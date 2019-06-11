@@ -13,7 +13,7 @@ class BookingsPage extends Component {
     
     static contextType = AuthContext;
 
-    componentDidMount(){
+    componentWillMount(){
         this.getBookings();
     }
 

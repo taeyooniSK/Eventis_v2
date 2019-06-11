@@ -11,6 +11,14 @@ const { transformEvent } = require("./populate");
 // Resolvers for events
 
 module.exports = { // javascript object where all the resolver functions are in 
+    event: async (args) => {
+        try {
+            const event = await Event.findById({_id: args.eventID});
+            return transformEvent(event);
+         } catch(err){
+             throw err;
+         }
+    },
     events: async () => {
         try {
            const events = await Event.find({});

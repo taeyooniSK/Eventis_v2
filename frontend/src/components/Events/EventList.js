@@ -17,7 +17,6 @@ const EventList = (props) => {
         onEdit={props.onEdit}  
         openEditModal={props.openEditModal}  
         />
-       
     );
 
     return (

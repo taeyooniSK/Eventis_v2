@@ -31,7 +31,7 @@ class EventsPage extends Component {
         this.descriptionInputRef = React.createRef();
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.getEvents();
     }
 
@@ -44,6 +44,7 @@ class EventsPage extends Component {
         // & when closing the modal for view details, selectedEvent: null
         this.setState(() => ({creating : false, selectedEvent: null }));
     } 
+    // Edit: modal cancel button for editing an event
     handleEditModalCancel =() => {
         this.setState(() => ({editing : false, selectedEventToEdit: null }));
     }
@@ -114,7 +115,7 @@ class EventsPage extends Component {
         })
        
     }
-    // edit modal confirm button 
+    // Edit: modal confirm button for editing an event
     handleEditModalConfirm = () => {
         this.setState(() => ({editing: false}));
         const title = this.titleInputRef.current.value;

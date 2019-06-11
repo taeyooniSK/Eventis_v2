@@ -23,6 +23,9 @@ const MainNavigation = props => (
                     {context.token && 
                     <React.Fragment>
                         <li>
+                            <NavLink to="/my-events">My Events</NavLink>
+                        </li>
+                        <li>
                             <NavLink to="/bookings">Bookings</NavLink>
                         </li>
                         <li>

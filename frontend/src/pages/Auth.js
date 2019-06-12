@@ -15,6 +15,7 @@ class AuthPage extends Component {
         this.emailElement = React.createRef();
         this.passwordElement = React.createRef();
     }
+
     // toggle signup / login 
     switchHandler = () => {
         this.setState(prevState => (
@@ -67,12 +68,20 @@ class AuthPage extends Component {
             }
             return res.json();
         }).then(result => {
+            if(this.state.isLogin){
+                const info = {
+                    token: result.data.login.token,
+                    userId: result.data.login.userId
+                };
+                localStorage.setItem("info", JSON.stringify(info));
+            }
             // After I'm logged in, there is token
             console.log(result);
             if(result.data.login.token){
                 this.context.login(result.data.login.token, result.data.login.userId, result.data.login.tokenExpiration);
             }
         }).catch(err => {
+            localStorage.removeItem("token");
             console.log(err);
         })
         

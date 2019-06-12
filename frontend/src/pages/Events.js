@@ -239,7 +239,9 @@ class EventsPage extends Component {
           `
         };
         // save token from context into token variable
-        const token = this.context.token;       
+        const token = this.context.token; 
+        
+
 
         fetch("http://localhost:8000/graphql", {
             method: "POST",
@@ -337,7 +339,7 @@ class EventsPage extends Component {
                     <h2>${this.state.selectedEvent.price} - {new Date(this.state.selectedEvent.date).toLocaleString("ko-KR")}</h2>
                     <p>{this.state.selectedEvent.description}</p>
                     </Modal>}
-                {this.context.token && (
+                { this.context.token && (
                     <div className="events-control">
                         <p>Share your events!</p>
                         <button className="btn" onClick={this.handleCreateEvent}>Create Event</button>

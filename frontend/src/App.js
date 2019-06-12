@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import HomePage from "./pages/Home";
 import AuthPage from "./pages/Auth";    
 import BookingsPage from "./pages/Bookings"; 
 import EventsPage from "./pages/Events"   
@@ -16,17 +17,43 @@ class App extends Component {
     token: null,
     userId: null
   }
+// Before loading a page, if the user is logged in, 
+// get token and userId from localstorage (this enables user to use websites even after refreshing the browser)
+
+  componentWillMount(){
+    const userInfo = JSON.parse(localStorage.getItem("info"));
+    if(userInfo){
+      this.setState(prevState => (
+        {token: userInfo.token, userId: userInfo.userId }
+      ));
+    }
+  }
+
   login = (token, userId, tokenExpiration) => {
+    // const userInfo = JSON.parse(localStorage.getItem("info"));
+    // this.setState(prevState => (
+    //   {token: userInfo.token, userId: userInfo.userId }
+    // ));
     this.setState(prevState => (
       {token: token, userId: userId }
     ));
+    
   }
 
   logout = () => {
     this.setState({token: null, userId: null});
+    // when user is logged out, remove token and userId in localstorage
+    localStorage.removeItem("info");
   }
 
+  // loadUser = ()  => {
+  //   const userInfo = localStorage.getItem("token");
+  //   return userInfo;
+  // }
+ 
+
   render(){
+    
     return (
       <BrowserRouter>
         <AuthContext.Provider value={{
@@ -35,6 +62,8 @@ class App extends Component {
           <MainNavigation />
           <main className="main-content">
             <Switch>
+              {this.state.token && <Route path="/" component={HomePage} exact />}
+              {!this.state.token && <Route path="/" component={HomePage} exact />}
               {this.state.token && <Redirect from="/" to="/events" exact />}
               {this.state.token && <Redirect from="/auth" to="/events" exact />}
               {!this.state.token && <Redirect from="/" to="/auth" exact />}

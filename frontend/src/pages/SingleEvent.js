@@ -27,6 +27,9 @@ class SingleEventPage extends Component {
                         price
                         date
                         description
+                        creator{
+                            email
+                        }
                     }
                 }
             `

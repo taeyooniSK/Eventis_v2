@@ -11,6 +11,9 @@ import Spinner from "../components/Spinner/Spinner";
 =======
 import S3FileUpload from "react-s3";
 import config from "../config/config";
+<<<<<<< HEAD
+>>>>>>> 6a44a74ec81f13a8afec37796508d4417601f9b6
+=======
 >>>>>>> 6a44a74ec81f13a8afec37796508d4417601f9b6
 
 class EventsPage extends Component {

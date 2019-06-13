@@ -6,7 +6,8 @@ import EventList from "../components/Events/EventList";
 import AuthContext from "../context/auth-context";
 import "./Events.css";
 import Spinner from "../components/Spinner/Spinner";
-
+import S3FileUpload from "react-s3";
+import config from "../config";
 
 class EventsPage extends Component {
     state = {
@@ -15,7 +16,8 @@ class EventsPage extends Component {
         events : [],
         isLoading: false,
         selectedEvent: null,
-        selectedEventToEdit: null
+        selectedEventToEdit: null,
+        url: null
     };
 
     isActive = true;
@@ -28,6 +30,7 @@ class EventsPage extends Component {
         this.titleInputRef = React.createRef();
         this.priceInputRef = React.createRef();
         this.dateInputRef = React.createRef();
+        this.imgInputRef = React.createRef();
         this.descriptionInputRef = React.createRef();
     }
 
@@ -48,32 +51,58 @@ class EventsPage extends Component {
     handleEditModalCancel =() => {
         this.setState(() => ({editing : false, selectedEventToEdit: null }));
     }
+    setFile = (e) => {
+        const imgFile = e.target.files[0];
+        if(imgFile) {
+            this.setState({file : imgFile});
+        }
+    }
+    uploadImage = (e) => {
+        e.preventDefault();
+        // get image file through ref
+        const imgFile = this.imgInputRef.files[0];
+        // upload image to AWS S3
+        S3FileUpload.uploadFile(imgFile, config)
+        .then(data => {
+            console.log(data);
+            this.setState(() => ({url: data.location}));
+            this.refs.image.src = this.state.url; 
+        })
+        .catch(err => console.error(err));
+    }
 
     handleModalConfirm = () => {
+
+        
         this.setState(() => ({creating: false}));
         const title = this.titleInputRef.current.value;
         const price = this.priceInputRef.current.value;
         const date = this.dateInputRef.current.value;
+        const img = this.state.url;
         const description = this.descriptionInputRef.current.value;
-        
         // simple validation
-        if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || description.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
             return;
         }
 
 
+       
+
         // same key, value pairs
-        const event = {title, price, date, description};
+        const event = {title, price, date, description, img};
         console.log(event);
+
+        
 
         let reqBody = {
             query: `
             mutation {
-              createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", price: ${price}, date: "${date}"}) {
                 _id
                 title
                 description
                 date
+                img
                 price
               }
             }
@@ -103,12 +132,13 @@ class EventsPage extends Component {
                     title : result.data.createEvent.title,
                     price : result.data.createEvent.price,
                     date : result.data.createEvent.date,
+                    img: result.data.createEvent.img,
                     description : result.data.createEvent.description,
                     creator :{
                         _id : this.context.userId
                     }
                 });
-                return { events: updatedEvents };
+                return { events: updatedEvents, url: null };
             })
         }).catch(err => {
             console.log(err);
@@ -278,6 +308,8 @@ class EventsPage extends Component {
         this.isActive = false;
     }
 
+    
+
     render() {
         return (
             <React.Fragment>
@@ -299,7 +331,13 @@ class EventsPage extends Component {
                             <div className="form-control">
                                 <label htmlFor="date">Date</label>
                                 <input type="datetime-local" id="date" ref={this.dateInputRef}></input>
-                            </div>    
+                            </div>   
+                            <div className="form-control">
+                                <label htmlFor="img">Image</label>
+                                <input type="file" onChange={this.setFile} ref={file => this.imgInputRef = file}/>
+                                <button className="btn" onClick={this.uploadImage}>Upload</button>
+                            </div> 
+                            <img alt={this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/>
                             <div className="form-control">
                                 <label htmlFor="description">Description</label>
                                 <textarea id="description" rows="4" ref={this.descriptionInputRef}></textarea>
@@ -324,7 +362,12 @@ class EventsPage extends Component {
                             </div>
                             <div className="form-control">
                                 <label htmlFor="date">Date</label>
-                                <input type="datetime-local" id="date" ref={this.dateInputRef} defaultValue={this.state.selectedEventToEdit.date}></input>
+                                <input type="datetime-local" id="date" ref={this.dateInputRef} defaultValue={new Date(this.state.selectedEventToEdit.date).toLocaleString("ko-KR")}></input>
+                            </div>
+                            <div className="form-control">
+                                <label htmlFor="img">Image</label>
+                                <input type="file" onChange={this.setFile} ref={file => this.imgInputRef = file}/>
+                                <button className="btn" onClick={this.uploadImage}>Upload</button>
                             </div>    
                             <div className="form-control">
                                 <label htmlFor="description">Description</label>

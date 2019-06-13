@@ -7,7 +7,7 @@ import AuthContext from "../context/auth-context";
 import "./Events.css";
 import Spinner from "../components/Spinner/Spinner";
 import S3FileUpload from "react-s3";
-import config from "../config";
+import config from "../config/config";
 
 class EventsPage extends Component {
     state = {

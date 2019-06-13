@@ -37,7 +37,6 @@ module.exports = { // javascript object where all the resolver functions are in
             title: args.eventInput.title,  
             description: args.eventInput.description,
             price: +args.eventInput.price,
-            img: args.eventInput.img,
             date: new Date(args.eventInput.date),
             creator: req.userId // user who is authenticated
         });

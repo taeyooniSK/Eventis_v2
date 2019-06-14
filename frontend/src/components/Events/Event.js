@@ -14,7 +14,7 @@ const Event = (props) => {
             <div>
                 {
                   props.userId === props.creatorId 
-                ? <button className="btn" onClick={props.openEditModal.bind(this, props.eventId)}>Edit</button> 
+                ? <React.Fragment><button className="btn" onClick={props.openEditModal.bind(this, props.eventId)}>Edit</button><Link to={`/events/${props.eventId}`} className="btn">View Details</Link></React.Fragment>
                 : <React.Fragment><button className="btn" onClick={props.onMore.bind(this, props.eventId)}>More</button><Link to={`/events/${props.eventId}`} className="btn">View Details</Link></React.Fragment>
                 }
             </div>

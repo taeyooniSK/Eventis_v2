@@ -1,6 +1,7 @@
 // mongoose Schema
 const User = require("../../models/user");
 const Event = require("../../models/event");
+const CancelledEvent = require("../../models/cancelledEvent");
 
 // functions for merging
 
@@ -24,8 +25,35 @@ module.exports = { // javascript object where all the resolver functions are in
            const events = await Event.find({});
            return events.map(event => {
                 return transformEvent(event);
-           })
+           });
         } catch(err){
+            throw err;
+        }
+    },
+    cancelledEvents : async (args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try {
+            const cancelledEvents = await CancelledEvent.findById({user: args.userID}).populate("event");
+            console.log(cancelledEvents);
+            return cancelledEvents.map(event => {
+                return transformEvent(event);
+            })
+        } catch(err) {
+            throw err;
+        }
+    },
+    myEvents: async (args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try{
+            const myEvents = await Event.find({creator: args.userID });
+            return myEvents.map(event => {
+                return transformEvent(event);
+            });
+        } catch(err) {
             throw err;
         }
     },
@@ -78,6 +106,24 @@ module.exports = { // javascript object where all the resolver functions are in
             return event._doc;
         } catch (err) {
             console.log(err);
+            throw err;
+        }
+    },
+    cancelEvent : async(args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try {
+            const eventToCancel = await Event.findById({_id: args.eventID});
+            console.log(eventToCancel);
+            const cancelledEvent = new CancelledEvent({
+                user: req.userId,
+                event: eventToCancel._id
+            });
+            const result = await cancelledEvent.save();
+            await Event.findByIdAndDelete({_id: args.eventID});
+            return result;
+        } catch(err) {
             throw err;
         }
     }

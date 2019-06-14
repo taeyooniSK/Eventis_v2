@@ -10,6 +10,13 @@ type Booking {
     updatedAt : String!
 }
 
+type CancelledEvents {
+    _id: ID!
+    event: Event!
+    user: User!
+    createdAt : String!
+    updatedAt : String!
+}
 
 type Event {
     _id : ID!
@@ -18,6 +25,7 @@ type Event {
     price: Float!
     date: String! 
     img: String
+    cancelled: Boolean! 
     creator: User!
 }
 
@@ -59,6 +67,8 @@ input UserInput {
 type RootQuery {
     event(eventID: ID!): Event!
     events: [Event!]! 
+    myEvents(userID: ID!): [Event!]!
+    cancelledEvents(userID: ID!): [CancelledEvents!]!
     bookings: [Booking!]!
     login(email: String!, password: String!): AuthData!
 }
@@ -66,6 +76,7 @@ type RootQuery {
 type RootMutation {
     createEvent(eventInput: EventInput): Event
     editEvent(updatedEventInput: UpdatedEventInput): Event
+    cancelEvent(eventID: ID!): Event
     createUser(userInput: UserInput): User
     bookEvent(eventID: ID!): Booking!
     cancelBooking(bookingID: ID!): Event!

@@ -20,7 +20,7 @@ const singleEvent = async eventId => {
         throw err;
     }
     
-}
+};
 
 
 const events = async eventIds => {
@@ -36,7 +36,7 @@ const events = async eventIds => {
         throw err;
     }
     
-}
+};
 
 
 // In 'events' resolver, when event.creator value is put in as an argument, then 'user' returns data on the user including createdEvents(function) which enable me to query data on events 
@@ -62,7 +62,7 @@ const transformEvent = event => {
         date: dateToString(event._doc.date),
         creator: user.bind(this, event._doc.creator) 
     }
-}
+};
 
 const transformBooking = booking => {
     return {

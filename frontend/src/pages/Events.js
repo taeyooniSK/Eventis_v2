@@ -6,15 +6,10 @@ import EventList from "../components/Events/EventList";
 import AuthContext from "../context/auth-context";
 import "./Events.css";
 import Spinner from "../components/Spinner/Spinner";
-<<<<<<< HEAD
 
-=======
 import S3FileUpload from "react-s3";
 import config from "../config/config";
-<<<<<<< HEAD
->>>>>>> 6a44a74ec81f13a8afec37796508d4417601f9b6
-=======
->>>>>>> 6a44a74ec81f13a8afec37796508d4417601f9b6
+
 
 class EventsPage extends Component {
     state = {
@@ -210,6 +205,7 @@ class EventsPage extends Component {
                         price
                         date
                         description
+                        cancelled
                         creator {
                             _id
                             email
@@ -333,7 +329,7 @@ class EventsPage extends Component {
                                 <label htmlFor="img">Image</label>
                                 <input type="file" onChange={this.setFile} ref={file => this.imgInputRef = file}/>
                                 <button className="btn" onClick={this.uploadImage}>Upload</button>
-                                <img alt={this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/>
+                                <a rel="noopener noreferrer" href={this.state.url} target="_blank"><img alt={this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
                             </div>    
                             <div className="form-control">
                                 <label htmlFor="description">Description</label>
@@ -359,7 +355,7 @@ class EventsPage extends Component {
                             </div>
                             <div className="form-control">
                                 <label htmlFor="date">Date</label>
-                                <input type="datetime-local" id="date" ref={this.dateInputRef} defaultValue={this.state.selectedEventToEdit.date}></input>
+                                <input type="datetime-local" id="date" ref={this.dateInputRef} defaultValue={new Date(this.state.selectedEventToEdit.date).toLocaleString("ko-KR")}></input>
                             </div>    
                             <div className="form-control">
                                 <label htmlFor="description">Description</label>

@@ -8,12 +8,13 @@ import BookingList from "../components/Bookings/BookingList";
 class BookingsPage extends Component {
     state = {
         isLoading: false,
-        bookings: []
+        bookings: [],
+        cancelledBookingsByHost: []
     };
     
     static contextType = AuthContext;
 
-    componentWillMount(){
+    componentDidMount(){
         this.getBookings();
     }
 
@@ -28,6 +29,7 @@ class BookingsPage extends Component {
                             _id
                             title
                             price
+                            cancelled
                             date
                             description
                         }
@@ -47,13 +49,17 @@ class BookingsPage extends Component {
             }
         }).then(res => {
             if(res.status !== 200 && res.status !== 201){
-                throw new Error("Failed to get events");
+                throw new Error("Failed to get bookings");
             }
             return res.json();
         }).then(result => {
+            console.log(result);
             const bookings = result.data.bookings;
+            const cancelledBookingsByHost = bookings.filter(booking => {
+                return booking.event.cancelled === true;
+            })
             // if booking list is updated after getting data from the db
-            this.setState({bookings, isLoading: false});
+            this.setState(() => ({bookings, cancelledBookingsByHost, isLoading: false} ));
         }).catch(err => {
             console.log(err);
             this.setState({isLoading: true});
@@ -106,7 +112,7 @@ class BookingsPage extends Component {
             <React.Fragment>
             {this.state.isLoading 
             ? <Spinner /> 
-            : <BookingList bookings={this.state.bookings} handleCancelBooking={this.handleCancelBooking}/>
+            : <BookingList bookings={this.state.bookings} cancelledBookings={this.state.cancelledBookingsByHost} handleCancelBooking={this.handleCancelBooking}/>
             } 
             </React.Fragment> 
         );

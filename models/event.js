@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 const eventSchema = new Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     description: {
         type: String,
@@ -21,6 +22,10 @@ const eventSchema = new Schema({
     },
     img: {
         type: String
+    },
+    cancelled: {
+        type: Boolean,
+        default : false
     },
     creator: {
         type: Schema.Types.ObjectId,

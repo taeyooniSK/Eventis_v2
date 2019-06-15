@@ -35,7 +35,7 @@ class EventsPage extends Component {
         this.descriptionInputRef = React.createRef();
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.getEvents();
     }
 
@@ -80,7 +80,11 @@ class EventsPage extends Component {
         const description = this.descriptionInputRef.current.value;
         
         // simple validation
-        if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
+        //이게 원본
+        // if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
+        //     return;
+        // }
+        if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || description.trim().length === 0) {
             return;
         }
 
@@ -376,7 +380,13 @@ class EventsPage extends Component {
                         <button className="btn" onClick={this.handleCreateEvent}>Create Event</button>
                     </div>
                 )}
-                {this.state.isLoading ? <Spinner /> : <EventList events={this.state.events} authUserId={this.context.userId} onViewMore={this.handleShowDetail} onEdit={this.handleEdit} openEditModal={this.editEvent}/> }
+                {this.state.isLoading ? <Spinner /> : 
+                <EventList 
+                    events={this.state.events} 
+                    authUserId={this.context.userId} 
+                    onViewMore={this.handleShowDetail}
+                    onEdit={this.handleEdit}
+                    openEditModal={this.editEvent}/> }
             </React.Fragment>
         );
     }

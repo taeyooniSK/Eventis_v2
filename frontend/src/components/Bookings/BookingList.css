@@ -1,3 +1,4 @@
+.booking__list--cancelled,
 .booking__list {
     margin: 4rem auto 0 auto;
     width: 40rem;
@@ -11,4 +12,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.booking__list--warning{
+    color: red;
 }

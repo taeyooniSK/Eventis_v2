@@ -12,6 +12,7 @@ const EventList = (props) => {
         title={event.title}
         price={event.price} 
         date={event.date}
+        cancelled={event.cancelled}
         creatorId={event.creator._id} 
         onMore={props.onViewMore}
         onEdit={props.onEdit}  

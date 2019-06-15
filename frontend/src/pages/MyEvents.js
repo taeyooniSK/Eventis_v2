@@ -10,15 +10,15 @@ import MyEventList from "../components/Events/MyEventList";
 class MyEventsPage extends Component {
     state = {
         myEvents: null,
-        cancelledEvents: null,
+        myCancelledEvents: [],
         isLoaidng: false
     }
     static contextType = AuthContext;
     isActive = true;
     componentWillMount(){
-        // this.getMyEvents();
+        this.getMyEvents();
         // return this.getPromise();
-        this.getCancelledEvents();
+        // this.getCancelledEvents();
     }
 
     getMyEvents() {
@@ -32,6 +32,7 @@ class MyEventsPage extends Component {
                         price
                         date
                         description
+                        cancelled
                         creator {
                             email
                         }
@@ -55,11 +56,12 @@ class MyEventsPage extends Component {
         }).then(result => {
             console.log(result);
             const myEvents = result.data.myEvents;
-        
+            const cancelledEvents = myEvents.filter(event => (event.cancelled === true));
+
              //only when this component is active, update the state
            if(this.isActive){
             // if events list is updated when user creates a new event, override events of state
-            this.setState({myEvents, isLoading: false});
+            this.setState({myEvents, myCancelledEvents: cancelledEvents, isLoading: false});
            }
     
         }).catch(err => {
@@ -68,48 +70,6 @@ class MyEventsPage extends Component {
             
         })
     }
-
-
-    getCancelledEvents(){
-        let reqBody = {
-            query : `
-                query { 
-                    cancelledEvents(userID: "${this.context.userId}") {
-                        _id
-                        title
-                        price
-                        date
-                        description
-                        creator {
-                            email
-                        }
-                    }
-                }
-            `
-        }
-        fetch("http://localhost:8000/graphql", {
-            method: "POST",
-            body: JSON.stringify(reqBody),
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization" : "Bearer " + this.context.token
-            }
-        })
-        .then(res => {
-            if(res.status !== 200 && res.status !== 201){
-                throw new Error("Failed to get cancelled events");
-            }
-            return res.json();
-        })
-        .then(result => {
-            const cancelledEvents = result;
-            console.log("cancelledEvents:", result);
-            this.setState({cancelledEvents, isLoading: false});
-
-        })
-        .catch(err => console.log(err));
-    }
-
     
     // Cancel event
     handleCancelEvent = (eventId) => {
@@ -118,19 +78,15 @@ class MyEventsPage extends Component {
             query: `
                 mutation { 
                     cancelEvent(eventID: "${eventId}") {
-                        user {
+                        _id
+                        title
+                        description
+                        price
+                        date
+                        img
+                        cancelled
+                        creator{
                             email
-                        }
-                        event {
-                            _id
-                            title
-                            price
-                            description
-                            date
-                            img
-                            creator{
-                                email
-                            }
                         }
                     }
                 }
@@ -150,24 +106,54 @@ class MyEventsPage extends Component {
             }
             return res.json();
         }).then(result => {
-            // booking._id and bookingId(the booking I click) is differnet (which means the booking I'm about to delete is equal)
-            this.setState(prevState => {
-                const updatedEvents = prevState.myEvents.filter(event => {
-                    return event._id !== eventId;
-                })
-                return {myEvents: updatedEvents, isLoading: false};
-            });
+            console.log("Event that got cancelled:", result);
+            this.getMyEvents();
         }).catch(err => {
             console.log(err);
             this.setState({isLoading: true});
             
         })
     }
-    getPromise = () => {
-        return Promise.all([this.getCancelledEvents, this.getMyEvents]);
+    
+    // Delete event 
+
+    handleDeleteEvent = (eventId) => {
+        this.setState({ isLoading: true });
+        const reqBody = {
+            query: `
+                mutation { 
+                    deleteEvent(eventID: "${eventId}") {
+                        _id
+                    }
+                }
+            `
+        };
+
+        fetch("http://localhost:8000/graphql", {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : "Bearer " + this.context.token
+            }
+        }).then(res => {
+            if(res.status !== 200 && res.status !== 201){
+                throw new Error("Failed to delete the event");
+            }
+            return res.json();
+        }).then(result => {
+            console.log("Event that got deleted:", result);
+            this.getMyEvents();
+        }).catch(err => {
+            console.log(err);
+            this.setState({isLoading: true});
+            
+        })
     }
 
-    // this component is destroyed 
+
+
+    // when this component is destroyed 
     componentWillUnmount(){
         this.isActive = false;
     }
@@ -175,7 +161,16 @@ class MyEventsPage extends Component {
     render(){
         return(
         <React.Fragment>
-            {this.state.isLoading ? <Spinner /> : <MyEventList myEvents={this.state.myEvents} myCancelledEvents={this.state.cancelledEvents} handleCancelEvent={this.handleCancelEvent}/>}
+            {
+            this.state.isLoading
+             ? <Spinner /> 
+             : <MyEventList 
+                myEvents={this.state.myEvents} 
+                myCancelledEvents={this.state.myCancelledEvents} 
+                handleCancelEvent={this.handleCancelEvent}
+                handleDeleteEvent={this.handleDeleteEvent}
+                />
+            }
         </React.Fragment>
         );
     }

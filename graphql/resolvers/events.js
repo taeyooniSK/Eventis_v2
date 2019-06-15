@@ -1,6 +1,7 @@
 // mongoose Schema
 const User = require("../../models/user");
 const Event = require("../../models/event");
+const Booking = require("../../models/booking");
 const CancelledEvent = require("../../models/cancelledEvent");
 
 // functions for merging
@@ -109,20 +110,31 @@ module.exports = { // javascript object where all the resolver functions are in
             throw err;
         }
     },
-    cancelEvent : async(args, req) => {
+    cancelEvent : async (args, req) => {
         if (!req.isAuthenticated){
             throw new Error("It's not authenticated!");
         }
         try {
-            const eventToCancel = await Event.findById({_id: args.eventID});
+            const eventToCancel = await Event.findByIdAndUpdate({_id: args.eventID}, { $set : {
+                cancelled: true
+            }});
             console.log(eventToCancel);
-            const cancelledEvent = new CancelledEvent({
-                user: req.userId,
-                event: eventToCancel._id
-            });
-            const result = await cancelledEvent.save();
-            await Event.findByIdAndDelete({_id: args.eventID});
-            return result;
+            return transformEvent(eventToCancel)
+           
+        } catch(err) {
+            throw err;
+        }
+    },
+    deleteEvent: async (args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try {
+            const eventToDelete = await Event.findByIdAndDelete({_id: args.eventID});
+            console.log(eventToDelete);
+            const deletedBooking = await Booking.findOneAndDelete({event: { $in: [args.eventID] }});
+            console.log("Booking deleted : ", deletedBooking);
+            return eventToDelete;
         } catch(err) {
             throw err;
         }

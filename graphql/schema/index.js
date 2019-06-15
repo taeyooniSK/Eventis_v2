@@ -25,7 +25,7 @@ type Event {
     price: Float!
     date: String! 
     img: String
-    cancelled: Boolean! 
+    cancelled: Boolean
     creator: User!
 }
 
@@ -77,6 +77,7 @@ type RootMutation {
     createEvent(eventInput: EventInput): Event
     editEvent(updatedEventInput: UpdatedEventInput): Event
     cancelEvent(eventID: ID!): Event
+    deleteEvent(eventID: ID!): Event
     createUser(userInput: UserInput): User
     bookEvent(eventID: ID!): Booking!
     cancelBooking(bookingID: ID!): Event!

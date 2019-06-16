@@ -43,6 +43,9 @@
     display:inline-block;
     color:#fff;
 }
+.header__button{
+    margin-top: 0.7rem;
+}
 
 .content {
     display: flex;

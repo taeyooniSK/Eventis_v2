@@ -15,8 +15,9 @@ const MyEventList = (props) => {
     );
     
     const events = props.myEvents.map(event => {
+        let myEvent;
         if(event.cancelled === false){
-            return <MyEvent
+            myEvent = <MyEvent
             key={event._id}
             eventId={event._id}
             userId={props.authUserId} 
@@ -28,7 +29,8 @@ const MyEventList = (props) => {
             onEdit={props.onEdit}  
             onCancel={props.handleCancelEvent}  
         />
-        } 
+        }
+        return myEvent; 
     });
 
     return (

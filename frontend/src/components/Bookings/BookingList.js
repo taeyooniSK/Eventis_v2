@@ -11,35 +11,10 @@ const BookingList = props => {
             cancelledBookingId={booking._id}
             title={booking.event.title}
             date={booking.createdAt}
-            handleCancelBooking={props.handleCancelBooking}
+            deleteBooking={props.handleDeleteBooking}
             cancelledBookingsByHost={props.cancelledBookings}
         />
     ));
-    
-    // const cancelledBookingsByHost = props.cancelledBookingsByHost.map(booking => (
-    //     <li key={booking._id} className="booking__list-item">
-    //         <div className="bookings__item-date">
-    //             {booking.event.title} - {new Date(booking.createdAt).toLocaleDateString()}
-    //         </div>
-    //         <div className="bookings__item-actions">
-    //             <button className="btn" onClick={props.handleCancelBooking.bind(this, booking._id)}>Cancel</button>
-    //         </div>
-    //     </li>
-    // ));
-
-
-    // const cancelledBookings = props.bookings.filter(booking => {
-    //     return booking.cancelled ? ( <li key={booking._id} className="booking__list-item">
-    //     <div className="bookings__item-date">
-    //         {booking.event.title} - {new Date(booking.createdAt).toLocaleDateString()}
-    //     </div>
-    //     <div className="bookings__item-actions">
-    //         <button className="btn" onClick={props.handleCancelBooking.bind(this, booking._id)}>Cancel</button>
-    //     </div>
-    // </li>) : "";
-          
-    // });
-
 
     const bookings = props.bookings.map(booking => (
         <Booking 
@@ -53,26 +28,12 @@ const BookingList = props => {
         />
      ));
     
-    // const bookings = props.bookings.map(booking => {
-    //     let bookingList;
-    //     if(booking.event.cancelled === false){
-    //         bookingList = <li key={booking._id} className="booking__list-item">
-    //                         <div className="bookings__item-date">
-    //                             {booking.event.title} - {new Date(booking.createdAt).toLocaleDateString()}
-    //                         </div>
-    //                         <div className="bookings__item-actions">
-    //                             <button className="btn" onClick={props.handleCancelBooking.bind(this, booking._id)}>Cancel</button>
-    //                         </div>
-    //                     </li>
-    //     }
-    //     return bookingList;
-    // });
-    
     return (
         <React.Fragment>
             <ul className="booking__list--cancelled">
+                {/* {props.deleteResponse ? props.deleteResponse.ok.length > 0  props.deleteResponse.ok : props.deleteResponse.err} */}
                 <h2>Cancelled Bookings by hosts</h2>
-                <p>You can't attend this(these) event(s). Please cancel this(these) event(s)</p>
+                <p>You can't attend this(these) event(s). Please delete this(these) event(s)</p>
             {cancelledBookingsByHost}
             </ul>
             <ul className="booking__list">

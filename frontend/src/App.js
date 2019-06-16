@@ -66,7 +66,8 @@ class App extends Component {
               {!this.state.token && <Route path="/" component={HomePage} exact />}
               {this.state.token && <Redirect from="/" to="/events" exact />}
               {this.state.token && <Redirect from="/auth" to="/events" exact />}
-              {!this.state.token && <Redirect from="/" to="/auth" exact />}
+              {!this.state.token && <Route path="/" component={HomePage} exact />}
+              {/* {!this.state.token && <Redirect from="/" to="/auth" exact />} */}
               {!this.state.token && <Route path="/auth" component={AuthPage} />}
               {this.state.token && <Route path="/my-events" component={MyEventsPage} />}
               <Route path="/events/:eventId/" component={SingleEventPage} />

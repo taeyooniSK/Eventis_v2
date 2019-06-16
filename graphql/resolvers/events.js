@@ -132,9 +132,9 @@ module.exports = { // javascript object where all the resolver functions are in
         try {
             const eventToDelete = await Event.findByIdAndDelete({_id: args.eventID});
             console.log(eventToDelete);
-            const deletedBooking = await Booking.findOneAndDelete({event: { $in: [args.eventID] }});
+            const deletedBooking = await Booking.findOneAndDelete({event: args.eventID});
             console.log("Booking deleted : ", deletedBooking);
-            return eventToDelete;
+            return deletedBooking;
         } catch(err) {
             throw err;
         }

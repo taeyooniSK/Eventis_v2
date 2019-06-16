@@ -7,7 +7,7 @@ const CancelledBooking = props =>  {
                 {props.title} - {new Date(props.date).toLocaleDateString()}
             </div>
             <div className="bookings__item-actions">
-                <button className="btn" onClick={props.handleCancelBooking.bind(this, props.cancelledBookingId)}>Cancel</button>
+                <button className="btn" onClick={props.deleteBooking.bind(this, props.cancelledBookingId)}>Delete</button>
             </div>
         </li>
     )

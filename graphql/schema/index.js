@@ -81,6 +81,13 @@ type RootMutation {
     createUser(userInput: UserInput): User
     bookEvent(eventID: ID!): Booking!
     cancelBooking(bookingID: ID!): Event!
+    deleteBooking(bookingID: ID!): DeleteResponse
+}
+
+
+type DeleteResponse {
+    ok: String!
+    err: String!
 }
 
 schema {

@@ -13,7 +13,10 @@ module.exports = { // javascript object where all the resolver functions are in
             throw new Error("It's not authenticated!");
         }
         try {
-            const bookings = await Booking.find({user: req.userId});
+
+            const bookings = await Booking.find({user: { $in : [req.userId]} });
+            console.log("bookings: ", bookings);
+
             return bookings.map(booking => {
                 return transformBooking(booking);
             })
@@ -49,6 +52,19 @@ module.exports = { // javascript object where all the resolver functions are in
             return event;
         } catch(err) {
             throw err;
+        }
+    },
+    deleteBooking: async (args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try {
+            const booking = await Booking.findByIdAndDelete({_id : args.bookingID});
+            console.log("deleted booking : ", booking);
+
+            return { ok : "Deleted successfully", err : ""};
+        } catch(err) {
+            return { ok : "", err: err};
         }
     }
 }

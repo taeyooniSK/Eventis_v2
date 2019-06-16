@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Comment = require("./comment");
 
 const Schema = mongoose.Schema;
 
@@ -27,6 +28,12 @@ const eventSchema = new Schema({
         type: Boolean,
         default : false
     },
+    // comments: [
+    //     {
+    //         type: Schema.Types.ObjectId,
+    //         ref: "Comment"
+    //     }
+    // ],
     creator: {
         type: Schema.Types.ObjectId,
         ref : "User"

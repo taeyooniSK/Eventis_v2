@@ -2,11 +2,17 @@ import React from "react";
 
 import Comment from "./Comment";
 const CommentList = props => {
-  
+  let comments = props.comments.map(comment => {
+    return <Comment 
+            key={comment.author._id} 
+            author={comment.author}
+            text={comment.text}  
+            />
+  })
     return (
-      <div className="comment__list">
-        
-      </div>
+      <ul className="comment__list">
+        {comments}
+      </ul>
     )
 }
 

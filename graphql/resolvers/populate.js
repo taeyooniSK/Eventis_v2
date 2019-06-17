@@ -1,5 +1,6 @@
 const Event = require("../../models/event");
 const User = require("../../models/user");
+const Comment = require("../../models/comment");
 
 // helper function
 const { dateToString } = require("../../helpers/date");
@@ -53,27 +54,19 @@ const user = async userId => {
     }
 };
 
-const commentUser = async userId => {
+
+
+const comments = async commentIds => {
     try {
-        const user = await User.findById(userId);
-        return {
-                ...user._doc,
-                createdEvents: events.bind(this, user.createdEvents)
-        }; 
-    } catch(err){
-        throw err;
-    }
-}
-// single event가 fetching 될때 그 해당 이벤트의 코멘트들도 같이 fetching되어야함
-// 그리고 fetching된 데이터에서 author(user)와 관련된 데이터가 또 덧붙어서 나와야됨
-const comments = async eventId => {
-    try {
-        const comments = await Comment.findById();
+        // get data of comments according to the commentIds put inside transformEvent.comments method
+        const comments = await Comment.find({_id: { $in: commentIds}});
         //console.log(user._doc);
-        return {
-                ...comments._doc,
-                author: commentUser.bind(this, user.)
-        }; // merging with the rest properties of object that got found by mongoose
+        return comments.map(comment => {
+            return {
+                ...comment._doc,
+                author: user.bind(this, comment._doc.author)
+            }
+        })
     } catch(err){
         throw err;
     }
@@ -85,7 +78,8 @@ const transformEvent = event => {
     return {
         ...event._doc,
         date: dateToString(event._doc.date),
-        creator: user.bind(this, event._doc.creator) 
+        creator: user.bind(this, event._doc.creator),
+        comments:  comments.bind(this, event._doc.comments) // when event is loaded from db, get comments data according to the event
     }
 };
 

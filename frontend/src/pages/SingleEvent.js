@@ -5,10 +5,12 @@ import Spinner from "../components/Spinner/Spinner";
 import DetailedEvent from "../components/Events/DetailedEvent";
 
 class SingleEventPage extends Component {
-    state = {
-        isLoading: false,
-        event: null
-    }
+        state = {
+            isLoading: false,
+            event: null,
+            comments: null
+        }
+
     static contextType = AuthContext;
 
     isActive = true;
@@ -27,6 +29,13 @@ class SingleEventPage extends Component {
                         price
                         date
                         description
+                        comments {
+                            author {
+                                _id
+                                email
+                            }
+                            text
+                        }
                         creator{
                             email
                         }
@@ -49,12 +58,14 @@ class SingleEventPage extends Component {
         }).then(result => {
             const event = result.data.event;
             console.log(event);
+            const comments = result.data.event.comments;
 
              //only when this component is active, update the state
           // if(this.isActive){
             // if events list is updated when user creates a new event, override events of state
         //   this.setState({event: event, isLoading: false});
-            this.setState({event, isLoading: false});
+            this.setState(() => ({event, comments, isLoading: false}))
+            
           // }
         }).catch(err => {
             console.log(err);
@@ -62,7 +73,6 @@ class SingleEventPage extends Component {
             
         })
     }
-    
     // componentWillUnmount(){
     //     this.isActive = false;
     // }
@@ -71,7 +81,7 @@ class SingleEventPage extends Component {
             <React.Fragment>
             { 
                 this.state.isLoading ? 
-               <Spinner /> : <DetailedEvent event={this.state.event}/>
+               <Spinner /> : <DetailedEvent event={this.state.event} comments={this.state.comments} />
             }
             </React.Fragment>
         );

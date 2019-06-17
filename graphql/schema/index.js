@@ -26,6 +26,7 @@ type Event {
     date: String! 
     img: String
     cancelled: Boolean
+    comments: [Comment!]
     creator: User!
 }
 
@@ -34,6 +35,12 @@ type User {
     email: String!
     password: String
     createdEvents: [Event!]
+}
+
+type Comment {
+    _id : ID!
+    author: User!
+    text: String!
 }
 
 type AuthData {
@@ -82,12 +89,19 @@ type RootMutation {
     bookEvent(eventID: ID!): Booking!
     cancelBooking(bookingID: ID!): Event!
     deleteBooking(bookingID: ID!): DeleteResponse
+    createComment(commentInput: CommentInput) : Comment
 }
 
 
 type DeleteResponse {
     ok: String!
     err: String!
+}
+
+input CommentInput {
+    eventId : ID!
+    author: ID!
+    text: String!
 }
 
 schema {

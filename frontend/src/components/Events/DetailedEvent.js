@@ -5,7 +5,7 @@ import "./DetailedEvent.css";
 
 class DetailedEvent extends Component{
     state = {
-        comments: null
+        comments: this.props.comments
     }
 
     render(){
@@ -17,7 +17,13 @@ class DetailedEvent extends Component{
                 <img src={this.props.event.img} alt={this.props.event.img}/>
                 <h2>${this.props.event.price} - {new Date(this.props.event.date).toLocaleDateString("ko-KR") }</h2>
                 <p>{this.props.event.description}</p>
-                <CommentList />
+                <div className="comment__container">
+                    <form>
+                        <textarea></textarea>
+                        <button className="btn">Save</button>
+                    </form>
+                </div>
+                <CommentList comments={this.state.comments} />
             </div>
         );
     }

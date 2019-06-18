@@ -1,24 +1,9 @@
 const Event = require("../../models/event");
-const User = require("../../models/user");
 const Comment = require("../../models/comment");
-const { dateToString } = require("../../helpers/date");
-const { user, transformEvent } = require("./populate");
 
+const { transformComment } = require("./populate");
 
-module.exports = { // javascript object where all the resolver functions are in 
-    // comments: async (args, req) => {
-    //         const comments = await Comment.find({});
-    //         console.log("comments: ", comments);
-
-    //         return comments.map(comment => {
-    //             return {
-    //                 ...comment,
-    //                 author: user.bind(this, comment._doc.author),
-    //                 createdAt: dateToString(comment._doc.createdAt),
-    //                 updatedAt: dateToString(comment._doc.updatedAt)
-    //             }
-    //         })
-    // },
+module.exports = { 
     createComment: async (args, req) => {
         if (!req.isAuthenticated){
             throw new Error("It's not authenticated!");
@@ -35,13 +20,13 @@ module.exports = { // javascript object where all the resolver functions are in
             const savedComment = await comment.save();
             console.log("comments saved in the event: ", savedComment);
             // console.log("event's comments :", event.comments);
-            event.comments.push(savedComment);
+            event.comments.unshift(savedComment);
             // event.comments에 push이후에 comments의 parent인 event를 save()해야 데이터 저장;
             const eventToSave = await event.save();
             
             console.log("event's comments: ", eventToSave.comments);
 
-            return savedComment;
+            return  transformComment(savedComment);
         } catch(err){
             throw err;
         }

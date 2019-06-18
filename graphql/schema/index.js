@@ -41,6 +41,8 @@ type Comment {
     _id : ID!
     author: User!
     text: String!
+    createdAt : String!
+    updatedAt : String!
 }
 
 type AuthData {

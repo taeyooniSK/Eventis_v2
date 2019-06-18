@@ -3,7 +3,7 @@ const User = require("../../models/user");
 const Comment = require("../../models/comment");
 
 // helper function
-const { dateToString } = require("../../helpers/date");
+const { dateToString, dateToString2 } = require("../../helpers/date");
 
 
 // const user, events, singleEvent make me to query more flexible way to a deeper level of queries 
@@ -58,8 +58,8 @@ const user = async userId => {
 
 const comments = async commentIds => {
     try {
-        // get data of comments according to the commentIds put inside transformEvent.comments method
-        const comments = await Comment.find({_id: { $in: commentIds}});
+        // get data of comments according to the commentIds put inside transformEvent.comments method and sort them as descendingly
+        const comments = await Comment.find({_id: { $in: commentIds}, updatedAt : {$exists: true}}).sort({updatedAt : -1});
         //console.log(user._doc);
         return comments.map(comment => {
             return {
@@ -93,6 +93,14 @@ const transformBooking = booking => {
     }
 };
 
+const transformComment = comment => {
+    return {
+        ...comment._doc,
+        author: user.bind(this, comment._doc.author),
+        createdAt: dateToString2(comment._doc.createdAt),
+        updatedAt: dateToString2(comment._doc.updatedAt)
+    }
+}
 
 
 
@@ -105,3 +113,4 @@ exports.user = user;
 exports.singleEvent = singleEvent;
 exports.transformEvent = transformEvent;
 exports.transformBooking = transformBooking;
+exports.transformComment = transformComment;

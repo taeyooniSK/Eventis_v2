@@ -30,6 +30,7 @@ class SingleEventPage extends Component {
                         date
                         description
                         comments {
+                            _id
                             author {
                                 _id
                                 email
@@ -81,7 +82,7 @@ class SingleEventPage extends Component {
             <React.Fragment>
             { 
                 this.state.isLoading ? 
-               <Spinner /> : <DetailedEvent event={this.state.event} comments={this.state.comments} />
+               <Spinner /> : <DetailedEvent eventId={this.props.match.params.eventId} event={this.state.event} comments={this.state.comments} />
             }
             </React.Fragment>
         );

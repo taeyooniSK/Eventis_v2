@@ -30,7 +30,7 @@ class App extends Component {
     }
   }
 
-  login = (token, userId, email, tokenExpiration) => {
+  login = (token, email, userId, tokenExpiration) => {
     // const userInfo = JSON.parse(localStorage.getItem("info"));
     // this.setState(prevState => (
     //   {token: userInfo.token, userId: userInfo.userId }

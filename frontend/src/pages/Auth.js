@@ -72,14 +72,16 @@ class AuthPage extends Component {
             if(this.state.isLogin){
                 const info = {
                     token: result.data.login.token,
+                    email: result.data.login.email.slice(0, result.data.login.email.indexOf("@")), // using this for saving image file in s3
                     userId: result.data.login.userId
                 };
                 localStorage.setItem("info", JSON.stringify(info));
             }
             // After I'm logged in, there is token
             console.log(result);
+            const emailWithOutAt = result.data.login.email.slice(0, result.data.login.email.indexOf("@"));
             if(result.data.login.token){
-                this.context.login(result.data.login.token, result.data.login.email, result.data.login.userId, result.data.login.tokenExpiration);
+                this.context.login(result.data.login.token, emailWithOutAt, result.data.login.userId, result.data.login.tokenExpiration);
             }
         }).catch(err => {
             localStorage.removeItem("token");

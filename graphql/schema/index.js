@@ -48,6 +48,7 @@ type Comment {
 type AuthData {
     userId: ID!
     token: String!
+    email: String!
     tokenExpiration: Int!
 }
 

@@ -34,6 +34,7 @@ module.exports = { // javascript object where all the resolver functions are in
     },
     login : async ({email, password}) => {
         const user = await User.findOne({email: email});
+        console.log(user.email);
         if(!user){
             throw new Error("User does not exist");
         }
@@ -47,6 +48,6 @@ module.exports = { // javascript object where all the resolver functions are in
             email: user.email
         }, "SuperSecretKey", {expiresIn :"1h"})
         
-        return { userId: user.id, token: token, tokenExpiration : 1}
+        return { userId: user.id, email: user.email, token: token, tokenExpiration : 1}
     }
 }

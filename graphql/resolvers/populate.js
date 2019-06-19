@@ -58,13 +58,14 @@ const user = async userId => {
 
 const comments = async commentIds => {
     try {
-        // get data of comments according to the commentIds put inside transformEvent.comments method and sort them as descendingly
+        // get data of comments according to the commentIds put inside transformEvent.comments method and sort them descendingly
         const comments = await Comment.find({_id: { $in: commentIds}, updatedAt : {$exists: true}}).sort({updatedAt : -1});
         //console.log(user._doc);
         return comments.map(comment => {
             return {
                 ...comment._doc,
-                author: user.bind(this, comment._doc.author)
+                author: user.bind(this, comment._doc.author),
+                updatedAt: dateToString2(comment._doc.updatedAt)
             }
         })
     } catch(err){

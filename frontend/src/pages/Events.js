@@ -8,7 +8,7 @@ import "./Events.css";
 import Spinner from "../components/Spinner/Spinner";
 
 import AWS from "aws-sdk";
-import S3FileUpload from "react-s3";
+// import S3FileUpload from "react-s3";
 import config from "../config/config";
 
 
@@ -35,7 +35,8 @@ class EventsPage extends Component {
         isLoading: false,
         selectedEvent: null,
         selectedEventToEdit: null,
-        url: null
+        url: null,
+        isUploaded: false
     };
 
     isActive = true;
@@ -56,25 +57,24 @@ class EventsPage extends Component {
     }
 
     handleCreateEvent = () => {
-        this.setState((prevState) => ({creating: !prevState.creating}))
+        this.setState((prevState) => ({creating: !prevState.creating, url: localStorage.getItem("url") && localStorage.getItem("url") }))
     }
 
     handleModalCancel = () => {
         // when making an event if you cancel, creating : false 
         // & when closing the modal for view details, selectedEvent: null
-        this.setState(() => ({creating : false, selectedEvent: null }));
+        this.setState(() => ({creating : false, selectedEvent: null, isUploaded: false }));
+        // deletePhoto gets triggered only when file has been uploaded and click the cancel button
+        if(this.state.isUploaded){
+            this.deletePhoto();
+        }
     } 
     // Edit: modal cancel button for editing an event
     handleEditModalCancel =() => {
         this.setState(() => ({editing : false, selectedEventToEdit: null }));
     }
-    // setFile = (e) => {
-    //     const imgFile = e.target.files[0];
-    //     if(imgFile) {
-    //         this.setState({file : imgFile});
-    //     }
-    // }
-    addPhoto = (e, albumName)=> {
+  
+    addPhoto = (e) => {
         e.preventDefault();
         const files = this.imgInputRef.files;
         console.log(files);
@@ -83,6 +83,8 @@ class EventsPage extends Component {
         }
         const file = files[0];
         const fileName = file.name;
+        console.log(this.context.email);
+        const albumName = this.context.email;
         const albumPhotosKey = encodeURIComponent(albumName) + "/";
     
         const photoName = albumPhotosKey + fileName;
@@ -100,25 +102,34 @@ class EventsPage extends Component {
               return alert("There was an error uploading your photo: ", err);
             }
             console.log(data);
-            this.setState(() => ({ url: data.Location }));
+            this.setState(() => ({ isUploaded : true, url: data.Location }));
             this.refs.image.src = this.state.url;
+
+            localStorage.setItem("imgUrl", this.state.url);
          
           }
         );
       };
-    // uploadImage = (e) => {
-    //     e.preventDefault();
-    //     // get image file through ref
-    //     const imgFile = this.imgInputRef.files[0];
-    //     // upload image to AWS S3
-    //     S3FileUpload.uploadFile(imgFile, config)
-    //     .then(data => {
-    //         console.log(data);
-    //         this.setState(() => ({url: data.location}));
-    //         this.refs.image.src = this.state.url; 
-    //     })
-    //     .catch(err => console.error(err));
-    // }
+
+      deletePhoto = () => {
+        var index = this.state.url.indexOf(this.context.email);
+        var albumAndFile = this.state.url.slice(index).split("/");
+    
+        var params = {
+          Bucket: config.bucketName,
+          Key: encodeURIComponent(albumAndFile[0]) + "/" + albumAndFile[1]
+        };
+        s3.deleteObject(params, (err, data) => {
+          if (err) {
+            return alert("There was an error deleting your photo: ", err.message);
+          }
+          console.log(data);
+          this.setState({ url: null, isUploaded: false });
+          localStorage.removeItem("imgUrl");
+          alert("Successfully deleted photo.");
+        });
+    };
+
     handleModalConfirm = () => {
         this.setState(() => ({creating: false}));
         const title = this.titleInputRef.current.value;
@@ -184,7 +195,8 @@ class EventsPage extends Component {
                         _id : this.context.userId
                     }
                 });
-                return { events: updatedEvents };
+                localStorage.removeItem("imgUrl");
+                return { events: updatedEvents, isUploaded: false };
             })
         }).catch(err => {
             console.log(err);
@@ -290,7 +302,7 @@ class EventsPage extends Component {
             this.setState({isLoading: true});
             
         })
-    }
+    };
 
     handleShowDetail = eventId => {
         this.setState(prevState => {
@@ -377,11 +389,12 @@ class EventsPage extends Component {
                                 <label htmlFor="date">Date</label>
                                 <input type="datetime-local" id="date" ref={this.dateInputRef}></input>
                             </div>
-                            <div className="form-control">
+                            <div className="form-control" style={linkStyle}>
                                 <label htmlFor="img">Image</label>
                                 <input type="file"  accept="image/jpeg, image/png" ref={file => this.imgInputRef = file}/>
-                                <button className="btn" onClick={(e) => this.addPhoto(e, this.context.email)}>Upload</button>
-                                <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"><img alt={this.state.url && this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
+                                <button className="btn" onClick={this.addPhoto}>Upload</button>
+                                <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"><img src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
+                                <span style={xBtn} onClick={this.deletePhoto}>x</span>
                             </div>    
                             <div className="form-control">
                                 <label htmlFor="description">Description</label>
@@ -439,6 +452,21 @@ class EventsPage extends Component {
         );
     }
 }
+const linkStyle = {
+    position: "relative"
+  };
 
-
+const xBtn = {
+  display: "inline-block",
+  position: "absolute",
+  right: 555,
+  top: 52,
+  width: 20,
+  height: 20,
+  backgroundColor: "white",
+  cursor: "pointer",
+  zIndex: 5,
+  textAlign: "center",
+  borderRadius: 13
+};
 export default EventsPage;

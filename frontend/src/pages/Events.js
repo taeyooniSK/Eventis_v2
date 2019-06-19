@@ -7,8 +7,24 @@ import AuthContext from "../context/auth-context";
 import "./Events.css";
 import Spinner from "../components/Spinner/Spinner";
 
+import AWS from "aws-sdk";
 import S3FileUpload from "react-s3";
 import config from "../config/config";
+
+
+
+AWS.config.update({
+    bucketName: config.bucketName,
+    dirName: config.dirName,
+    region: config.region,
+    accessKeyId: config.accessKeyId,
+    secretAccessKey: config.secretAccessKey
+  });
+  
+  const s3 = new AWS.S3({
+    apiVersion: "2006-03-01",
+    params: { Bucket: config.bucketName }
+  });
 
 
 class EventsPage extends Component {
@@ -52,25 +68,57 @@ class EventsPage extends Component {
     handleEditModalCancel =() => {
         this.setState(() => ({editing : false, selectedEventToEdit: null }));
     }
-    setFile = (e) => {
-        const imgFile = e.target.files[0];
-        if(imgFile) {
-            this.setState({file : imgFile});
-        }
-    }
-    uploadImage = (e) => {
+    // setFile = (e) => {
+    //     const imgFile = e.target.files[0];
+    //     if(imgFile) {
+    //         this.setState({file : imgFile});
+    //     }
+    // }
+    addPhoto = (e, albumName)=> {
         e.preventDefault();
-        // get image file through ref
-        const imgFile = this.imgInputRef.files[0];
-        // upload image to AWS S3
-        S3FileUpload.uploadFile(imgFile, config)
-        .then(data => {
+        const files = this.imgInputRef.files;
+        console.log(files);
+        if (!files.length) {
+          return alert("Please choose a file to upload first.");
+        }
+        const file = files[0];
+        const fileName = file.name;
+        const albumPhotosKey = encodeURIComponent(albumName) + "/";
+    
+        const photoName = albumPhotosKey + fileName;
+       
+        s3.upload(
+          {
+            Key: photoName,
+            Body: file,
+            ACL: "public-read",
+            ContentType: "image/jpeg" // if I don't specify this, when you get the url and click it, you can only download it not being able to see it
+          },
+          (err, data) => {
+            if (err) {
+              console.log("error: ", err);
+              return alert("There was an error uploading your photo: ", err);
+            }
             console.log(data);
-            this.setState(() => ({url: data.location}));
-            this.refs.image.src = this.state.url; 
-        })
-        .catch(err => console.error(err));
-    }
+            this.setState(() => ({ url: data.Location }));
+            this.refs.image.src = this.state.url;
+         
+          }
+        );
+      };
+    // uploadImage = (e) => {
+    //     e.preventDefault();
+    //     // get image file through ref
+    //     const imgFile = this.imgInputRef.files[0];
+    //     // upload image to AWS S3
+    //     S3FileUpload.uploadFile(imgFile, config)
+    //     .then(data => {
+    //         console.log(data);
+    //         this.setState(() => ({url: data.location}));
+    //         this.refs.image.src = this.state.url; 
+    //     })
+    //     .catch(err => console.error(err));
+    // }
     handleModalConfirm = () => {
         this.setState(() => ({creating: false}));
         const title = this.titleInputRef.current.value;
@@ -331,9 +379,9 @@ class EventsPage extends Component {
                             </div>
                             <div className="form-control">
                                 <label htmlFor="img">Image</label>
-                                <input type="file" onChange={this.setFile} ref={file => this.imgInputRef = file}/>
-                                <button className="btn" onClick={this.uploadImage}>Upload</button>
-                                <a rel="noopener noreferrer" href={this.state.url} target="_blank"><img alt={this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
+                                <input type="file"  accept="image/jpeg, image/png" ref={file => this.imgInputRef = file}/>
+                                <button className="btn" onClick={(e) => this.addPhoto(e, this.context.email)}>Upload</button>
+                                <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"><img alt={this.state.url && this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
                             </div>    
                             <div className="form-control">
                                 <label htmlFor="description">Description</label>

@@ -15,7 +15,8 @@ import "./App.css";
 class App extends Component {
   state = { // having state here 
     token: null,
-    userId: null
+    userId: null,
+    email: null
   }
 // Before loading a page, if the user is logged in, 
 // get token and userId from localstorage (this enables user to use websites even after refreshing the browser)
@@ -24,24 +25,24 @@ class App extends Component {
     const userInfo = JSON.parse(localStorage.getItem("info"));
     if(userInfo){
       this.setState(prevState => (
-        {token: userInfo.token, userId: userInfo.userId }
+        {token: userInfo.token, userId: userInfo.userId, email: userInfo.email }
       ));
     }
   }
 
-  login = (token, userId, tokenExpiration) => {
+  login = (token, userId, email, tokenExpiration) => {
     // const userInfo = JSON.parse(localStorage.getItem("info"));
     // this.setState(prevState => (
     //   {token: userInfo.token, userId: userInfo.userId }
     // ));
     this.setState(prevState => (
-      {token: token, userId: userId }
+      {token: token, userId: userId, email: email }
     ));
     
   }
 
   logout = () => {
-    this.setState({token: null, userId: null});
+    this.setState({token: null, userId: null, email: null});
     // when user is logged out, remove token and userId in localstorage
     localStorage.removeItem("info");
   }
@@ -57,7 +58,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <AuthContext.Provider value={{
-          token: this.state.token, userId: this.state.userId, login: this.login, logout: this.logout
+          token: this.state.token, userId: this.state.userId, email: this.state.email, login: this.login, logout: this.logout
         }}>
           <MainNavigation />
           <main className="main-content">

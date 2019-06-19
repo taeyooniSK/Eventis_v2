@@ -8,6 +8,7 @@ import "./DetailedEvent.css";
 class DetailedEvent extends Component{
     state = {
         isLoading: false,
+        isClicked: false,
         comments: this.props.comments
     }
     
@@ -24,8 +25,12 @@ class DetailedEvent extends Component{
         e.preventDefault();
         // Remove blank space
         let text = this.textInputRef.current.value.trim();
+        // if user didn't type anything, this returns
+        if(text.length === 0){
+            return;
+        }
        
-        this.setState({ isLoading: true });
+        this.setState({ isClicked: true, isLoading: true });
         const reqBody = {
             query: `
                 mutation { 
@@ -59,13 +64,13 @@ class DetailedEvent extends Component{
             console.log(result);
            
             this.setState((prevState) => (
-                {comments : [comment, ...prevState.comments], isLoading: false}
+                {comments : [comment, ...prevState.comments], isClicked: false, isLoading: false}
             ));
             document.querySelector("textarea").value = "";
             
         }).catch(err => {
             console.log(err);
-            this.setState({isLoading: true});
+            this.setState({isClicked: true, isLoading: true});
             
         })
     }
@@ -75,18 +80,22 @@ class DetailedEvent extends Component{
         const email = this.props.event.creator.email;
         const id = email.slice(0, this.props.event.creator.email.indexOf("@"));
         return(
-            <div className="detailed-event">
-                <h1>{this.props.event.title} hosted by <span>{id}</span></h1>
-                <img src={this.props.event.img} alt={this.props.event.img}/>
-                <h2>${this.props.event.price} - {new Date(this.props.event.date).toLocaleDateString("ko-KR") }</h2>
-                <p>{this.props.event.description}</p>
+            <div className="detailed-event__container">
+                <div className="detailed-event__info">
+                    <h1>{this.props.event.title} hosted by <span>{id}</span></h1>
+                    <img src={this.props.event.img} alt={this.props.event.img}/>
+                    <h2>${this.props.event.price} - {new Date(this.props.event.date).toLocaleDateString("ko-KR") }</h2>
+                    <p>{this.props.event.description}</p>
+                </div>
                 {
                     this.context.token 
                     && 
                     <div className="comment__container">
                         <form className="form-control">
-                            <textarea ref={this.textInputRef}></textarea>
-                            <button className="btn" onClick={this.context.token && this.postComment}>Confirm</button>
+                            <div className="comment__container--actions">
+                                <textarea ref={this.textInputRef}></textarea>
+                                <button disabled={this.state.isClicked} className="btn" onClick={this.context.token && this.postComment}>Confirm</button>
+                            </div>
                         </form>
                     </div>
                 }

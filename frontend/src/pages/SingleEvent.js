@@ -36,6 +36,7 @@ class SingleEventPage extends Component {
                                 email
                             }
                             text
+                            updatedAt
                         }
                         creator{
                             email

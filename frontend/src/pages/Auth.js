@@ -37,6 +37,7 @@ class AuthPage extends Component {
                 query {
                     login(email: "${email}", password: "${password}"){
                         userId
+                        email
                         token
                         tokenExpiration
                     }
@@ -78,7 +79,7 @@ class AuthPage extends Component {
             // After I'm logged in, there is token
             console.log(result);
             if(result.data.login.token){
-                this.context.login(result.data.login.token, result.data.login.userId, result.data.login.tokenExpiration);
+                this.context.login(result.data.login.token, result.data.login.email, result.data.login.userId, result.data.login.tokenExpiration);
             }
         }).catch(err => {
             localStorage.removeItem("token");

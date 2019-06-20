@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import Modal from "../components/Modal/Modal";
 import BackgroundShadow from "../components/BackgroundShadow/BackgroundShadow";
@@ -56,9 +57,9 @@ class EventsPage extends Component {
         this.getEvents();
     }
 
-    handleCreateEvent = () => {
-        this.setState((prevState) => ({creating: !prevState.creating, url: localStorage.getItem("url") && localStorage.getItem("url") }))
-    }
+    // handleCreateEvent = () => {
+    //     this.setState((prevState) => ({creating: !prevState.creating, url: localStorage.getItem("url") && localStorage.getItem("url") }))
+    // }
 
     handleModalCancel = () => {
         // when making an event if you cancel, creating : false 
@@ -134,7 +135,7 @@ class EventsPage extends Component {
         this.setState(() => ({creating: false}));
         const title = this.titleInputRef.current.value;
         const price = this.priceInputRef.current.value;
-        const date = this.dateInputRef.current.value;
+        const date = this.dateInputRef.current.value; // 여기 나중에 수정할떄 startDate랑 endDate로 추가 &&수정 해야함
         const img = this.state.url;
         const description = this.descriptionInputRef.current.value;
         
@@ -188,7 +189,8 @@ class EventsPage extends Component {
                     _id : result.data.createEvent._id,
                     title : result.data.createEvent.title,
                     price : result.data.createEvent.price,
-                    date : result.data.createEvent.date,
+                    startDate : result.data.createEvent.startDate,
+                    endDate : result.data.createEvent.endDate,
                     img: result.data.createEvent.img,
                     description : result.data.createEvent.description,
                     creator :{
@@ -208,27 +210,29 @@ class EventsPage extends Component {
         this.setState(() => ({editing: false}));
         const title = this.titleInputRef.current.value;
         const price = this.priceInputRef.current.value;
-        const date = this.dateInputRef.current.value;
+        const startDate = this.startDateInputRef.current.value; // start date
+        const endDate = this.endDateInputRef.current.value; // end date
         const description = this.descriptionInputRef.current.value;
         
         // simple validation
-        if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || description.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || description.trim().length === 0) {
             return;
         }
 
 
         // same key, value pairs
-        const event = {title, price, date, description};
+        const event = {title, price, startDate, endDate, description};
         console.log(event);
 
         let reqBody = {
             query: `
             mutation {
-              editEvent(updatedEventInput: {_id: "${this.state.selectedEventToEdit._id}" title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+              editEvent(updatedEventInput: {_id: "${this.state.selectedEventToEdit._id}" title: "${title}", description: "${description}", price: ${price}, startDate: "${startDate}"}, endDate: "${endDate}"}) {
                 _id
                 title
                 description
-                date
+                startDate
+                endDate
                 price
               }
             }
@@ -267,7 +271,8 @@ class EventsPage extends Component {
                         _id
                         title
                         price
-                        date
+                        startDate
+                        endDate
                         description
                         cancelled
                         creator {
@@ -371,7 +376,8 @@ class EventsPage extends Component {
         return (
             <React.Fragment>
                 {this.state.selectedEvent && <BackgroundShadow />}
-                {
+                {/* {this.state.creating && } */}
+                {/* {
                  this.state.creating && <React.Fragment>
                     <BackgroundShadow />
                      <Modal title="Add Event" canCancel canConfirm handleModalCancel={this.handleModalCancel} handleModalConfirm={this.handleModalConfirm} buttonText="Confirm">
@@ -403,7 +409,7 @@ class EventsPage extends Component {
                         </form>
                     </Modal>
                    </React.Fragment>
-                }
+                } */}
                 {
                  this.state.editing && <React.Fragment>
                     <BackgroundShadow />
@@ -437,8 +443,8 @@ class EventsPage extends Component {
                     </Modal>}
                 { this.context.token && (
                     <div className="events-control">
-                        <p>Share your events!</p>
-                        <button className="btn" onClick={this.handleCreateEvent}>Create Event</button>
+                        <Link to="/event/new" className="btn">Create Event</Link>
+                        {/* <button className="btn" onClick={this.handleCreateEvent}>Create Event</button> */}
                     </div>
                 )}
                 {this.state.isLoading ? <Spinner /> : 

@@ -23,7 +23,8 @@ type Event {
     title: String!
     description: String!
     price: Float!
-    date: String! 
+    startDate: String!
+    endDate : String! 
     img: String
     cancelled: Boolean
     comments: [Comment!]
@@ -58,7 +59,8 @@ input EventInput {
     description: String!
     price: Float!
     img: String
-    date: String!
+    startDate: String!
+    endDate : String! 
 }
 
 input UpdatedEventInput {

@@ -6,6 +6,7 @@ import BookingsPage from "./pages/Bookings";
 import EventsPage from "./pages/Events"   
 import SingleEventPage from "./pages/SingleEvent"
 import MyEventsPage from './pages/MyEvents';
+import NewEventPage from "./pages/NewEvent";
 import MainNavigation from "./components/Navigation/MainNavigation";    
 import AuthContext from "./context/auth-context";
 
@@ -71,6 +72,7 @@ class App extends Component {
               {/* {!this.state.token && <Redirect from="/" to="/auth" exact />} */}
               {!this.state.token && <Route path="/auth" component={AuthPage} />}
               {this.state.token && <Route path="/my-events" component={MyEventsPage} />}
+              {this.state.token && <Route path="/event/new" component={NewEventPage}/>}
               <Route path="/events/:eventId/" component={SingleEventPage} />
               <Route path="/events" component={EventsPage} />
               {this.state.token && <Route path="/bookings" component={BookingsPage} />}

@@ -11,7 +11,8 @@ const EventList = (props) => {
         userId={props.authUserId} 
         title={event.title}
         price={event.price} 
-        date={event.date}
+        startDate={event.startDate}
+        endDate={event.endDate}
         cancelled={event.cancelled}
         creatorId={event.creator._id} 
         onMore={props.onViewMore}
@@ -19,7 +20,7 @@ const EventList = (props) => {
         openEditModal={props.openEditModal}  
         />
     );
-
+        
     return (
         <ul className="event__list">{events}</ul>
     )

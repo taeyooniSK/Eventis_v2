@@ -13,8 +13,9 @@ const singleEvent = async eventId => {
     try {
         const event = await Event.findById({_id: eventId });
         return {
-            ...event._doc, 
-            // _id: event.id, 
+            ...event._doc,
+            startDate: dateToString2(event.startDate),
+            endDate: dateToString2(event.endDate), 
             creator: user.bind(this, event.creator)
         }
     } catch (err){
@@ -78,7 +79,8 @@ const comments = async commentIds => {
 const transformEvent = event => {
     return {
         ...event._doc,
-        date: dateToString(event._doc.date),
+        startDate: dateToString2(event._doc.startDate),
+        endDate: dateToString2(event._doc.endDate),
         creator: user.bind(this, event._doc.creator),
         comments:  comments.bind(this, event._doc.comments) // when event is loaded from db, get comments data according to the event
     }

@@ -67,7 +67,8 @@ module.exports = { // javascript object where all the resolver functions are in
             description: args.eventInput.description,
             price: +args.eventInput.price,
             img: args.eventInput.img,
-            date: new Date(args.eventInput.date),
+            startDate: new Date(args.eventInput.startDate),
+            endDate: new Date(args.eventInput.endDate),
             creator: req.userId // user who is authenticated
         });
         let createdEvent; // this variable is going to contain event that is created by createEvent resolver

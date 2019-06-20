@@ -27,7 +27,8 @@ class SingleEventPage extends Component {
                         _id
                         title
                         price
-                        date
+                        startDate
+                        endDate
                         description
                         comments {
                             _id

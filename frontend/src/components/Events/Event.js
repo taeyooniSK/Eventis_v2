@@ -11,7 +11,7 @@ const Event = (props) => {
         <li key={props.id} className="events__list--item">
             <div>
                 <h1>{props.title}</h1>
-                <h2>${props.price} - {new Date(props.date).toLocaleString("ko-KR")}</h2>
+                <h2>${props.price} - { props.startDate } ~ { props.endDate }</h2>
             </div>
             <div>
                 <React.Fragment>

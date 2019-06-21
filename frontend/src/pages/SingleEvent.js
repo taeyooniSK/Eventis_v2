@@ -41,6 +41,7 @@ class SingleEventPage extends Component {
                             updatedAt
                         }
                         creator{
+                            _id
                             email
                         }
                     }

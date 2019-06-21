@@ -91,8 +91,8 @@ const transformBooking = booking => {
         ...booking._doc,
         user: user.bind(this, booking._doc.user),
         event: singleEvent.bind(this, booking._doc.event),
-        createdAt: dateToString(booking._doc.createdAt),
-        updatedAt: dateToString(booking._doc.updatedAt)
+        createdAt: dateToString2(booking._doc.createdAt),
+        updatedAt: dateToString2(booking._doc.updatedAt)
     }
 };
 

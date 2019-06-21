@@ -31,7 +31,8 @@ class BookingsPage extends Component {
                             title
                             price
                             cancelled
-                            date
+                            startDate
+                            endDate
                             description
                         }
                         createdAt
@@ -68,7 +69,10 @@ class BookingsPage extends Component {
         })
     }
 
-    handleCancelBooking = (bookingId) => {
+    handleCancelBooking = (bookingId, eventId) => {
+        if(this.getCookie(this.context.email) && this.getCookie(this.context.email) === eventId){
+            this.deleteCookie(this.context.email);
+        }
         this.setState({ isLoading: true });
         const reqBody = {
             query: `
@@ -152,7 +156,25 @@ class BookingsPage extends Component {
             
         })
     }
-
+    getCookie(cookieName) {
+        const name = `${cookieName}=`;
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+      
+    deleteCookie(cookieName) {   
+        document.cookie = cookieName+'=; Max-Age=-99999999;';  
+    }
     render() {
         return (
             

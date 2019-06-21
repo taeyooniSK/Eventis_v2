@@ -6,10 +6,10 @@ const Booking = props =>  {
     if(isCancelled === false){
         bookingList = <li key={props.bookingId} className="booking__list-item">
                         <div className="bookings__item-date">
-                            {props.title} - {new Date(props.date).toLocaleDateString()}
+                            {props.title} - {props.date}
                         </div>
                         <div className="bookings__item-actions">
-                            <button className="btn" onClick={props.handleCancelBooking.bind(this, props.bookingId)}>Cancel</button>
+                            <button className="btn" onClick={props.handleCancelBooking.bind(this, props.bookingId, props.eventId)}>Cancel</button>
                         </div>
                     </li>
         return bookingList;

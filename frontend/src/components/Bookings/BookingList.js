@@ -21,6 +21,7 @@ const BookingList = props => {
             key={booking._id}
             bookingId={booking._id}
             title={booking.event.title}
+            eventId={booking.event._id}
             date={booking.createdAt}
             handleCancelBooking={props.handleCancelBooking}
             cancelled={booking.event.cancelled}

@@ -182,6 +182,7 @@ class NewEvent extends Component {
         })
        
     }
+
     componentWillUnmount(){
         this.isActive = false;
     }

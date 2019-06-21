@@ -14,8 +14,8 @@ const singleEvent = async eventId => {
         const event = await Event.findById({_id: eventId });
         return {
             ...event._doc,
-            startDate: dateToString2(event.startDate),
-            endDate: dateToString2(event.endDate), 
+            startDate: dateToString2(event._doc.startDate),
+            endDate: dateToString2(event._doc.endDate), 
             creator: user.bind(this, event.creator)
         }
     } catch (err){

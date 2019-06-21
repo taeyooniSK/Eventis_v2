@@ -1,0 +1,73 @@
+.my-events__list {
+    display: flex;
+    flex-direction: column;
+    margin: 4rem auto;
+}
+
+.my-events__list a:link,
+.my-events__list a:active{
+    display: block;
+    color: black;
+}
+
+.my-events__list--cancelled,
+.my-events__list--host {
+    display: flex;
+}
+
+.cancelled:hover {
+    box-shadow:rgb(255, 188, 188) 3px 5px 5px 2px;
+}
+
+/* myEvents list (containing cancelled events list and events a user host list) */
+
+.my-events__list h2{
+    margin-bottom: 1.5rem;
+}
+
+/* my-events__list--item(events lists I host) */
+.my-events__list--item {
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: rgba(194, 194, 194, 0.5) 0px 2px 4px 0px;
+    border-radius: 10%;
+    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.my-events__list--item:hover{
+    box-shadow: rgb(153, 200, 241) 3px 5px 5px 2px;
+}
+
+.my-events__list--item.cancelled:hover {
+    box-shadow:rgb(252, 114, 114) 3px 5px 5px 2px;
+}
+.my-events__list--item h1 {
+    font-size: 1.4rem;
+    color: #2ABFCB;
+    margin-bottom: 0.3rem;
+}
+
+.my-events__list--item h2{
+    font-size: 0.9rem;
+    color: #cbc6d1;
+}
+.my-events__item--container {
+    display: flex;
+    flex-direction: column;
+}
+.my-events__item--thumbnail {
+    width: 100%;
+    height: 130px;
+    background-position: center center;
+    background-size: cover;
+}
+
+.my-events__item--content {
+    height: 90px;
+    padding: 13px;
+}
+
+
+/* my-events__list--item cancelled(events lists I cancelled) */

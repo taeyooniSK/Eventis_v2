@@ -1,15 +1,19 @@
 import React from "react";
+
+import "./MyEventsList.css";
 import MyCancelledEvent from "./MyCancelledEvent";
 import MyEvent from "./MyEvent";
 
-const MyEventList = (props) => {
+const MyEventsList = (props) => {
     const cancelledEvents = props.myCancelledEvents.map(event => 
         <MyCancelledEvent 
             key={event._id}
             eventId={event._id}
             title={event.title}
             price={event.price} 
-            date={event.date}
+            img={event.img}
+            startDate={event.startDate}
+            endDate={event.endDate}
             onDelete={props.handleDeleteEvent}
         />
     );
@@ -23,7 +27,9 @@ const MyEventList = (props) => {
             userId={props.authUserId} 
             title={event.title}
             price={event.price} 
-            date={event.date}
+            startDate={event.startDate}
+            endDate={event.endDate}
+            img={event.img}
             creatorId={event.creator._id} 
             onMore={props.onViewMore}
             onEdit={props.onEdit}  
@@ -35,17 +41,22 @@ const MyEventList = (props) => {
 
     return (
         <React.Fragment>
-            <ul className="event__list">
+            <ul className="my-events__list">
             <h2>Events lists that I cancelled</h2>
+            <div className="my-events__list--cancelled">
                 {cancelledEvents}
+            </div>
+                
             </ul>
-            <ul className="event__list">
+            <ul className="my-events__list">
             <h2>Events lists I host</h2>
-            {events}
+            <div className="my-events__list--host">
+                {events}
+            </div>
             </ul>
         </React.Fragment>
     )
 }
 
 
-export default MyEventList;
+export default MyEventsList;

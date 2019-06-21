@@ -53,7 +53,7 @@ class EventsPage extends Component {
         this.descriptionInputRef = React.createRef();
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.getEvents();
     }
 
@@ -274,6 +274,7 @@ class EventsPage extends Component {
                         startDate
                         endDate
                         description
+                        img
                         cancelled
                         creator {
                             _id
@@ -438,7 +439,7 @@ class EventsPage extends Component {
                 }
                 {this.state.selectedEvent && <Modal title={this.state.selectedEvent.title} canCancel canConfirm handleModalCancel={this.handleModalCancel} handleModalConfirm={this.handleBookEvent} buttonText={this.context.token ? "Book" : "Confirm"}>
                     <h1>{this.state.selectedEvent.title}</h1>
-                    <h2>${this.state.selectedEvent.price} - {new Date(this.state.selectedEvent.date).toLocaleString("ko-KR")}</h2>
+                    <h2>${this.state.selectedEvent.price} - {this.state.selectedEvent.startDate} ~ {this.state.selectedEvent.startDate}</h2>
                     <p>{this.state.selectedEvent.description}</p>
                     </Modal>}
                 { this.context.token && (

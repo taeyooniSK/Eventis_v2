@@ -10,10 +10,12 @@ const EventList = (props) => {
         eventId={event._id}
         userId={props.authUserId} 
         title={event.title}
+        img={event.img}
         price={event.price} 
         startDate={event.startDate}
         endDate={event.endDate}
         cancelled={event.cancelled}
+        creatorEmail={event.creator.email}
         creatorId={event.creator._id} 
         onMore={props.onViewMore}
         onEdit={props.onEdit}  

@@ -4,7 +4,7 @@ import BackgroundShadow from "../components/BackgroundShadow/BackgroundShadow";
 import AuthContext from "../context/auth-context";
 import Spinner from "../components/Spinner/Spinner";
 import "./MyEvents.css";
-import MyEventList from "../components/Events/MyEventList";
+import MyEventsList from "../components/Events/MyEventsList/MyEventsList";
 
 
 class MyEventsPage extends Component {
@@ -30,7 +30,9 @@ class MyEventsPage extends Component {
                         _id
                         title
                         price
-                        date
+                        startDate
+                        endDate
+                        img
                         description
                         cancelled
                         creator {
@@ -82,7 +84,8 @@ class MyEventsPage extends Component {
                         title
                         description
                         price
-                        date
+                        startDate
+                        endDate
                         img
                         cancelled
                         creator{
@@ -164,7 +167,7 @@ class MyEventsPage extends Component {
             {
             this.state.isLoading
              ? <Spinner /> 
-             : <MyEventList 
+             : <MyEventsList 
                 myEvents={this.state.myEvents} 
                 myCancelledEvents={this.state.myCancelledEvents} 
                 handleCancelEvent={this.handleCancelEvent}

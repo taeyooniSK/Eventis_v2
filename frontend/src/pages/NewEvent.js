@@ -31,7 +31,8 @@ class NewEvent extends Component {
         url: null,
         isUploaded: false
     };
-    
+    isActive = true;
+
     static contextType = AuthContext;
 
     constructor(props){
@@ -116,7 +117,7 @@ class NewEvent extends Component {
         // if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
         //     return;
         // }
-        if( title.trim().length === 0 || price <= 0 || startDate.trim().length === 0 ||  endDate.trim().length === 0 ||description.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || startDate.trim().length === 0 ||  endDate.trim().length === 0 || description.trim().length === 0) {
             return;
         }
 
@@ -131,10 +132,11 @@ class NewEvent extends Component {
               createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", price: ${price}, startDate: "${startDate}", endDate: "${endDate}"}) {
                 _id
                 title
-                description
+                price
                 startDate
                 endDate
-                price
+                img
+                description
               }
             }
           `
@@ -155,6 +157,7 @@ class NewEvent extends Component {
             }
             return res.json();
         }).then(result => {
+            if(this.isActive){
             // when user who is logged in created a new event, this reduces request from the database compared to the last code
             this.setState(prevState => {
                 const updatedEvents = [...prevState.events];
@@ -173,59 +176,86 @@ class NewEvent extends Component {
                 localStorage.removeItem("imgUrl");
                 return { events: updatedEvents, isUploaded: false };
             })
+        }
         }).catch(err => {
             console.log(err);
         })
        
     }
-
+    componentWillUnmount(){
+        this.isActive = false;
+    }
 
   render() {
     return (
       <div className="new-event">
         <header className="new-event__header">
-            <h1>Host an Event</h1>
+            <h1>Be an Attractive Host of Events</h1>
             <p>Please fill the forms for information about the event.</p>
         </header>
         <div className="new-event__content">
-            <h3>Host Of The Event</h3>
-            <div className="new-event__host">
-                <h4>{this.context.email}</h4>
+            <div id="new-event__hostInfo">
+                <h3>Host of The Event</h3>
+                <div id="new-event__hostTitle">
+                    <div id="new-event__host">
+                        <span>{this.context.email}</span>
+                    </div>
+                </div>
             </div>
             <form>
                 <div className="form-control">
-                    <h3 className="form-title">Event's Title</h3>
-                    <p className="form-description">Make a nice title represeting your event's theme.</p>
-                    <input type="text" id="title" ref={this.titleInputRef}></input>
+                    <div className="form-specification">
+                        <h3 className="form-title">Event's Title</h3>
+                        <p className="form-description">Make a nice title represeting your event's theme.</p>
+                    </div>
+                    <div className="form-action">
+                        <input type="text" id="title" ref={this.titleInputRef}></input>
+                    </div>
                 </div>
                 <div className="form-control">
-                <h3 className="form-title">Price For The Event</h3>
+                <div className="form-specification">
+                    <h3 className="form-title">Price for The Event</h3>
                     <p className="form-description">Set a proper price for attending.</p>
-                    {/* <label htmlFor="price">Price</label> */}
+                </div>
+                <div className="form-action">
                     <input type="number" id="price" ref={this.priceInputRef}></input>
                 </div>
+                    {/* <label htmlFor="price">Price</label> */}
+                </div>
                 <div className="form-control">
-                    <h3 className="form-title">Event's Date & Time</h3>
-                    <p className="form-description">Enter the start time and end time.</p>
-                    <label htmlFor="start-date">Date</label>
-                    <input type="datetime-local" id="start-date" ref={this.startDateInputRef}></input>
-                    <label htmlFor="end-date">Date</label>
-                    <input type="datetime-local" id="end-date" ref={this.endDateInputRef}></input>
+                    <div className="form-specification">
+                        <h3 className="form-title">Event's Date & Time</h3>
+                        <p className="form-description">Enter the start time and end time.</p>
+                    </div>
+                    <div className="form-action"> 
+                        <label htmlFor="start-date">Start Date</label>
+                        <input type="datetime-local" id="start-date" ref={this.startDateInputRef} />
+                        <label htmlFor="end-date">End Date</label>
+                        <input type="datetime-local" id="end-date" ref={this.endDateInputRef} />
+                    </div>
                 </div>
                 <div className="form-control" style={linkStyle}>
-                    <h3 className="form-title">Event's Thumbnail Image</h3>
-                    <p className="form-description">Many words in the picture are not attractive.</p>
-                    {/* <label htmlFor="img">Image</label> */}
-                    <input type="file"  accept="image/jpeg, image/png" ref={file => this.imgInputRef = file}/>
-                    <button className="btn" onClick={this.addPhoto}>Upload</button>
-                    <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"><img src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
-                    <span style={xBtn} onClick={this.deletePhoto}>x</span>
+                    <div className="form-specification">
+                        <h3 className="form-title">Event's Thumbnail Image</h3>
+                        <p className="form-description">Many words in the picture are not attractive.</p>
+                    </div>
+                    <div className="form-action">
+                        <label id="img-label" htmlFor="img">Choose a file</label>
+                            <input id="img" type="file"  accept="image/jpeg, image/jpg, image/png" ref={file => this.imgInputRef = file}/>
+                            <button className="btn" onClick={this.addPhoto}>Confirm</button>
+                            <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"><img src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
+                            <span style={xBtn} onClick={this.deletePhoto}>x</span>
+                    </div>
                 </div>    
-                <div className="form-control">
-                    <h3 className="form-title">Event's Description</h3>
-                    <p className="form-description">Enter specific information on the event.</p>
-                    {/* <label htmlFor="description">Description</label> */}
-                    <textarea id="description" rows="4" ref={this.descriptionInputRef}></textarea>
+                <div id="form-control__description" className="form-control">
+                    <div className="form-specification">
+                        <h3 className="form-title">Event's Description</h3>
+                        <p className="form-description">Enter specific information on the event.</p>
+                    </div>
+                    <div className="form-action">
+                        {/* <label htmlFor="description">Description</label> */}
+                        <textarea id="description" rows="4" ref={this.descriptionInputRef}></textarea>
+                    </div>
                 </div>
                 <Link to="/events" onClick={this.saveEventInfo} className="btn">Create Event</Link>
             </form>

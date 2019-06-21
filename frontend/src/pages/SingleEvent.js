@@ -29,6 +29,7 @@ class SingleEventPage extends Component {
                         price
                         startDate
                         endDate
+                        img
                         description
                         comments {
                             _id

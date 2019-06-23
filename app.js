@@ -7,7 +7,8 @@ const mongoose = require("mongoose");
 const isAuthenticated = require("./middleware/isAuth");
 
 const graphqlSchema = require("./graphql/schema/index");
-const graphqlResolvers = require("./graphql/resolvers/index"); 
+const graphqlResolvers = require("./graphql/resolvers/index");
+
 
 
 
@@ -18,6 +19,7 @@ const User = require("./models/user");
 
 
 app.use(bodyParser.json()); 
+
 
 // middleware for taking care of CORS : every host or client can send requests to server
 app.use((req, res, next) => {

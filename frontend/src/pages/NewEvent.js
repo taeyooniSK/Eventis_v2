@@ -3,9 +3,20 @@ import { Link } from "react-router-dom";
 
 import AuthContext from "../context/auth-context";
 import AWS from "aws-sdk";
+import NodeGeocoder from "node-geocoder";
 import config from "../config/config";
 import "./NewEvent.css";
 
+const options = {
+  provider: 'google',
+ 
+  // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: 'AIzaSyCTQ3N0LKR59czNcnbJ1-5k6ElRW27UCRY', // for Mapquest, OpenCage, Google Premier
+  formatter: null         // 'gpx', 'string', ...
+};
+ 
+const geocoder = NodeGeocoder(options);
 // AWS config
 AWS.config.update({
     bucketName: config.bucketName,
@@ -110,7 +121,9 @@ class NewEvent extends Component {
         const startDate = this.startDateInputRef.current.value; // start date
         const endDate = this.endDateInputRef.current.value; // end date
         const img = this.state.url; 
+        const location = this.locationInputRef.current.value;
         const description = this.descriptionInputRef.current.value;
+        
         
         // simple validation
         //이게 원본
@@ -123,19 +136,20 @@ class NewEvent extends Component {
 
 
         // const event = {title, price, date, description, img}; // original version
-        const event = {title, price, startDate, endDate, img, description };
+        const event = {title, price, startDate, endDate, img, location, description };
         console.log(event);
 
         let reqBody = {
             query: `
             mutation {
-              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", price: ${price}, startDate: "${startDate}", endDate: "${endDate}"}) {
+              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", location: "${location}", price: ${price}, startDate: "${startDate}", endDate: "${endDate}"}) {
                 _id
                 title
                 price
                 startDate
                 endDate
                 img
+                location
                 description
               }
             }
@@ -159,23 +173,26 @@ class NewEvent extends Component {
         }).then(result => {
             if(this.isActive){
             // when user who is logged in created a new event, this reduces request from the database compared to the last code
-            this.setState(prevState => {
-                const updatedEvents = [...prevState.events];
-                updatedEvents.push({
-                    _id : result.data.createEvent._id,
-                    title : result.data.createEvent.title,
-                    price : result.data.createEvent.price,
-                    startDate : result.data.createEvent.startDate,
-                    endDate : result.data.createEvent.endDate,
-                    img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
-                    description : result.data.createEvent.description,
-                    creator :{
-                        _id : this.context.userId
-                    }
-                });
-                localStorage.removeItem("imgUrl");
-                return { events: updatedEvents, isUploaded: false };
-            })
+            // this.setState(prevState => {
+            //     const updatedEvents = [...prevState.events];
+            //     updatedEvents.push({
+            //         _id : result.data.createEvent._id,
+            //         title : result.data.createEvent.title,
+            //         price : result.data.createEvent.price,
+            //         startDate : result.data.createEvent.startDate,
+            //         endDate : result.data.createEvent.endDate,
+            //         img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
+            //         location: result.data.createEvent.location,
+            //         lat: result.data.createEvent.lat,
+            //         lng: result.data.createEvent.lng,
+            //         description : result.data.createEvent.description,
+            //         creator :{
+            //             _id : this.context.userId
+            //         }
+            //     });
+            //     localStorage.removeItem("imgUrl");
+            //     return { events: updatedEvents, isUploaded: false };
+            // })
         }
         }).catch(err => {
             console.log(err);
@@ -183,11 +200,42 @@ class NewEvent extends Component {
        
     }
 
+
     componentWillUnmount(){
         this.isActive = false;
     }
 
   render() {
+    
+    const linkStyle = {
+      position: "relative"
+    };
+
+    const xBtn = {
+    display: "inline-block",
+    position: "absolute",
+    right: 4,
+    top: 5,
+    padding: "5px 8px 5px 8px",
+    backgroundColor: "#fff",
+    cursor: "pointer",
+    zIndex: 5,
+    textAlign: "center",
+    borderRadius: 13
+    };
+
+    // const imageUploadedStyle={
+    //   width: "100%",
+    //   height: "200px",
+    //   objectFit: "cover",
+    // }
+
+    // const imageUploadDefaultStyle={
+    //   width: "100%",
+    //   height: "200px",
+    //   objectFit: "cover",
+    //   backgroundColor: "#eaecef"
+    // }
     return (
       <div className="new-event">
         <header className="new-event__header">
@@ -204,7 +252,7 @@ class NewEvent extends Component {
                 </div>
             </div>
             <form>
-                <div className="form-control">
+                <div className="form-control event">
                     <div className="form-specification">
                         <h3 className="form-title">Event's Title</h3>
                         <p className="form-description">Make a nice title represeting your event's theme.</p>
@@ -213,7 +261,7 @@ class NewEvent extends Component {
                         <input type="text" id="title" ref={this.titleInputRef}></input>
                     </div>
                 </div>
-                <div className="form-control">
+                <div className="form-control event">
                 <div className="form-specification">
                     <h3 className="form-title">Price for The Event</h3>
                     <p className="form-description">Set a proper price for attending.</p>
@@ -223,7 +271,7 @@ class NewEvent extends Component {
                 </div>
                     {/* <label htmlFor="price">Price</label> */}
                 </div>
-                <div className="form-control">
+                <div className="form-control event">
                     <div className="form-specification">
                         <h3 className="form-title">Event's Date & Time</h3>
                         <p className="form-description">Enter the start time and end time.</p>
@@ -235,7 +283,7 @@ class NewEvent extends Component {
                         <input type="datetime-local" id="end-date" ref={this.endDateInputRef} />
                     </div>
                 </div>
-                <div className="form-control" style={linkStyle}>
+                <div className="form-control event" style={linkStyle}>
                     <div className="form-specification">
                         <h3 className="form-title">Event's Thumbnail Image</h3>
                         <p className="form-description">Many words in the picture are not attractive.</p>
@@ -243,12 +291,28 @@ class NewEvent extends Component {
                     <div className="form-action">
                         <label id="img-label" htmlFor="img">Choose a file</label>
                             <input id="img" type="file"  accept="image/jpeg, image/jpg, image/png" ref={file => this.imgInputRef = file}/>
+                            <div style={{position: "relative"}}>
+                              <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank">
+                                <div id="image-upload__container">
+                                  <img id="image-upload" src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : {width: "100%", height: "200px", objectFit: "cover", backgroundColor: "#eaecef", marginBottom: "10px"}} ref="image"/>
+                                </div>
+                              </a>
+                              <span style={xBtn} onClick={this.deletePhoto}>X</span>
+                            </div>
                             <button className="btn" onClick={this.addPhoto}>Confirm</button>
-                            <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"><img src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {"width": "100px", "height": "100px"} : {"width": "100px", "height": "100px", "backgroundColor": "grey"}} ref="image"/></a>
-                            <span style={xBtn} onClick={this.deletePhoto}>x</span>
                     </div>
+                </div>
+                <div className="form-control event">
+                    <div className="form-specification">
+                        <h3 className="form-title">Event's Location</h3>
+                        <p className="form-description">Enter the specific location where you host your event. <br />(Ex: Theresienhöhe 11, München)</p>
+                    </div>
+                    <div className="form-action"> 
+                        <input type="text" id="location" ref={this.locationInputRef}/>
+                    </div>
+                    {/* <div id="map" style={{"width": "400px", "height": "400px"}}></div> */}
                 </div>    
-                <div id="form-control__description" className="form-control">
+                <div id="form-control__description" className="form-control event">
                     <div className="form-specification">
                         <h3 className="form-title">Event's Description</h3>
                         <p className="form-description">Enter specific information on the event.</p>
@@ -266,23 +330,5 @@ class NewEvent extends Component {
   }
 }
 
-
-const linkStyle = {
-    position: "relative"
-  };
-
-const xBtn = {
-  display: "inline-block",
-  position: "absolute",
-  right: 555,
-  top: 52,
-  width: 20,
-  height: 20,
-  backgroundColor: "white",
-  cursor: "pointer",
-  zIndex: 5,
-  textAlign: "center",
-  borderRadius: 13
-};
 
 export default NewEvent;

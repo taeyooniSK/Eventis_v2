@@ -1,7 +1,0 @@
-{
-    "env" : {
-        "MONGO_USER": "taeyoon",
-        "MONGO_PASSWORD": "lr61unKM27MoKaXB",
-        "MONGO_DB" : "GraphQL_React_EventBookingApp"
-    }
-}

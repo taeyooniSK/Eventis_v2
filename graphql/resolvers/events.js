@@ -8,7 +8,17 @@ const CancelledEvent = require("../../models/cancelledEvent");
 
 const { transformEvent } = require("./populate");
 
+const NodeGeocoder = require('node-geocoder');
 
+const options = {
+  provider: 'google',
+ 
+  // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: process.env.GEOCODER_API_KEY, // for Mapquest, OpenCage, Google Premier
+  formatter: null         // 'gpx', 'string', ...
+};
+const geocoder = NodeGeocoder(options);
 
 // Resolvers for events
 
@@ -62,11 +72,24 @@ module.exports = { // javascript object where all the resolver functions are in
       if (!req.isAuthenticated){
           throw new Error("It's not authenticated!");
       }
+      let lat, lng, location;
+      geocoder.geocode(args.eventInput.location, async (err, data) => {
+          if(err || !data.length ) {
+              throw err.message;
+          }
+            lat = data[0].latitude;
+            lng = data[0].longitude;
+            location = data[0].formattedAddress;
+
+      })
         const event = new Event({
             title: args.eventInput.title,  
             description: args.eventInput.description,
             price: +args.eventInput.price,
             img: args.eventInput.img,
+            location: location,
+            lat: lat,
+            lng: lng,
             startDate: new Date(args.eventInput.startDate),
             endDate: new Date(args.eventInput.endDate),
             creator: req.userId // user who is authenticated

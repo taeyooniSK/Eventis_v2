@@ -1,4 +1,4 @@
-.new-event{
+.new-event {
     margin: 8rem auto;
     /* width: 40rem; */
     max-width: 1160px;
@@ -53,11 +53,13 @@
 
 .form-title {
     letter-spacing: 1px;
-    font-size: 24px;
+    font-size: 28px;
+    margin-bottom: 10px;
 }
 .form-description {
-    font-size: 17px;
+    font-size: 19px;
     color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 30px;
 }
 
 #form-control__description{
@@ -90,4 +92,46 @@
 
 #img-label:hover {
     background: rgb(183, 220, 253);
+}
+
+
+@media all and (max-width: 991px) { 
+    .new-event h3 {
+        font-size:24px;
+    }
+    .new-event p {
+        font-size: 17px;
+    }
+    .new-event__header > h1 {
+        font-size: 28px;
+    }
+    .new-event__header > p {
+        font-size: 17px;
+    }
+    .form-control.event{
+        flex-direction: column;
+    }
+    .form-control, .form-specification, .form-action  {
+        width: 100%;
+    }
+    .form-title, .form-description {
+        margin-bottom: 10px;
+    }
+}
+@media all and (max-width: 768px) {
+    
+}
+@media all and (max-width: 480px) { 
+    .new-event h3 {
+        font-size:21px;
+    }
+    .new-event p {
+        font-size: 16px;
+    }
+    .new-event__header > h1 {
+        font-size: 24px;
+    }
+    .new-event__header > p {
+        font-size: 16px;
+    }
 }

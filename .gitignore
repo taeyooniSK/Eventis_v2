@@ -8,3 +8,4 @@
 >>>>>>> 6a44a74ec81f13a8afec37796508d4417601f9b6
 config/
 node_modules/
+nodemon.json

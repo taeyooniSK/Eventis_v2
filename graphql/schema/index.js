@@ -26,6 +26,9 @@ type Event {
     startDate: String!
     endDate : String! 
     img: String
+    location: String
+    lat: Float
+    lng: Float
     cancelled: Boolean
     comments: [Comment!]
     creator: User!

@@ -65,6 +65,7 @@ class AuthPage extends Component {
             }
         }).then(res => {
             if(res.status !== 200 && res.status !== 201){
+                alert("Email or Password is wrong");
                 throw new Error("Failed");
             }
             return res.json();

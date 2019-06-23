@@ -12,21 +12,49 @@ class DetailedEvent extends Component{
         comments: this.props.comments,
         isBooked: false
     }
-    
+    static contextType = AuthContext;
     componentDidMount(){
-        if(this.getCookie(this.context.email) && this.getCookie(this.context.email) === this.props.eventId){
-            this.setState(() => ({isBooked: true}));
-        }
+        // if(this.getCookie(this.context.email) && this.getCookie(this.context.email) === this.props.eventId){
+        //     this.setState(() => ({isBooked: true}));
+        // }
+       
+       this.isBooked();
+        
     }
 
     constructor(props){
         super(props);
         this.textInputRef = React.createRef();
-    
+        
+        
     }
     
+    isBooked = () => {
+        const email = this.context.email;
+        if(localStorage.getItem(email)){
+            let isBooked;
+            const parsedArr = JSON.parse(localStorage.getItem(email));
+            // const isBooked = parsedArr.filter(bookedEventId => {
+            //     return bookedEventId === this.props.eventId;
+            // });
+            // see if this event has been booked by the user
+            for ( let i = 0; i < parsedArr.length; i++){
+                if(parsedArr[i] === this.props.eventId){
+                    isBooked = true;
+                }
+            }
+            if( isBooked ) {
+                this.setState(() => ({isBooked: true}));
+            }
+            // const isBooked = parsedArr.find(bookedEventId => {
+            //     return bookedEventId === this.props.eventId;
+            // })
+            // if it hasn't been booked, isBooked will return undefined 
+            
+            
+        }
+    }
 
-    static contextType = AuthContext;
 
     postComment = (e) => {
         e.preventDefault();
@@ -94,10 +122,10 @@ class DetailedEvent extends Component{
         }
         
         this.setState(() => ({isBooked : true}));
-        const email =  `${this.context.email}`;
-        const eventId = `${this.props.event._id}`;
-
-        this.setCookie(email, eventId, 31);
+        
+       
+        
+        // this.setCookie(email, eventId, 31);
         
         let reqBody = {
             query: `
@@ -131,32 +159,31 @@ class DetailedEvent extends Component{
            console.log(result);
             // // after getting data, close the modal
             // this.setState({selectedEvent: null})
+            const email =  `${this.context.email}`;
+            const eventId = `${this.props.eventId}`;
+            // if there is no data in localstorage related to email
+            const arr = [eventId];
+            if(!localStorage.getItem(email)){
+                localStorage.setItem(email, JSON.stringify(arr));
+            } else {
+                // if there is data related to the email 
+                // parse the data and push a new eventId that user books
+                const parsedArr = JSON.parse(localStorage.getItem(email));
+                for (let i = 0; i < parsedArr.length; i++){
+                    if( parsedArr[i] === this.props.eventId){
+                        return;
+                    } else {
+                        parsedArr.push(this.props.eventId);
+                        localStorage.setItem(email, JSON.stringify(parsedArr));
+                    }
+                }
+           
+        }
         }).catch(err => {
             console.log(err);
+            this.setState(() => ({isBooked : false}));
         })
     }
-    setCookie(email, eventId, exdays){
-        let date = new Date();
-        date.setTime(date.getTime() + (exdays*24*60*60*1000));
-        const expires = "expires="+ date.toUTCString();
-        document.cookie = email + "=" + eventId + ";" + expires + ";path=/";
-    }
-
-    getCookie(cookieName) {
-        const name = `${cookieName}=`;
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) === ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
-          }
-        }
-        return "";
-      }
 
     render(){
         // console.log(this.textInputRef.current);
@@ -169,7 +196,7 @@ class DetailedEvent extends Component{
                     <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/>
                     <h2>${this.props.event.price} - {this.props.event.startDate} ~ {this.props.event.endDate }</h2>
                     <p>{this.props.event.description}</p>
-                    <button disabled={this.state.isBooked} onClick={this.handleBookEvent} className={this.state.isBooked ? "btn disabled" :  "btn"}>{this.state.isBooked ? "Booked" : "Book"}</button>
+                    {this.props.event.cancelled ? "This event is cancelled" : <button disabled={this.state.isBooked } onClick={this.handleBookEvent} className={this.state.isBooked ? "btn disabled" :  "btn"}>{this.state.isBooked ? "Booked" : "Book" }</button>}
                 </div>
                 {
                     this.context.token 

@@ -3,20 +3,10 @@ import { Link } from "react-router-dom";
 
 import AuthContext from "../context/auth-context";
 import AWS from "aws-sdk";
-import NodeGeocoder from "node-geocoder";
+
 import config from "../config/config";
 import "./NewEvent.css";
 
-const options = {
-  provider: 'google',
- 
-  // Optional depending on the providers
-  httpAdapter: 'https', // Default
-  apiKey: 'AIzaSyCTQ3N0LKR59czNcnbJ1-5k6ElRW27UCRY', // for Mapquest, OpenCage, Google Premier
-  formatter: null         // 'gpx', 'string', ...
-};
- 
-const geocoder = NodeGeocoder(options);
 // AWS config
 AWS.config.update({
     bucketName: config.bucketName,
@@ -130,7 +120,7 @@ class NewEvent extends Component {
         // if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
         //     return;
         // }
-        if( title.trim().length === 0 || price <= 0 || startDate.trim().length === 0 ||  endDate.trim().length === 0 || description.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
             return;
         }
 
@@ -142,7 +132,7 @@ class NewEvent extends Component {
         let reqBody = {
             query: `
             mutation {
-              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", location: "${location}", price: ${price}, startDate: "${startDate}", endDate: "${endDate}"}) {
+              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", location: "${location}", price: ${price}, startDate: "${startDate}", endDate: "${endDate}", location: "${location}"}) {
                 _id
                 title
                 price
@@ -172,27 +162,24 @@ class NewEvent extends Component {
             return res.json();
         }).then(result => {
             if(this.isActive){
-            // when user who is logged in created a new event, this reduces request from the database compared to the last code
-            // this.setState(prevState => {
-            //     const updatedEvents = [...prevState.events];
-            //     updatedEvents.push({
-            //         _id : result.data.createEvent._id,
-            //         title : result.data.createEvent.title,
-            //         price : result.data.createEvent.price,
-            //         startDate : result.data.createEvent.startDate,
-            //         endDate : result.data.createEvent.endDate,
-            //         img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
-            //         location: result.data.createEvent.location,
-            //         lat: result.data.createEvent.lat,
-            //         lng: result.data.createEvent.lng,
-            //         description : result.data.createEvent.description,
-            //         creator :{
-            //             _id : this.context.userId
-            //         }
-            //     });
-            //     localStorage.removeItem("imgUrl");
-            //     return { events: updatedEvents, isUploaded: false };
-            // })
+            this.setState(prevState => {
+                const updatedEvents = [...prevState.events];
+                updatedEvents.push({
+                    _id : result.data.createEvent._id,
+                    title : result.data.createEvent.title,
+                    price : result.data.createEvent.price,
+                    startDate : result.data.createEvent.startDate,
+                    endDate : result.data.createEvent.endDate,
+                    img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
+                    location: result.data.createEvent.location,
+                    description : result.data.createEvent.description,
+                    creator :{
+                        _id : this.context.userId
+                    }
+                });
+                localStorage.removeItem("imgUrl");
+                return { events: updatedEvents, isUploaded: false };
+            })
         }
         }).catch(err => {
             console.log(err);
@@ -269,7 +256,6 @@ class NewEvent extends Component {
                 <div className="form-action">
                     <input type="number" id="price" ref={this.priceInputRef}></input>
                 </div>
-                    {/* <label htmlFor="price">Price</label> */}
                 </div>
                 <div className="form-control event">
                     <div className="form-specification">
@@ -310,7 +296,6 @@ class NewEvent extends Component {
                     <div className="form-action"> 
                         <input type="text" id="location" ref={this.locationInputRef}/>
                     </div>
-                    {/* <div id="map" style={{"width": "400px", "height": "400px"}}></div> */}
                 </div>    
                 <div id="form-control__description" className="form-control event">
                     <div className="form-specification">
@@ -318,8 +303,7 @@ class NewEvent extends Component {
                         <p className="form-description">Enter specific information on the event.</p>
                     </div>
                     <div className="form-action">
-                        {/* <label htmlFor="description">Description</label> */}
-                        <textarea id="description" rows="4" ref={this.descriptionInputRef}></textarea>
+                        <textarea id="description" style={{padding: "15px"}} rows="4" ref={this.descriptionInputRef}></textarea>
                     </div>
                 </div>
                 <Link to="/events" onClick={this.saveEventInfo} className="btn">Create Event</Link>

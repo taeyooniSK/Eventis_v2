@@ -16,9 +16,9 @@ class SingleEventPage extends Component {
     isActive = true;
 
     componentWillMount(){
-        this.getEvents();
+        this.getEvent();
     }
-    getEvents() {
+    getEvent() {
         this.setState({ isLoading: true });
         const reqBody = {
             query: `
@@ -31,6 +31,7 @@ class SingleEventPage extends Component {
                         endDate
                         img
                         description
+                        cancelled
                         comments {
                             _id
                             author {
@@ -66,21 +67,21 @@ class SingleEventPage extends Component {
             const comments = result.data.event.comments;
 
              //only when this component is active, update the state
-          // if(this.isActive){
+          if(this.isActive){
             // if events list is updated when user creates a new event, override events of state
         //   this.setState({event: event, isLoading: false});
             this.setState(() => ({event, comments, isLoading: false}))
             
-          // }
+          }
         }).catch(err => {
             console.log(err);
             this.setState({isLoading: true});
             
         })
     }
-    // componentWillUnmount(){
-    //     this.isActive = false;
-    // }
+    componentWillUnmount(){
+        this.isActive = false;
+    }
     render(){
         return(
             <React.Fragment>

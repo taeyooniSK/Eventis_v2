@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.478.0",
-    "node-geocoder": "^3.23.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",

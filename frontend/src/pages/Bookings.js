@@ -70,9 +70,8 @@ class BookingsPage extends Component {
     }
 
     handleCancelBooking = (bookingId, eventId) => {
-        if(this.getCookie(this.context.email) && this.getCookie(this.context.email) === eventId){
-            this.deleteCookie(this.context.email);
-        }
+      
+        this.deleteBookingFromStorage(eventId);
         this.setState({ isLoading: true });
         const reqBody = {
             query: `
@@ -155,26 +154,28 @@ class BookingsPage extends Component {
             this.setState({isLoading: true});
             
         })
-    }
-    getCookie(cookieName) {
-        const name = `${cookieName}=`;
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) === ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
-          }
+    };
+
+    deleteBookingFromStorage = (eventId) => {
+        const email = this.context.email;
+        if(localStorage.getItem(email)){
+            const parsedArr = JSON.parse(localStorage.getItem(email));
+            const bookings = parsedArr.filter(bookedEventId => {
+                return bookedEventId !== eventId;
+            });
+            if(bookings.length !== 0){
+                localStorage.setItem(email, JSON.stringify(bookings));
+            } 
+            // after deleting booking, if the bookings' length is 0, delete it in localStorage
+            if(bookings.length === 0){
+                localStorage.removeItem(email);
+            }   
+            
+            
+            
         }
-        return "";
-      }
-      
-    deleteCookie(cookieName) {   
-        document.cookie = cookieName+'=; Max-Age=-99999999;';  
-    }
+    };
+    
     render() {
         return (
             

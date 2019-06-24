@@ -15,7 +15,7 @@ const Event = (props) => {
                     <div className="events__item--thumbnail" style={{ "backgroundImage": `url(${props.img})`}}></div>
                 </Link>
                 <div className="events__item--content">
-                    <p>{ props.startDate } ~ { props.endDate }</p>
+                    <p>{ props.startDateTime } ~ { props.endDateTime }</p>
                     <h3>{props.title}</h3>
                     <p>{props.creatorEmail}</p>
                     <p>${props.price} </p>

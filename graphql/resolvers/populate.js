@@ -79,8 +79,8 @@ const comments = async commentIds => {
 const transformEvent = event => {
     return {
         ...event._doc,
-        startDate: dateToString2(event._doc.startDate),
-        endDate: dateToString2(event._doc.endDate),
+        startDateTime: dateToString2(event._doc.startDateTime),
+        endDateTime: dateToString2(event._doc.endDateTime),
         creator: user.bind(this, event._doc.creator),
         comments:  comments.bind(this, event._doc.comments) // when event is loaded from db, get comments data according to the event
     }

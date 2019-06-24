@@ -194,7 +194,7 @@ class DetailedEvent extends Component{
                 <div className="detailed-event__info">
                     <h1>{this.props.event.title} hosted by <span>{id}</span></h1>
                     <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/>
-                    <h2>${this.props.event.price} - {this.props.event.startDate} ~ {this.props.event.endDate }</h2>
+                    <h2>${this.props.event.price} - {this.props.event.startDateTime} ~ {this.props.event.endDateTime }</h2>
                     <p>{this.props.event.description}</p>
                     {this.props.event.cancelled ? "This event is cancelled" : <button disabled={this.state.isBooked } onClick={this.handleBookEvent} className={this.state.isBooked ? "btn disabled" :  "btn"}>{this.state.isBooked ? "Booked" : "Book" }</button>}
                 </div>

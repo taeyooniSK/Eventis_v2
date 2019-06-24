@@ -15,10 +15,12 @@ const MyCancelledEvent = (props) => {
                     <h3>{props.title}</h3>
                 </div>
             </div>
-            <div>
+            <div className="event-actions__wrapper">
                 {
                   (props.userId === props.creatorId ) &&
-                 <React.Fragment><button className="btn" onClick={props.onDelete.bind(this, props.eventId)}>Delete</button></React.Fragment>
+                 <React.Fragment>
+                    <button className="btn-small" onClick={props.onDelete.bind(this, props.eventId)}>Delete</button>
+                 </React.Fragment>
                 }
             </div>
         </li>

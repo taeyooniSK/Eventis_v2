@@ -85,10 +85,10 @@ class NewEvent extends Component {
       };
       // 사진 지우기
       deletePhoto = () => {
-        var index = this.state.url.indexOf(this.context.email);
-        var albumAndFile = this.state.url.slice(index).split("/");
+        const index = this.state.url.indexOf(this.context.email);
+        const albumAndFile = this.state.url.slice(index).split("/");
     
-        var params = {
+        const params = {
           Bucket: config.bucketName,
           Key: encodeURIComponent(albumAndFile[0]) + "/" + albumAndFile[1]
         };
@@ -109,7 +109,15 @@ class NewEvent extends Component {
         const title = this.titleInputRef.current.value;
         const price = this.priceInputRef.current.value;
         const startDate = this.startDateInputRef.current.value; // start date
+        const startTime = this.startTimeInputRef.current.value // start time
+
+        const startDateTime = startDate + "T" + startTime;
+
         const endDate = this.endDateInputRef.current.value; // end date
+        const endTime = this.endTimeInputRef.current.value; // end time
+
+        const endDateTime = endDate + "T" + endTime;
+
         const img = this.state.url; 
         const location = this.locationInputRef.current.value;
         const description = this.descriptionInputRef.current.value;
@@ -120,24 +128,24 @@ class NewEvent extends Component {
         // if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
         //     return;
         // }
-        if( title.trim().length === 0 || price <= 0 || startDate.trim().length === 0 || endDate.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
             return;
         }
 
 
         // const event = {title, price, date, description, img}; // original version
-        const event = {title, price, startDate, endDate, img, location, description };
+        const event = {title, price, startDateTime, endDateTime, img, location, description };
         console.log(event);
 
         let reqBody = {
             query: `
             mutation {
-              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", location: "${location}", price: ${price}, startDate: "${startDate}", endDate: "${endDate}", location: "${location}"}) {
+              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", location: "${location}", price: ${price}, startDateTime: "${startDateTime}", endDateTime: "${endDateTime}", location: "${location}"}) {
                 _id
-                title
+                title 
                 price
-                startDate
-                endDate
+                startDateTime
+                endDateTime
                 img
                 location
                 description
@@ -168,8 +176,8 @@ class NewEvent extends Component {
                     _id : result.data.createEvent._id,
                     title : result.data.createEvent.title,
                     price : result.data.createEvent.price,
-                    startDate : result.data.createEvent.startDate,
-                    endDate : result.data.createEvent.endDate,
+                    startDateTime : result.data.createEvent.startDate,
+                    endDateTime : result.data.createEvent.endDate,
                     img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
                     location: result.data.createEvent.location,
                     description : result.data.createEvent.description,
@@ -264,9 +272,25 @@ class NewEvent extends Component {
                     </div>
                     <div className="form-action"> 
                         <label htmlFor="start-date">Start Date</label>
-                        <input type="datetime-local" id="start-date" ref={this.startDateInputRef} />
+                        <input type="date"
+                               id="start-date"
+                               ref={this.startDateInputRef} 
+                        />
+                        <input type="time"
+                               id="start-time" 
+                               ref={this.startTimeInputRef} 
+                               defaultValue={"12:00"}
+                        />
                         <label htmlFor="end-date">End Date</label>
-                        <input type="datetime-local" id="end-date" ref={this.endDateInputRef} />
+                        <input type="date" 
+                               id="end-date"
+                               ref={this.endDateInputRef} 
+                        />
+                        <input type="time" 
+                               id="end-time" 
+                               ref={this.endTimeInputRef} 
+                               defaultValue={"13:00"}
+                        />
                     </div>
                 </div>
                 <div className="form-control event" style={linkStyle}>

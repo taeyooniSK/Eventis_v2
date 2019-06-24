@@ -14,10 +14,13 @@ const MyEvent = (props) => {
                     <div className="my-events__item--content">
                         <h3>{props.title}</h3>
                     </div>
-                    <div>
+                    <div className="event-actions__wrapper">
                         {
                         (props.userId === props.creatorId ) &&
-                        <React.Fragment><button className="btn" onClick={props.onCancel.bind(this, props.eventId)}>Cancel</button></React.Fragment>
+                        <React.Fragment>
+                            <button className="btn-small" onClick={props.onCancel.bind(this, props.eventId)}>Cancel</button>
+                            <Link className="btn-small" to={`/my-events/${props.eventId}/edit`}>Edit</Link>
+                        </React.Fragment>
                         }
                     </div>
                 </div>

@@ -30,8 +30,8 @@ class MyEventsPage extends Component {
                         _id
                         title
                         price
-                        startDate
-                        endDate
+                        startDateTime
+                        endDateTime
                         img
                         description
                         cancelled
@@ -84,8 +84,8 @@ class MyEventsPage extends Component {
                         title
                         description
                         price
-                        startDate
-                        endDate
+                        startDateTime
+                        endDateTime
                         img
                         cancelled
                         creator{

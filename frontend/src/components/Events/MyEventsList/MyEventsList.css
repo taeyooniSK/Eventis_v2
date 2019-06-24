@@ -3,12 +3,17 @@
     flex-direction: column;
     margin: 4rem auto;
 }
-
+/* 
 .my-events__list a:link,
 .my-events__list a:active{
     display: block;
     color: black;
-}
+} */
+/* .my-events__list a:link,
+.my-events__list a:active{
+    display: inline-block;
+    color: #fff;
+} */
 
 .my-events__list--cancelled,
 .my-events__list--host {

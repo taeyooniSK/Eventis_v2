@@ -271,8 +271,8 @@ class EventsPage extends Component {
                         _id
                         title
                         price
-                        startDate
-                        endDate
+                        startDateTime
+                        endDateTime
                         description
                         img
                         cancelled

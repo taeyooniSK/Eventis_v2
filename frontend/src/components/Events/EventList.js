@@ -12,8 +12,8 @@ const EventList = (props) => {
         title={event.title}
         img={event.img}
         price={event.price} 
-        startDate={event.startDate}
-        endDate={event.endDate}
+        startDateTime={event.startDateTime}
+        endDateTime={event.endDateTime}
         cancelled={event.cancelled}
         creatorEmail={event.creator.email}
         creatorId={event.creator._id} 

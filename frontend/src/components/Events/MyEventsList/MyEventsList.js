@@ -12,8 +12,8 @@ const MyEventsList = (props) => {
             title={event.title}
             price={event.price} 
             img={event.img}
-            startDate={event.startDate}
-            endDate={event.endDate}
+            startDateTime={event.startDateTime}
+            endDateTime={event.endDateTime}
             onDelete={props.handleDeleteEvent}
         />
     );
@@ -27,8 +27,8 @@ const MyEventsList = (props) => {
             userId={props.authUserId} 
             title={event.title}
             price={event.price} 
-            startDate={event.startDate}
-            endDate={event.endDate}
+            startDateTime={event.startDateTime}
+            endDateTime={event.endDateTime}
             img={event.img}
             creatorId={event.creator._id} 
             onMore={props.onViewMore}

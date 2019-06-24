@@ -1,0 +1,137 @@
+.new-event {
+    margin: 8rem auto;
+    /* width: 40rem; */
+    max-width: 1160px;
+    letter-spacing: 1px;
+}
+.new-event__header {
+    margin-bottom: 3rem;
+}
+.new-event__header > p {
+    font-size: 21px;
+    color: rgba(0, 0, 0, 0.6);
+}
+.new-event__content--heading {
+    font-size: 32px;
+}
+
+/* #new-event__hostInfo{
+    width: 100%;
+  
+} */
+
+#new-event__hostInfo > h3 {
+    font-size: 24px;
+}
+#new-event__hostTitle {
+    width: 100%;
+    height: 5rem;
+    border-radius: 10px;
+    margin-bottom: 3rem;
+}
+
+#new-event__host span{
+    margin-top: 1rem;
+    display: inline-block;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    background-color: #2ABFCB;
+    color: #fff;
+}
+
+.form-specification {
+    display: flex;
+    flex-direction: column;
+    /* padding-right: 10px; */
+    width: 50%;
+    flex: 1 1;
+}
+.form-action {
+    width: 50%;
+    flex: 1 1;
+}
+
+.form-title {
+    letter-spacing: 1px;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+.form-description {
+    font-size: 19px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 30px;
+}
+
+#form-control__description{
+    flex-direction: column;
+}
+#form-control__description .form-specification, 
+#form-control__description .form-action {
+    width: 100%;
+}
+
+#form-control__description .form-action textarea {
+    height: 20rem;
+}
+
+#img {
+    border: none;
+    width: 1px;
+    height: 1px;
+}
+
+#img-label {
+    display: inline-block;
+    padding: 0.5rem 0.5rem;
+    background: aliceblue;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+#img-label:hover {
+    background: rgb(183, 220, 253);
+}
+
+
+@media all and (max-width: 991px) { 
+    .new-event h3 {
+        font-size:24px;
+    }
+    .new-event p {
+        font-size: 17px;
+    }
+    .new-event__header > h1 {
+        font-size: 28px;
+    }
+    .new-event__header > p {
+        font-size: 17px;
+    }
+    .form-control.event{
+        flex-direction: column;
+    }
+    .form-control, .form-specification, .form-action  {
+        width: 100%;
+    }
+    .form-title, .form-description {
+        margin-bottom: 10px;
+    }
+}
+@media all and (max-width: 768px) {
+    
+}
+@media all and (max-width: 480px) { 
+    .new-event h3 {
+        font-size:21px;
+    }
+    .new-event p {
+        font-size: 16px;
+    }
+    .new-event__header > h1 {
+        font-size: 24px;
+    }
+    .new-event__header > p {
+        font-size: 16px;
+    }
+}

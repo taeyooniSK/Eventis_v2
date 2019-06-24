@@ -23,12 +23,10 @@ type Event {
     title: String!
     description: String!
     price: Float!
-    startDate: String!
-    endDate : String! 
+    startDateTime: String!
+    endDateTime : String! 
     img: String
     location: String
-    lat: Float
-    lng: Float
     cancelled: Boolean
     comments: [Comment!]
     creator: User!
@@ -62,8 +60,9 @@ input EventInput {
     description: String!
     price: Float!
     img: String
-    startDate: String!
-    endDate : String! 
+    startDateTime: String!
+    endDateTime: String!
+    location: String! 
 }
 
 input UpdatedEventInput {
@@ -72,6 +71,10 @@ input UpdatedEventInput {
     description: String!
     price: Float!
     date: String!
+    img: String
+    startDateTime: String!
+    endDateTime: String!
+    location: String! 
 }
 
 input UserInput {

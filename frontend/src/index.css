@@ -99,6 +99,15 @@ body {
 .form-actions button:hover,
 .form-actions button:active,
 .btn:hover,
-.bth:active {
+.bth:active,
+.btn-small:hover,
+.btn-small:active {
   background-color:#4694B4;
+}
+
+/* center My Event's cancel/ delete buttons */
+.event-actions__wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
 }

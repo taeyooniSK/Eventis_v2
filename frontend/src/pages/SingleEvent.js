@@ -27,8 +27,8 @@ class SingleEventPage extends Component {
                         _id
                         title
                         price
-                        startDate
-                        endDate
+                        startDateTime
+                        endDateTime
                         img
                         description
                         cancelled

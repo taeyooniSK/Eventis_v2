@@ -60,26 +60,14 @@ module.exports = { // javascript object where all the resolver functions are in
       if (!req.isAuthenticated){
           throw new Error("It's not authenticated!");
       }
-      let lat, lng, location;
-      geocoder.geocode(args.eventInput.location, async (err, data) => {
-          if(err || !data.length ) {
-              throw err.message;
-          }
-            lat = data[0].latitude;
-            lng = data[0].longitude;
-            location = data[0].formattedAddress;
-
-      })
         const event = new Event({
             title: args.eventInput.title,  
             description: args.eventInput.description,
             price: +args.eventInput.price,
             img: args.eventInput.img,
             location: location,
-            lat: lat,
-            lng: lng,
-            startDate: new Date(args.eventInput.startDate),
-            endDate: new Date(args.eventInput.endDate),
+            startDateTime: new Date(args.eventInput.startDateTime),
+            endDateTime: new Date(args.eventInput.endDateTime),
             creator: req.userId // user who is authenticated
         });
         let createdEvent; // this variable is going to contain event that is created by createEvent resolver
@@ -111,7 +99,10 @@ module.exports = { // javascript object where all the resolver functions are in
                 title: args.updatedEventInput.title,  
                 description: args.updatedEventInput.description,
                 price: +args.updatedEventInput.price,
-                date: new Date(args.updatedEventInput.date),
+                startDateTime: new Date(args.updatedEventInput.startDateTime),
+                endDateTime: new Date(args.updatedEventInput.endDateTime),
+                img: args.updatedEventInput.img,
+                location: args.updatedEventInput.location,
                 creator: req.userId 
             }});
 

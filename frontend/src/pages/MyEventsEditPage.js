@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom";
 
 import AuthContext from "../context/auth-context";
 import AWS from "aws-sdk";
 import config from "../config/config";
 import Spinner from "../components/Spinner/Spinner";
+import "./MyEventsEditPage.css";
 
 // AWS config
 AWS.config.update({
@@ -36,13 +36,14 @@ AWS.config.update({
         super(props);
 
         this.titleInputRef = React.createRef();
-        this.priceInputRef = React.createRef();
+        this.priceInputRef = React.createRef(); 
         this.startDateInputRef = React.createRef();
+        this.startTimeInputRef = React.createRef();
         this.endDateInputRef = React.createRef();
+        this.endTimeInputRef = React.createRef();
         this.imgInputRef = React.createRef();
         this.locationInputRef = React.createRef();
         this.descriptionInputRef = React.createRef();
-       
 
   }
 
@@ -50,9 +51,14 @@ AWS.config.update({
     this.getEvent();
   }
 
-  // componentDidMount(){
-  //   this.getEvent();
-  // }
+  componentDidMount(){
+       
+  }
+
+  componentDidUpdate(){
+    console.log(this.titleInputRef.current.value);
+    console.log(this.priceInputRef.current.value);
+  }
   // Get an event that I'm about to edit
   getEvent() {
           this.setState({ isLoading: true });
@@ -133,9 +139,9 @@ AWS.config.update({
   }
   // when a user change a picture not deleting the previous image, delete the picture before the user uploads it
   handleChangeImg = () => {
-
-        const index = this.refs.image.src.indexOf(this.context.email);
-        const albumAndFile = this.refs.image.src.slice(index).split("/");
+        const imgURL = this.state.event.img;
+        const index = imgURL.indexOf(this.context.email);
+        const albumAndFile = imgURL.slice(index).split("/");
     
         const params = {
           Bucket: config.bucketName,
@@ -147,7 +153,7 @@ AWS.config.update({
           }
           console.log(data);
           this.setState({ url: null, isUploaded: false });
-          localStorage.removeItem("imgUrl");
+          // localStorage.removeItem("imgUrlForEditPage");
           alert("Successfully deleted photo.");
         });
     
@@ -157,9 +163,9 @@ AWS.config.update({
         const files = this.imgInputRef.files;
         if(this.imgInputRef.files)
         console.log(files);
-        if (!files.length) {
-          return alert("Please choose a file to upload first.");
-        }
+        // if (!files.length) {
+        //   return alert("Please choose a file to upload first.");
+        // }
         const file = files[0];
         const fileName = file.name;
         console.log(this.context.email);
@@ -184,7 +190,7 @@ AWS.config.update({
             this.setState(() => ({ isUploaded : true, url: data.Location }));
             this.refs.image.src = this.state.url;
 
-            localStorage.setItem("imgUrl", this.state.url);
+            // localStorage.setItem("imgUrlForEditPage", this.state.url);
          
           }
         );
@@ -204,17 +210,19 @@ AWS.config.update({
           }
           console.log(data);
           this.setState({ url: null, isUploaded: false });
-          localStorage.removeItem("imgUrl");
+          // localStorage.removeItem("imgUrlForEditPage");
           alert("Successfully deleted photo.");
         });
     };
    // Edit: modal confirm button for editing an event
-    saveEditInfo = () => {
+    saveEditInfo = (e) => {
+        e.preventDefault();
         // this.setState(() => ({editing: false}));
         const title = this.titleInputRef.current.value;
+        console.log(title);
         const price = this.priceInputRef.current.value;
         const startDate = this.startDateInputRef.current.value; // start date
-        const startTime = this.startDateTimeInputRef.current.value // start time
+        const startTime = this.startTimeInputRef.current.value // start time
 
         const startDateTime = startDate + "T" + startTime;
           
@@ -222,24 +230,24 @@ AWS.config.update({
         const endTime = this.endTimeInputRef.current.value; // end time
 
         const endDateTime = endDate + "T" + endTime;
-
+        const img = this.refs.image.src;
         const description = this.descriptionInputRef.current.value;
         const location = this.locationInputRef.current.value;
         
         // simple validation
-        if( title.trim().length === 0 || price <= 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
             return;
         }
 
 
         // same key, value pairs
-        const event = {title, price, startDateTime, endDateTime, description, location};
+        const event = {title, price, startDateTime, endDateTime, img, description, location};
         console.log(event);
 
         let reqBody = {
             query: `
             mutation {
-              editEvent(updatedEventInput: {_id: "${this.state.selectedEventToEdit._id}" title: "${title}", description: "${description}", price: ${price}, startDateTime: "${startDateTime}"}, endDateTime: "${endDateTime}", location: "${location}"}) {
+              editEvent(updatedEventInput: {_id: "${this.state.event._id}" title: "${title}", description: "${description}", price: ${price}, img: "${img}",startDateTime: "${startDateTime}", endDateTime: "${endDateTime}", location: "${location}"}) {
                 _id
                 title
                 price
@@ -268,8 +276,10 @@ AWS.config.update({
             }
             return res.json();
         }).then(result => {
+          const path = `/events`;
+           this.props.history.push(path);
             // after updating an event, getting data from db;
-            this.getEvents();
+            // this.getEvents();
         }).catch(err => {
             console.log(err);
         })
@@ -279,6 +289,24 @@ AWS.config.update({
   //   isActive = false;
   // }
 
+
+
+  getMyRefs = () => {
+      // console.log(this.titleInputRef.current);
+      // console.log(this.priceInputRef.current.value);
+      // console.log(this.startDateInputRef.current.value); // start date
+      console.log(this.startTimeInputRef.current.value) // start time
+
+       
+          
+      // console.log(this.endDateInputRef.current.value); // end date
+      // console.log(this.endTimeInputRef.current.value); // end time
+
+       
+      // console.log(this.refs.image.src);
+      // console.log(this.descriptionInputRef.current.value);
+      // console.log(this.locationInputRef.current.value);
+  }
   render() {
         const linkStyle = {
       position: "relative"
@@ -296,20 +324,20 @@ AWS.config.update({
     textAlign: "center",
     borderRadius: 13
     };
-    console.log(this.refs.image.src.indexOf(this.context.email));
     return (
       <React.Fragment>
       { this.state.isLoading ? <Spinner /> : 
-      <div className="new-event">
-        <header className="new-event__header">
+      <div className="edit-event">
+        <header className="edit-event__header">
             <h1>Edit your event</h1>
             <p>Please fill the forms to update the information about the event.</p>
         </header>
-        <div className="new-event__content">
-            <div id="new-event__hostInfo">
+        <button onClick={this.getMyRefs}>Test</button>
+        <div className="edit-event__content">
+            <div id="edit-event__hostInfo">
                 <h3>Host of The Event</h3>
-                <div id="new-event__hostTitle">
-                    <div id="new-event__host">
+                <div id="edit-event__hostTitle">
+                    <div id="edit-event__host">
                         <span>{this.context.email}</span>
                     </div>
                 </div>
@@ -336,7 +364,7 @@ AWS.config.update({
                 <div className="form-action">
                     <input type="number" 
                            id="price" 
-                           ref={this.priceInputRef} 
+                           ref={this.priceInputRef } 
                            defaultValue={this.state.event.price && this.state.event.price}
                          
                     />
@@ -357,13 +385,13 @@ AWS.config.update({
                         />
                         <input type="time"
                                id="start-time" 
-                               ref={this.startTimeInputRef} 
+                               ref={ this.startTimeInputRef} 
                                defaultValue={this.state.event.startDateTime.split("T")[1]}
                         />
                         <label htmlFor="end-date">End Date</label>
                         <input type="date" 
                                id="end-date" 
-                               ref={this.endDateInputRef} 
+                               ref={ this.endDateInputRef} 
                                defaultValue={this.state.event.endDateTime.split("T")[0]}
                              
                         />
@@ -395,7 +423,7 @@ AWS.config.update({
                                        src={this.state.event.img && this.state.event.img} 
                                        alt={this.state.event.img && this.state.event.img} 
                                        style={
-                                         this.state.img ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : 
+                                         this.state.event.img ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : 
                                          {width: "100%", height: "200px", objectFit: "cover", backgroundColor: "#eaecef", marginBottom: "10px"}
                                        } 
                                        ref="image"/>
@@ -432,7 +460,7 @@ AWS.config.update({
                         </textarea>
                     </div>
                 </div>
-                <Link to="/events" onClick={this.saveEditInfo} className="btn">Save</Link>
+                <button className="btn" onClick={this.saveEditInfo}>Save</button>
             </form>
         </div>
       </div>}

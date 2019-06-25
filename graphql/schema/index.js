@@ -22,7 +22,7 @@ type Event {
     _id : ID!
     title: String!
     description: String!
-    price: Float!
+    price: Float
     startDateTime: String!
     endDateTime : String! 
     img: String
@@ -58,7 +58,7 @@ type AuthData {
 input EventInput {
     title: String!
     description: String!
-    price: Float!
+    price: Int
     img: String
     startDateTime: String!
     endDateTime: String!
@@ -69,8 +69,7 @@ input UpdatedEventInput {
     _id: ID!
     title: String!
     description: String!
-    price: Float!
-    date: String!
+    price: Float
     img: String
     startDateTime: String!
     endDateTime: String!

@@ -106,8 +106,11 @@ body {
 }
 
 /* center My Event's cancel/ delete buttons */
-.event-actions__wrapper {
+.actions__wrapper {
   display: flex;
   justify-content: center;
   margin-bottom: 12px;
+}
+.actions__wrapper a {
+  margin-right: 0;
 }

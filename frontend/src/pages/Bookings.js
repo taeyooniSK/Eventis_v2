@@ -31,8 +31,10 @@ class BookingsPage extends Component {
                             title
                             price
                             cancelled
-                            startDate
-                            endDate
+                            startDateTime
+                            endDateTime
+                            img
+                            location
                             description
                         }
                         createdAt

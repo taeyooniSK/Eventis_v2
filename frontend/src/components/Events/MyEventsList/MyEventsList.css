@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     margin: 4rem auto;
+    max-width: 1060px;
 }
 /* 
 .my-events__list a:link,
@@ -18,6 +19,7 @@
 .my-events__list--cancelled,
 .my-events__list--host {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .cancelled:hover {
@@ -32,15 +34,18 @@
 
 /* my-events__list--item(events lists I host) */
 .my-events__list--item {
-    width: 25%;
+    width: 23%;
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 1%;
+    margin-right: 1%;
     box-shadow: rgba(194, 194, 194, 0.5) 0px 2px 4px 0px;
     border-radius: 10%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
+
 .my-events__list--item:hover{
     box-shadow: rgb(153, 200, 241) 3px 5px 5px 2px;
 }
@@ -72,7 +77,31 @@
 .my-events__item--content {
     height: 90px;
     padding: 13px;
+    text-align: center;
+}
+/* Delete button of cancelled events  */
+.my-cancelled-events__item--actions button{
+    margin-right: 0;
 }
 
-
-/* my-events__list--item cancelled(events lists I cancelled) */
+@media all and (max-width: 991px) { 
+    .my-events__list--item {
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-bottom: 14px;
+    }
+} 
+@media all and (max-width: 768px) {
+    .my-events__list--item {
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+} 
+@media all and (max-width: 575px) {
+    .my-events__list--item {
+        width: 100%;
+        margin-bottom: 14px;
+    }
+}

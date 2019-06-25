@@ -15,7 +15,7 @@ const MyCancelledEvent = (props) => {
                     <h3>{props.title}</h3>
                 </div>
             </div>
-            <div className="event-actions__wrapper">
+            <div className="my-cancelled-events__item--actions actions__wrapper">
                 {
                   (props.userId === props.creatorId ) &&
                  <React.Fragment>

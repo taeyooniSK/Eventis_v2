@@ -42,8 +42,12 @@ class NewEvent extends Component {
         this.titleInputRef = React.createRef();
         this.priceInputRef = React.createRef();
         this.startDateInputRef = React.createRef();
+        this.startTimeInputRef = React.createRef();
         this.endDateInputRef = React.createRef();
+        this.endTimeInputRef = React.createRef();
+        this.locationInputRef = React.createRef();
         this.descriptionInputRef = React.createRef();
+       
     }
 
     // 사진 추가하기
@@ -104,10 +108,11 @@ class NewEvent extends Component {
     };
 
     // 이벤트 내용 다 작성 후 save 버튼 눌릴때 이 함수 쓰면됨 (이름만 바꾸자)
-    saveEventInfo = () => {
+    saveEventInfo = (e) => {
+      e.preventDefault();
         this.setState(() => ({creating: false}));
         const title = this.titleInputRef.current.value;
-        const price = this.priceInputRef.current.value;
+        const price = Number(this.priceInputRef.current.value);
         const startDate = this.startDateInputRef.current.value; // start date
         const startTime = this.startTimeInputRef.current.value // start time
 
@@ -124,23 +129,26 @@ class NewEvent extends Component {
         
         
         // simple validation
-        //이게 원본
-        // if( title.trim().length === 0 || price <= 0 || date.trim().length === 0 || img.length === 0 || description.trim().length === 0) {
-        //     return;
-        // }
-        if( title.trim().length === 0 || price <= 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
+        if( title.trim().length === 0 || price <= 0 || img.length === 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || location.trim().length === 0 || description.trim().length === 0 ) {
             return;
         }
 
 
-        // const event = {title, price, date, description, img}; // original version
-        const event = {title, price, startDateTime, endDateTime, img, location, description };
+        const event = {
+          title, 
+          price, 
+          startDateTime, 
+          endDateTime, 
+          img, 
+          location, 
+          description 
+        };
         console.log(event);
 
         let reqBody = {
             query: `
             mutation {
-              createEvent(eventInput: {title: "${title}", description: "${description}", img: "${img}", location: "${location}", price: ${price}, startDateTime: "${startDateTime}", endDateTime: "${endDateTime}", location: "${location}"}) {
+              createEvent(eventInput: {title: "${title}", price: ${price}, startDateTime: "${startDateTime}", endDateTime: "${endDateTime}",  img: "${img}", location: "${location}", description: "${description}"}) {
                 _id
                 title 
                 price
@@ -169,26 +177,30 @@ class NewEvent extends Component {
             }
             return res.json();
         }).then(result => {
-            if(this.isActive){
+          console.log(result);
+            // if(this.isActive){
             this.setState(prevState => {
-                const updatedEvents = [...prevState.events];
-                updatedEvents.push({
-                    _id : result.data.createEvent._id,
-                    title : result.data.createEvent.title,
-                    price : result.data.createEvent.price,
-                    startDateTime : result.data.createEvent.startDate,
-                    endDateTime : result.data.createEvent.endDate,
-                    img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
-                    location: result.data.createEvent.location,
-                    description : result.data.createEvent.description,
-                    creator :{
-                        _id : this.context.userId
-                    }
-                });
-                localStorage.removeItem("imgUrl");
-                return { events: updatedEvents, isUploaded: false };
+                // const updatedEvents = [...prevState.events];
+                // updatedEvents.push({
+                //     _id : result.data.createEvent._id,
+                //     title : result.data.createEvent.title,
+                //     price : result.data.createEvent.price,
+                //     startDateTime : result.data.createEvent.startDate,
+                //     endDateTime : result.data.createEvent.endDate,
+                //     img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
+                //     location: result.data.createEvent.location,
+                //     description : result.data.createEvent.description,
+                //     creator :{
+                //         _id : this.context.userId
+                //     }
+                // });
+                
+                return { isUploaded: false };
             })
-        }
+            const path = "/events";
+            this.props.history.push(path);
+            localStorage.removeItem("imgUrl");
+        // }
         }).catch(err => {
             console.log(err);
         })
@@ -331,6 +343,7 @@ class NewEvent extends Component {
                     </div>
                 </div>
                 <Link to="/events" onClick={this.saveEventInfo} className="btn">Create Event</Link>
+                <button  className="btn" onClick={this.saveEventInfo}>Create Event</button>
             </form>
         </div>
       </div>

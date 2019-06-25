@@ -65,7 +65,7 @@ module.exports = { // javascript object where all the resolver functions are in
             description: args.eventInput.description,
             price: +args.eventInput.price,
             img: args.eventInput.img,
-            location: location,
+            location: args.eventInput.location,
             startDateTime: new Date(args.eventInput.startDateTime),
             endDateTime: new Date(args.eventInput.endDateTime),
             creator: req.userId // user who is authenticated
@@ -99,8 +99,8 @@ module.exports = { // javascript object where all the resolver functions are in
                 title: args.updatedEventInput.title,  
                 description: args.updatedEventInput.description,
                 price: +args.updatedEventInput.price,
-                startDateTime: new Date(args.updatedEventInput.startDateTime),
-                endDateTime: new Date(args.updatedEventInput.endDateTime),
+                startDateTime: args.updatedEventInput.startDateTime,
+                endDateTime: args.updatedEventInput.endDateTime,
                 img: args.updatedEventInput.img,
                 location: args.updatedEventInput.location,
                 creator: req.userId 
@@ -137,6 +137,7 @@ module.exports = { // javascript object where all the resolver functions are in
             console.log(eventToDelete);
             const deletedBooking = await Booking.findOneAndDelete({event: args.eventID});
             console.log("Booking deleted : ", deletedBooking);
+            // 여기에 User's createdEvents에서 이벤트도 지워줘야함
             return deletedBooking;
         } catch(err) {
             throw err;

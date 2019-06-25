@@ -10,6 +10,7 @@ const BookingList = props => {
             key={booking._id}
             cancelledBookingId={booking._id}
             title={booking.event.title}
+            img={booking.event.img}
             date={booking.createdAt}
             deleteBooking={props.handleDeleteBooking}
             cancelledBookingsByHost={props.cancelledBookings}
@@ -20,6 +21,7 @@ const BookingList = props => {
         <Booking 
             key={booking._id}
             bookingId={booking._id}
+            img={booking.event.img}
             title={booking.event.title}
             eventId={booking.event._id}
             date={booking.createdAt}
@@ -35,7 +37,7 @@ const BookingList = props => {
                 {/* {props.deleteResponse ? props.deleteResponse.ok.length > 0  props.deleteResponse.ok : props.deleteResponse.err} */}
                 <h2>Cancelled Bookings by hosts</h2>
                 <p>You can't attend this(these) event(s). Please delete this(these) event(s)</p>
-            {cancelledBookingsByHost}
+            {cancelledBookingsByHost.length > 0 ? cancelledBookingsByHost : <h2 style={{textAlign: "center", padding: "30px"}}>None</h2>}
             </ul>
             <ul className="booking__list">
                 <h2>My Booking List</h2>

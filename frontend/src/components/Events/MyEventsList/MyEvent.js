@@ -14,7 +14,7 @@ const MyEvent = (props) => {
                     <div className="my-events__item--content">
                         <h3>{props.title}</h3>
                     </div>
-                    <div className="event-actions__wrapper">
+                    <div className="my-events__item--actions actions__wrapper">
                         {
                         (props.userId === props.creatorId ) &&
                         <React.Fragment>

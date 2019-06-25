@@ -1,19 +1,56 @@
 .booking__list--cancelled,
 .booking__list {
-    margin: 4rem auto 0 auto;
+    /* margin: 4rem auto 0 auto;
     width: 40rem;
-    max-width: 100%;
-}
-
-.booking__list-item{
-    margin: 0.6rem 0;
-    padding: 0.5rem;
-    border: 1px solid #2ABFCB;
+    max-width: 100%; */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    margin: 4rem auto;
+}
+.booking__list h2 {
+    margin-bottom: 1.5rem;
 }
 
-.booking__list--warning{
+.bookings__list--item{
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: rgba(194, 194, 194, 0.5) 0px 2px 4px 0px;
+    border-radius: 10%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.bookings__list--item:hover{
+    box-shadow: rgb(153, 200, 241) 3px 5px 5px 2px;
+}
+
+.bookings__list-item--container{
+    display: flex;
+    flex-direction: column;
+}
+.bookings__list-item--thumbnail {
+    width: 100%;
+    height: 130px;
+    background-position: center center;
+    background-size: cover;
+   
+}
+.bookings__list-item--content{
+    height: 90px;
+    padding: 13px;
+}
+.bookings__list-item--booking-date{
+    text-align: center;
+    padding: 13px;
+}
+.bookings__list-item--actions button{
+    margin-right:0;
+}
+
+.bookings__list--warning{
     color: red;
 }
+

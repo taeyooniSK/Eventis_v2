@@ -71,9 +71,14 @@ class AuthPage extends Component {
             return res.json();
         }).then(result => {
             if(this.state.isLogin){
+                // const info = {
+                //     token: result.data.login.token,
+                //     email: result.data.login.email.slice(0, result.data.login.email.indexOf("@")), // using this for saving image file in s3
+                //     userId: result.data.login.userId
+                // };
                 const info = {
                     token: result.data.login.token,
-                    email: result.data.login.email.slice(0, result.data.login.email.indexOf("@")), // using this for saving image file in s3
+                    email: result.data.login.email, // using this for saving image file in s3
                     userId: result.data.login.userId
                 };
                 localStorage.setItem("info", JSON.stringify(info));

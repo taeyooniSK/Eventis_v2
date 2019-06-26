@@ -66,6 +66,7 @@ const comments = async commentIds => {
             return {
                 ...comment._doc,
                 author: user.bind(this, comment._doc.author),
+                post: singleEvent.bind(this, comment._doc.post),
                 updatedAt: dateToString2(comment._doc.updatedAt)
             }
         })
@@ -100,6 +101,7 @@ const transformComment = comment => {
     return {
         ...comment._doc,
         author: user.bind(this, comment._doc.author),
+        post: singleEvent.bind(this, comment._doc.post),
         createdAt: dateToString2(comment._doc.createdAt),
         updatedAt: dateToString2(comment._doc.updatedAt)
     }

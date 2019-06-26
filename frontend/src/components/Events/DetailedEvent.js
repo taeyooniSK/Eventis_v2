@@ -69,11 +69,14 @@ class DetailedEvent extends Component{
         const reqBody = {
             query: `
                 mutation { 
-                    createComment(commentInput: { eventId: "${this.props.eventId}", author: "${this.context.userId}", text: "${text}"}) {
+                    createComment(commentInput: {  post: "${this.props.eventId}", author: "${this.context.userId}", text: "${text}"}) {
                         _id
                         author {
                             _id
                             email
+                        }
+                        post {
+                            title
                         }
                         text
                         updatedAt

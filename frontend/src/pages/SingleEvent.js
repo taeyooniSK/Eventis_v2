@@ -38,6 +38,9 @@ class SingleEventPage extends Component {
                                 _id
                                 email
                             }
+                            post {
+                                title
+                            }
                             text
                             updatedAt
                         }

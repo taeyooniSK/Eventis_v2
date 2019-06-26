@@ -11,10 +11,11 @@ module.exports = {
         try {
             // 해당 싱글 이벤트 페이지의 아디이(라우트의 아이디로 얻거나 그 singleEventPage route의 pathname을 통해서도 얻어서 
             // graphql query에 argument로 넣고 event.comments.push(넣을코멘트) 이런식으로 넣고 save한다. 그리고 만들어진 코멘트를 리턴.
-            const event = await Event.findOne({_id: args.commentInput.eventId});
+            const event = await Event.findOne({_id: args.commentInput.post});
             console.log("event I found for saving  a comment :", event);
             const comment = new Comment({
                 author: req.userId,
+                post: args.commentInput.post,
                 text: args.commentInput.text
             });
             const savedComment = await comment.save();

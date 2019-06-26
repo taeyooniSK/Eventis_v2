@@ -22,6 +22,7 @@ AWS.config.update({
   });
 
 class NewEvent extends Component {
+  
     state = {
         creating: false,
         editing: false,
@@ -32,10 +33,11 @@ class NewEvent extends Component {
         url: null,
         isUploaded: false
     };
+
     isActive = true;
 
     static contextType = AuthContext;
-
+    
     constructor(props){
         super(props);
 
@@ -47,11 +49,11 @@ class NewEvent extends Component {
         this.endTimeInputRef = React.createRef();
         this.locationInputRef = React.createRef();
         this.descriptionInputRef = React.createRef();
-       
     }
 
     // 사진 추가하기
     addPhoto = (e) => {
+        
         e.preventDefault();
         const files = this.imgInputRef.files;
         console.log(files);
@@ -60,8 +62,8 @@ class NewEvent extends Component {
         }
         const file = files[0];
         const fileName = file.name;
-        console.log(this.context.email);
-        const albumName = this.context.email;
+        console.log(this.context.email.slice(0, this.context.email.indexOf("@")) );
+        const albumName = this.context.email.slice(0, this.context.email.indexOf("@")) ;
         const albumPhotosKey = encodeURIComponent(albumName) + "/";
     
         const photoName = albumPhotosKey + fileName;
@@ -89,7 +91,7 @@ class NewEvent extends Component {
       };
       // 사진 지우기
       deletePhoto = () => {
-        const index = this.state.url.indexOf(this.context.email);
+        const index = this.state.url.indexOf(this.context.email.slice(0, this.context.email.indexOf("@")));
         const albumAndFile = this.state.url.slice(index).split("/");
     
         const params = {
@@ -213,7 +215,8 @@ class NewEvent extends Component {
     }
 
   render() {
-    
+    console.log(this.email);
+    console.log(this.context.email.slice(0, this.context.email.indexOf("@")));
     const linkStyle = {
       position: "relative"
     };
@@ -254,7 +257,7 @@ class NewEvent extends Component {
                 <h3>Host of The Event</h3>
                 <div id="new-event__hostTitle">
                     <div id="new-event__host">
-                        <span>{this.context.email}</span>
+                        <span>{this.context.email.slice(0, this.context.email.indexOf("@")) }</span>
                     </div>
                 </div>
             </div>

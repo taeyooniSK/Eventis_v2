@@ -42,6 +42,7 @@ type User {
 type Comment {
     _id : ID!
     author: User!
+    post: Event!
     text: String!
     createdAt : String!
     updatedAt : String!
@@ -76,6 +77,11 @@ input UpdatedEventInput {
     location: String! 
 }
 
+input DeleteEventInput {
+    userID: ID!
+    eventID: ID!
+}
+
 input UserInput {
     email: String!
     password: String!
@@ -94,7 +100,7 @@ type RootMutation {
     createEvent(eventInput: EventInput): Event
     editEvent(updatedEventInput: UpdatedEventInput): Event
     cancelEvent(eventID: ID!): Event
-    deleteEvent(eventID: ID!): Event
+    deleteEvent(deleteEventInput: DeleteEventInput): Event
     createUser(userInput: UserInput): User
     bookEvent(eventID: ID!): Booking!
     cancelBooking(bookingID: ID!): Event!
@@ -109,7 +115,7 @@ type DeleteResponse {
 }
 
 input CommentInput {
-    eventId : ID!
+    post: ID!
     author: ID!
     text: String!
 }

@@ -125,8 +125,9 @@ class MyEventsPage extends Component {
         const reqBody = {
             query: `
                 mutation { 
-                    deleteEvent(eventID: "${eventId}") {
+                    deleteEvent(deleteEventInput: { userID: "${this.context.userId}", eventID:"${eventId}" }) {
                         _id
+                        
                     }
                 }
             `

@@ -135,67 +135,23 @@ module.exports = { // javascript object where all the resolver functions are in
             throw new Error("It's not authenticated!");
         }
         try {
-            // const eventToDeleteInCreatedEvents = await User.findById({_id: args.deleteEventInput.userID}, (err, foundDoc) => {
-            //     if (err) console.log(err);
-            //     console.log("foundDoc", foundDoc);
-            //     const index = foundDoc.createdEvents.findIndex(elem => {
-            //         return elem === args.deleteEventInput.eventID;
-            //     })
-            //     foundDoc.createdEvents.splice(index, 1);
-            // });
+            // find the particular event that I want to delete and delete it (createdEvents is an array of subdoc of User)
+            const createdEventsAfterDeleting = await User.findOneAndUpdate({_id: req.userId }, {$pull: { createdEvents: args.deleteEventInput.eventID }}, (err, data) => {
+               if(err) console.log(err);
+               return data;
+            });
 
-
-            // const eventToDeleteInCreatedEvents = await User.find({_id: req.userId}, { "createdEvents": { $elemMatch: {id : args.deleteEventInput.eventID} } }, async (err, foundDoc) => {
-            //     if(err) console.log(err);
-            //     try {
-            //         console.log("I found the id in createdEvents", foundDoc);
-            //     }catch(err){
-            //         throw err;
-            //     }
-            // });
-            // const foundUser =  User.find({_id: req.userId}, (err, foundDoc) => {
-            //     if (err) console.log(err);
-            //     const index = foundDoc[0].createdEvents.findIndex(event => {
-            //         return event === args.deleteEventInput.eventID;
-            //     });
-            //     return foundDoc[0].createdEvents.splice(index, 1);
-
-            // });
-            // console.log(foundUser);
-
-           const foundUser = await User.find({_id: req.userId});
-        //    console.log(foundUser[0].createdEvents);
-        // console.log(args.deleteEventInput.eventID);
-            const createdEvents = foundUser[0].createdEvents;
-           for ( let i= 0; i < createdEvents.length; i++){
-                if(createdEvents[i] == args.deleteEventInput.eventID){
-                    delete createdEvents[i];
-                    User.save(createdEvents);
-                }
-           }
-            // console.log(foundUser[0].createdEvents);
-
-            // const foundUser = await User.update({_id: req.userId}, {
-            //     $pull: { createdEvents: {$elemMatch : {_id: args.deleteEventInput.eventID} } }
-            // })
-
-            console.log(foundUser);
-
-
-            // console.log("deleted Event in createdEvents", eventToDeleteInCreatedEvents);
-            
-            // // await User.save();
-            // // console.log("event deleted in user's createdEvents", eventToDeleteInCreatedEvents);
-            // // const commentsInEvent = await Event.findOneAndRemove({_id: args.deleteEventInput.eventID , comments: {}});
-            // const commentsToDelete  = await Comment.deleteMany({ post : args.deleteEventInput.eventID });
-            // // await Comment.save();
-            // console.log(commentsToDelete);
-            // const eventToDelete = await Event.findByIdAndDelete({_id: args.deleteEventInput.eventID});
-            // console.log(eventToDelete);
-            // const deletedBooking = await Booking.findOneAndDelete({event: args.deleteEventInput.eventID});
-            // console.log("Booking deleted : ", deletedBooking);
-            // // 여기에 User's createdEvents에서 이벤트도 지워줘야함
-            // return deletedBooking;
+            console.log(result)
+            // when deleting a post, delete all comments attached to this post
+            const commentsToDelete  = await Comment.deleteMany({ post : args.deleteEventInput.eventID });
+            console.log(commentsToDelete);
+            // delete the event from db that I'm about to delete
+            const eventToDelete = await Event.findByIdAndDelete({_id: args.deleteEventInput.eventID});
+            console.log(eventToDelete);
+            // delete booking data
+            const deletedBooking = await Booking.findOneAndDelete({event: args.deleteEventInput.eventID});
+            console.log("Booking deleted : ", deletedBooking);
+            return deletedBooking;
         } catch(err) {
             throw err;
         }

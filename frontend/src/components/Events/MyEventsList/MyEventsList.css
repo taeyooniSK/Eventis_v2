@@ -1,3 +1,7 @@
+.my-events__list--container {
+    padding: 0 24px;
+}
+
 .my-events__list {
     display: flex;
     flex-direction: column;

@@ -140,7 +140,7 @@ AWS.config.update({
   // when a user change a picture not deleting the previous image, delete the picture before the user uploads it
   handleChangeImg = () => {
         const imgURL = this.state.event.img;
-        const index = imgURL.indexOf(this.context.email);
+        const index = imgURL.indexOf(this.context.email.slice(0, this.context.email.indexOf("@")));
         const albumAndFile = imgURL.slice(index).split("/");
     
         const params = {
@@ -168,8 +168,8 @@ AWS.config.update({
         // }
         const file = files[0];
         const fileName = file.name;
-        console.log(this.context.email);
-        const albumName = this.context.email;
+        console.log(this.context.email.slice(0, this.context.email.indexOf("@")));
+        const albumName = this.context.email.slice(0, this.context.email.indexOf("@"));
         const albumPhotosKey = encodeURIComponent(albumName) + "/";
     
         const photoName = albumPhotosKey + fileName;
@@ -197,7 +197,7 @@ AWS.config.update({
       };
       // 사진 지우기
       deletePhoto = () => {
-        const index = this.state.url.indexOf(this.context.email);
+        const index = this.state.url.indexOf(this.context.email.slice(0, this.context.email.indexOf("@")));
         const albumAndFile = this.state.url.slice(index).split("/");
     
         const params = {
@@ -217,10 +217,8 @@ AWS.config.update({
    // Edit: modal confirm button for editing an event
     saveEditInfo = (e) => {
         e.preventDefault();
-        // this.setState(() => ({editing: false}));
         const title = this.titleInputRef.current.value;
-        console.log(title);
-        const price = this.priceInputRef.current.value;
+        const price = this.priceInputRef.current.value || 0;
         const startDate = this.startDateInputRef.current.value; // start date
         const startTime = this.startTimeInputRef.current.value // start time
 
@@ -235,7 +233,7 @@ AWS.config.update({
         const location = this.locationInputRef.current.value;
         
         // simple validation
-        if( title.trim().length === 0 || price <= 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
+        if( title.trim().length === 0 || price < 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
             return;
         }
 
@@ -289,24 +287,6 @@ AWS.config.update({
   //   isActive = false;
   // }
 
-
-
-  getMyRefs = () => {
-      // console.log(this.titleInputRef.current);
-      // console.log(this.priceInputRef.current.value);
-      // console.log(this.startDateInputRef.current.value); // start date
-      console.log(this.startTimeInputRef.current.value) // start time
-
-       
-          
-      // console.log(this.endDateInputRef.current.value); // end date
-      // console.log(this.endTimeInputRef.current.value); // end time
-
-       
-      // console.log(this.refs.image.src);
-      // console.log(this.descriptionInputRef.current.value);
-      // console.log(this.locationInputRef.current.value);
-  }
   render() {
         const linkStyle = {
       position: "relative"
@@ -338,7 +318,7 @@ AWS.config.update({
                 <h3>Host of The Event</h3>
                 <div id="edit-event__hostTitle">
                     <div id="edit-event__host">
-                        <span>{this.context.email}</span>
+                        <span>{this.context.email.slice(0, this.context.email.indexOf("@"))}</span>
                     </div>
                 </div>
             </div>

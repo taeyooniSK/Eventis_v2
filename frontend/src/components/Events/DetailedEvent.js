@@ -10,15 +10,18 @@ class DetailedEvent extends Component{
         isLoading: false,
         isClicked: false,
         comments: this.props.comments,
-        isBooked: false
+        isBooked: false,
+        countRegistrations: 0
     }
     static contextType = AuthContext;
+    
     componentDidMount(){
         // if(this.getCookie(this.context.email) && this.getCookie(this.context.email) === this.props.eventId){
         //     this.setState(() => ({isBooked: true}));
         // }
        
        this.isBooked();
+    //    this.getCountRegistrations();
         
     }
 
@@ -32,20 +35,24 @@ class DetailedEvent extends Component{
     isBooked = () => {
         const email = this.context.email;
         if(localStorage.getItem(email)){
-            let isBooked;
+            // let isBooked;
             const parsedArr = JSON.parse(localStorage.getItem(email));
             // const isBooked = parsedArr.filter(bookedEventId => {
             //     return bookedEventId === this.props.eventId;
             // });
             // see if this event has been booked by the user
+           
             for ( let i = 0; i < parsedArr.length; i++){
                 if(parsedArr[i] === this.props.eventId){
-                    isBooked = true;
+                    // console.log("parsedArr type", typeof parsedArr[i]);
+                    // console.log("this.props.eventId type", typeof this.props.eventId);
+                    this.setState(() => ({isBooked: true}));
+                    // isBooked = true;
                 }
             }
-            if( isBooked ) {
-                this.setState(() => ({isBooked: true}));
-            }
+            // if( isBooked ) {
+            //     this.setState(() => ({isBooked: true}));
+            // }
             // const isBooked = parsedArr.find(bookedEventId => {
             //     return bookedEventId === this.props.eventId;
             // })
@@ -133,7 +140,7 @@ class DetailedEvent extends Component{
         let reqBody = {
             query: `
             mutation {
-              bookEvent(eventID: "${this.props.eventId}") {
+              bookEvent(eventID: "${this.props.eventId}", userID: "${this.context.email}") {
                 _id
                 createdAt 
                 updatedAt
@@ -188,18 +195,65 @@ class DetailedEvent extends Component{
         })
     }
 
+    // getCountRegistrations = () => {
+    //     let reqBody = {
+    //         query: `
+    //         query {
+    //             countRegistrations(eventID: "${this.props.eventId}") {
+    //                 count
+    //           }
+    //         }
+    //       `
+    //     };
+
+    //     fetch("http://localhost:8000/graphql", {
+    //         method: "POST",
+    //         body: JSON.stringify(reqBody),
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         }
+    //     }).then(res => {
+    //         if(res.status !== 200 && res.status !== 201){
+    //             throw new Error("Failed to get count of registrations");
+    //         }
+    //         return res.json();
+    //     }).then(result => {
+    //     console.log(result);
+    //     }).catch(err => {
+    //         console.log(err);
+    //     })
+    // }
+
     render(){
         // console.log(this.textInputRef.current);
         const email = this.props.event.creator.email;
         const id = email.slice(0, this.props.event.creator.email.indexOf("@"));
+        console.log(this.context.email);
         return(
             <div className="detailed-event__container">
                 <div className="detailed-event__info">
                     <h1>{this.props.event.title} hosted by <span>{id}</span></h1>
                     <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/>
-                    <h2>${this.props.event.price} - {this.props.event.startDateTime} ~ {this.props.event.endDateTime }</h2>
+                    <h2>{(this.props.price && "$" + this.props.price ) || "Free"} - {this.props.event.startDateTime} ~ {this.props.event.endDateTime }</h2>
                     <p>{this.props.event.description}</p>
-                    {this.props.event.cancelled ? "This event is cancelled" : <button disabled={this.state.isBooked } onClick={this.handleBookEvent} className={this.state.isBooked ? "btn disabled" :  "btn"}>{this.state.isBooked ? "Booked" : "Book" }</button>}
+                    {/* <p>{this.getCountRegistrations()}</p> */}
+                    {
+                        this.context.userId === this.props.event.creator._id
+                    ?  "" 
+                    :
+                    <React.Fragment>
+                        { 
+                            this.props.event.cancelled 
+                            ? "This event is cancelled" 
+                            : <button disabled={this.state.isBooked } 
+                                      onClick={this.handleBookEvent} 
+                                      className={this.state.isBooked ? "btn disabled" :  "btn"}
+                              >
+                                {this.state.isBooked ? "Booked" : "Book" }
+                            </button>
+                        } 
+                    </React.Fragment>
+                    }
                 </div>
                 {
                     this.context.token 

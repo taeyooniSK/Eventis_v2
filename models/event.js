@@ -44,7 +44,19 @@ const eventSchema = new Schema({
     location : {
         type: String,
         required: true
-    }
+    },
+    bookers : [
+        {
+            userId: {
+                type: String,
+                required: true
+            },
+            bookedAt: {
+                type: Date,
+                default: Date.now()
+            }
+        }
+    ]
 });
 
 

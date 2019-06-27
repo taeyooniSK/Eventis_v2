@@ -41,6 +41,7 @@ const MyEventsList = (props) => {
 
     return (
         <React.Fragment>
+        <div className="my-events__list--container">
             <ul className="my-events__list">
             <h2>Events lists that I cancelled</h2>
             <div className="my-events__list--cancelled">
@@ -54,6 +55,7 @@ const MyEventsList = (props) => {
                 {events}
             </div>
             </ul>
+        </div>
         </React.Fragment>
     )
 }

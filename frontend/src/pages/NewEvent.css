@@ -1,6 +1,6 @@
 .new-event {
     margin: 8rem auto;
-    /* width: 40rem; */
+    padding: 0 24px;
     max-width: 1160px;
     letter-spacing: 1px;
 }

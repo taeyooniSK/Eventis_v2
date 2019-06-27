@@ -36,6 +36,13 @@ module.exports = { // javascript object where all the resolver functions are in
             user: req.userId,
             event: eventToBook.id
         });
+        const eventToSaveBooker = await Event.findOne({ _id: args.eventID });
+        const booker = {
+            userId: args.userID
+        }
+        eventToSaveBooker.bookers.push(booker);
+        const savedBooker = await eventToSaveBooker.save();
+        console.log("saved booker", savedBooker);
         const result = await booking.save();
         return transformBooking(result);
     },
@@ -62,9 +69,26 @@ module.exports = { // javascript object where all the resolver functions are in
             const booking = await Booking.findByIdAndDelete({_id : args.bookingID});
             console.log("deleted booking : ", booking);
 
-            return { ok : "Deleted successfully", err : ""};
+            return { ok : "Deleted successfully"};
         } catch(err) {
-            return { ok : "", err: err};
+            return { err: err};
+        }
+    },
+    countRegistrations : async (args, req) => {
+        try {
+            let data;
+            // const countRegistrations = await Booking.countDocuments({event: args.eventID }, async (err, count) => {
+            //     console.log("count", count);
+            //     if(err) console.log(err);
+            //     data = count;
+            // });
+
+            // const countRegistrations = await Booking.find({event: args.eventID });
+            // console.log(countRegistrations.length);
+            // return countRegistrations.length;
+            return 1;
+        } catch(err) {
+            throw err;
         }
     }
 }

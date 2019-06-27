@@ -55,7 +55,6 @@ type AuthData {
     tokenExpiration: Int!
 }
 
-
 input EventInput {
     title: String!
     description: String!
@@ -87,14 +86,21 @@ input UserInput {
     password: String!
 }
 
+type Count {
+    count: Int
+}
+
+
 type RootQuery {
     event(eventID: ID!): Event!
     events: [Event!]! 
     myEvents(userID: ID!): [Event!]!
     cancelledEvents(userID: ID!): [CancelledEvents!]!
     bookings: [Booking!]!
+    countRegistrations(eventID: ID!): Count
     login(email: String!, password: String!): AuthData!
 }
+
 
 type RootMutation {
     createEvent(eventInput: EventInput): Event
@@ -102,10 +108,11 @@ type RootMutation {
     cancelEvent(eventID: ID!): Event
     deleteEvent(deleteEventInput: DeleteEventInput): Event
     createUser(userInput: UserInput): User
-    bookEvent(eventID: ID!): Booking!
+    bookEvent(eventID: ID!, userID: String!): Booking!
     cancelBooking(bookingID: ID!): Event!
     deleteBooking(bookingID: ID!): DeleteResponse
     createComment(commentInput: CommentInput) : Comment
+    
 }
 
 

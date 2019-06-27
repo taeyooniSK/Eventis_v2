@@ -33,6 +33,7 @@ const BookingList = props => {
     
     return (
         <React.Fragment>
+        <div className="booking__list--container">
             <ul className="booking__list--cancelled">
                 {/* {props.deleteResponse ? props.deleteResponse.ok.length > 0  props.deleteResponse.ok : props.deleteResponse.err} */}
                 <h2>Cancelled Bookings by hosts</h2>
@@ -43,6 +44,7 @@ const BookingList = props => {
                 <h2>My Booking List</h2>
             {bookings}
             </ul>
+        </div>
         </React.Fragment>
     )
 };

@@ -46,8 +46,8 @@ module.exports = { // javascript object where all the resolver functions are in
         const token = jwt.sign({
             userId: user.id,
             email: user.email
-        }, "SuperSecretKey", {expiresIn :"1h"})
+        }, "SuperSecretKey", {expiresIn :"2h"})
         
-        return { userId: user.id, email: user.email, token: token, tokenExpiration : 1}
+        return { userId: user.id, email: user.email, token: token, tokenExpiration : 2}
     }
 }

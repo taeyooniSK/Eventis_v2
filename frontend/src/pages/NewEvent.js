@@ -114,7 +114,7 @@ class NewEvent extends Component {
       e.preventDefault();
         this.setState(() => ({creating: false}));
         const title = this.titleInputRef.current.value;
-        const price = Number(this.priceInputRef.current.value);
+        const price = this.priceInputRef.current.value || 0;
         const startDate = this.startDateInputRef.current.value; // start date
         const startTime = this.startTimeInputRef.current.value // start time
 
@@ -131,7 +131,7 @@ class NewEvent extends Component {
         
         
         // simple validation
-        if( title.trim().length === 0 || price <= 0 || img.length === 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || location.trim().length === 0 || description.trim().length === 0 ) {
+        if( title.trim().length === 0 || price < 0 || img.length === 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || location.trim().length === 0 || description.trim().length === 0 ) {
             return;
         }
 
@@ -234,18 +234,6 @@ class NewEvent extends Component {
     borderRadius: 13
     };
 
-    // const imageUploadedStyle={
-    //   width: "100%",
-    //   height: "200px",
-    //   objectFit: "cover",
-    // }
-
-    // const imageUploadDefaultStyle={
-    //   width: "100%",
-    //   height: "200px",
-    //   objectFit: "cover",
-    //   backgroundColor: "#eaecef"
-    // }
     return (
       <div className="new-event">
         <header className="new-event__header">

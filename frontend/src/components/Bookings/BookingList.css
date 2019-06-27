@@ -1,3 +1,6 @@
+.booking__list--container {
+    padding: 0 24px;
+}
 .booking__list--cancelled,
 .booking__list {
     /* margin: 4rem auto 0 auto;

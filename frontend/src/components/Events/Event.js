@@ -18,7 +18,7 @@ const Event = (props) => {
                     <p>{ props.startDateTime } ~ { props.endDateTime }</p>
                     <h3>{props.title}</h3>
                     <p>{props.creatorEmail}</p>
-                    <p>${props.price} </p>
+                    <p>{(props.price && "$" + props.price ) || "Free"}</p>
                 </div>
             </div>
             <div>

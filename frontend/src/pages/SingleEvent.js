@@ -48,6 +48,9 @@ class SingleEventPage extends Component {
                             _id
                             email
                         }
+                        bookers {
+                            userId
+                        }
                     }
                 }
             `

@@ -51,6 +51,11 @@ module.exports = { // javascript object where all the resolver functions are in
             throw new Error("It's not authenticated!");
         }
         try {
+            // remove the booker in the booker's array in Event that who cancels a booking
+            await Event.findOneAndUpdate({_id: args.eventID }, {$pull: { bookers: { userId: args.userID } }}, (err, data) => {
+               if (err) console.log(err);
+               console.log("data", data);
+             });
             // get booking data populated with data referencing event
             const booking = await Booking.findById({_id : args.bookingID}).populate("event");
             console.log({...booking.event._doc});

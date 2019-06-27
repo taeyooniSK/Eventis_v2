@@ -280,6 +280,9 @@ class EventsPage extends Component {
                             _id
                             email
                         }
+                        bookers{
+                            userId
+                        }
                     }
                 }
             `

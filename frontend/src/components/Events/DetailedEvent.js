@@ -11,7 +11,7 @@ class DetailedEvent extends Component{
         isClicked: false,
         comments: this.props.comments,
         isBooked: false,
-        countRegistrations: 0
+        numberOfBookers: this.props.event.bookers.length
     }
     static contextType = AuthContext;
     
@@ -121,21 +121,12 @@ class DetailedEvent extends Component{
     }
 
     handleBookEvent = () => {
-        // if(!this.context.token){
-        //     // when user is not logged in and close the modal clicking "Confirm" button, selectedEvent: null so that modal can get closed
-        //     this.setState({selectedEvent: null})
-        //     return;
-        // }
         // without login, users can't book
         if(!this.context.token){
             return;
         }
         
-        this.setState(() => ({isBooked : true}));
-        
-       
-        
-        // this.setCookie(email, eventId, 31);
+        this.setState((prevState) => ({isBooked : true, numberOfBookers: prevState.numberOfBookers + 1}));
         
         let reqBody = {
             query: `
@@ -178,7 +169,7 @@ class DetailedEvent extends Component{
             } else {
                 // if there is data related to the email 
                 // parse the data and push a new eventId that user books
-                const parsedArr = JSON.parse(localStorage.getItem(email));
+            const parsedArr = JSON.parse(localStorage.getItem(email));
                 for (let i = 0; i < parsedArr.length; i++){
                     if( parsedArr[i] === this.props.eventId){
                         return;
@@ -195,35 +186,6 @@ class DetailedEvent extends Component{
         })
     }
 
-    // getCountRegistrations = () => {
-    //     let reqBody = {
-    //         query: `
-    //         query {
-    //             countRegistrations(eventID: "${this.props.eventId}") {
-    //                 count
-    //           }
-    //         }
-    //       `
-    //     };
-
-    //     fetch("http://localhost:8000/graphql", {
-    //         method: "POST",
-    //         body: JSON.stringify(reqBody),
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         }
-    //     }).then(res => {
-    //         if(res.status !== 200 && res.status !== 201){
-    //             throw new Error("Failed to get count of registrations");
-    //         }
-    //         return res.json();
-    //     }).then(result => {
-    //     console.log(result);
-    //     }).catch(err => {
-    //         console.log(err);
-    //     })
-    // }
-
     render(){
         // console.log(this.textInputRef.current);
         const email = this.props.event.creator.email;
@@ -236,7 +198,7 @@ class DetailedEvent extends Component{
                     <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/>
                     <h2>{(this.props.price && "$" + this.props.price ) || "Free"} - {this.props.event.startDateTime} ~ {this.props.event.endDateTime }</h2>
                     <p>{this.props.event.description}</p>
-                    {/* <p>{this.getCountRegistrations()}</p> */}
+                    <p>{this.state.numberOfBookers}</p>
                     {
                         this.context.userId === this.props.event.creator._id
                     ?  "" 

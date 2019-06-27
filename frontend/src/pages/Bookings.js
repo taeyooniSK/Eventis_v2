@@ -78,7 +78,7 @@ class BookingsPage extends Component {
         const reqBody = {
             query: `
                 mutation { 
-                    cancelBooking(bookingID: "${bookingId}") {
+                    cancelBooking(bookingID: "${bookingId}", eventID: "${eventId}", userID: "${this.context.email}") {
                         _id
                     }
                 }

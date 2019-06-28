@@ -44,8 +44,8 @@ const MyEventsList = (props) => {
         <div className="my-events__list--container">
             <ul className="my-events__list">
             <h2>Events lists that I cancelled</h2>
-            <div className="my-events__list--cancelled">
-                {cancelledEvents}
+            <div className="my-events__list--cancelled" style={{justifyContent : "center"}}>
+                {cancelledEvents.length > 0 ? cancelledEvents : <h3 style={{marginTop: "30px"}}>None</h3>}
             </div>
                 
             </ul>

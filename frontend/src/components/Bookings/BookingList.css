@@ -1,6 +1,11 @@
 .booking__list--container {
     padding: 0 24px;
 }
+.booking__list--cancelled-item__container,
+.booking__list--item__container {
+    display: flex;
+    flex-wrap: wrap;
+}
 .booking__list--cancelled,
 .booking__list {
     /* margin: 4rem auto 0 auto;
@@ -9,6 +14,7 @@
     display: flex;
     flex-direction: column;
     margin: 4rem auto;
+    max-width: 1060px;
 }
 .booking__list h2 {
     margin-bottom: 1.5rem;
@@ -24,7 +30,7 @@
     border-radius: 10%;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 .bookings__list--item:hover{
     box-shadow: rgb(153, 200, 241) 3px 5px 5px 2px;
@@ -57,3 +63,26 @@
     color: red;
 }
 
+
+
+@media all and (max-width: 991px) { 
+    .bookings__list--item {
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-bottom: 14px;
+    }
+} 
+@media all and (max-width: 768px) {
+    .bookings__list--item  {
+        width: 48%;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+} 
+@media all and (max-width: 575px) {
+    .bookings__list--item  {
+        width: 100%;
+        margin-bottom: 14px;
+    }
+}

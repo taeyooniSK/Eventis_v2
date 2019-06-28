@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Booking = props =>  {
     const isCancelled = props.cancelled;
-    let bookingList;
+    let booking;
     if(isCancelled === false){
-        bookingList = <li key={props.bookingId} className="bookings__list--item">
+        booking = <li key={props.bookingId} className="bookings__list--item">
                         <div className="bookings__list-item--container">
                             <Link to={`/events/${props.eventId}`}>
                                 <div className="bookings__list-item--thumbnail" style={{ "backgroundImage": `url(${props.img})`}}></div>
@@ -21,10 +21,10 @@ const Booking = props =>  {
                             </div>
                         </div>
                     </li>
-        return bookingList;
+        return booking;
     }
     return (
-        <React.Fragment>{bookingList}</React.Fragment>
+        <React.Fragment>{booking}</React.Fragment>
     );
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Transition, animated } from "react-spring/renderprops";
 
 import './MainNavigation.css';
 import AuthContext from "../../context/auth-context";
@@ -7,20 +8,29 @@ import AuthContext from "../../context/auth-context";
 const MainNavigation = props => {
     const [isOpen, openModal] = useState(false);
     const navMenuStyle={
-        position: "absolute",
-        left: "0",
-        top: "3.5rem",
-        width: "100vw",
-        minHeight: "600px",
-        backgroundColor: "yellowgreen",
-        display: isOpen ? "block" : "none",
-        zIndex: "10",
-        transition: "all 1s ease"
-    }
+        from : {
+            position: "absolute",
+            top: "3.5rem",
+            left: "0",
+            opacity: "0",
+            width: "100%",
+            minHeight: "600px",
+            zIndex: "10",
+            transform: "translate3d(0,-50px,0)",
+        },
+        enter : {
+            opacity: "1",
+            transform: "translate3d(0,0,0)"
+        },
+        leave : {
+            opacity: 0,
+            transform: "translate3d(0,-50px,0)"
+        }
+    };
+
     const ulStyle={
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
+        flexDirection: "column"
     }
 
     
@@ -78,7 +88,21 @@ const MainNavigation = props => {
             <div className="hamburger-menu" onClick={setOpenModal}>
                 <div></div>
             </div>
-            <nav className="main-navigation__items__mobile" style={navMenuStyle}>
+            <Transition
+                items={isOpen}
+                from={{
+                    ...navMenuStyle.from
+                }}
+                enter={{
+                    ...navMenuStyle.enter
+                }}
+                leave={{
+                    ...navMenuStyle.leave
+                }}
+            >
+        {isOpen => isOpen && (props => (
+            <animated.div style={props}>
+            <nav className="main-navigation__items__mobile">
                 <ul style={ulStyle}>
                     {!context.token && <li>
                         <NavLink to="/auth" onClick={closeModal}>Authenticate</NavLink>
@@ -102,8 +126,11 @@ const MainNavigation = props => {
                     
                 </ul>
             </nav>
-        </header>
-    </div>
+            </animated.div>
+            ))}
+        </Transition>
+    </header>
+</div>
         )
     }}
     </AuthContext.Consumer>

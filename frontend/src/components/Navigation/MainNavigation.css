@@ -149,6 +149,7 @@
 
 .main-navigation__items__mobile ul > li:hover a {
     color: #fff;
+    font-weight: bold;
 }
 
 
@@ -184,3 +185,9 @@
         background-color:#2ABFCB;
     }
 } 
+
+@media all and (max-width: 480px) { 
+   .content-item {
+       margin: 1.5rem 2rem;
+   }
+}

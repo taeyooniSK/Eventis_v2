@@ -12,7 +12,7 @@ const HomePage = (props) => (
         return (
         <React.Fragment>
             <div className="backdrop"></div>
-            <section className="header__container">
+            <section href="#" className="header__container">
                 <div className="header__content">
                     <h1>Be the Host of Events in Eventis</h1>
                     <h3>With Your Creative Ideas</h3>
@@ -48,6 +48,43 @@ const HomePage = (props) => (
                     <img src={conference} alt="Lamp Event"></img>
                     </div>
                 </div>
+            </section>
+            <section className="footer">
+                <footer>
+                    <div className="footer__logo">
+                        <a href="#"><h1>Eventis</h1></a>
+                    </div>
+                    <div className="footer__menu">
+                        <h3>Menu</h3>
+                        {
+                            !context.token 
+                        ? <ul>
+                            <li>
+                                <Link to="/auth">Login / Sign Up</Link>
+                            </li>
+                            <li>
+                                <Link to="/events">Events</Link>
+                            </li>
+                        </ul>
+                        : 
+                        <ul>
+                            <li>
+                                <Link to="/events">Events</Link>
+                            </li>
+                            <li>
+                                <Link to="/my-events">My Events</Link>
+                            </li>
+                            <li>
+                                <Link to="/bookings">Bookings</Link>
+                            </li>
+                        </ul>
+                        }
+                    </div>
+                    <div className="footer__office">
+                        <h3>Office</h3>
+                        <p>Geumjeong-gu, Busan, Republic of Korea</p>
+                    </div>
+                </footer>
             </section>
         </React.Fragment>)
     }}

@@ -49,6 +49,50 @@ const HomePage = (props) => (
                     </div>
                 </div>
             </section>
+            <section className="testimonials">
+                <h3>Testimonials</h3>
+                <p>What users say about us.</p>
+                <div className="testimonials__container">
+                    <ul>
+                        <li className="testimonials__card">
+                            <span role="img" aria-label="star emoji" >⭐</span>
+                            <p className="testimonials__user--words">
+                                Cras a molestie sem, ac commodo tortor. 
+                                Maecenas ante elit, dignissim in malesuada id, 
+                                laoreet id neque. Nullam ultricies ultrices tincidunt. 
+                            </p>
+                            <p className="testimonials__user--name">- KimHe*** -</p>
+                        </li>
+                        <li className="testimonials__card">
+                            <span role="img" aria-label="star emoji" >🍻</span>
+                            <p className="testimonials__user--words">
+                                Maecenas ante elit, dignissim in malesuada id, 
+                                laoreet id neque. Nullam ultricies ultrices tincidunt. 
+                                Quisque ultricies erat sapien, hendrerit ullamcorper massa iaculis eget. 
+                            </p>
+                            <p className="testimonials__user--name">- MartinAmst*** -</p>
+                        </li>
+                        <li className="testimonials__card">
+                            <span role="img" aria-label="star emoji" >🌞</span>
+                            <p className="testimonials__user--words">
+                                Cras a molestie sem, ac commodo tortor. 
+                                laoreet id neque. Nullam ultricies ultrices tincidunt. 
+                                Quisque ultricies erat sapien, hendrerit ullamcorper massa iaculis eget. 
+                            </p>
+                            <p className="testimonials__user--name">- DanielCr*** -</p>
+                        </li>
+                        <li className="testimonials__card">
+                            <span role="img" aria-label="star emoji" >🍀</span>
+                            <p className="testimonials__user--words">
+                                Cras a molestie sem, ac commodo tortor. 
+                                Maecenas ante elit, dignissim in malesuada id, 
+                                laoreet id neque. Quisque ultricies erat sapien hendrerit ullamcorper massa iaculis eget. 
+                            </p>
+                            <p className="testimonials__user--name">- Neil*** -</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
             <section className="footer">
                 <footer>
                     <div className="footer__logo">

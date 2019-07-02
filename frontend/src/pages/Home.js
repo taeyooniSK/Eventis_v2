@@ -17,10 +17,12 @@ const HomePage = (props) => (
                     <h1>Be the Host of Events in Eventis</h1>
                     <h3>With Your Creative Ideas</h3>
                     {!context.token && <Link to="/auth" className="btn">Sign Up</Link>}
-                    {context.token && <button className="header__button btn" onClick={context.logout}>Logout</button>}
+                    {context.token && <Link className="header__button btn" to="/event/new" exact="true">Create Event</Link>}
                 </div>
             </section>
             <section className="content">
+                <span role="img" aria-label="Rased Fist Emoji">✊</span>
+                <h3>About</h3>
                 <div className="content__item">
                     <div className="content__item--text">
                         <h3>Attend any types of events you want</h3>
@@ -50,8 +52,8 @@ const HomePage = (props) => (
                 </div>
             </section>
             <section className="testimonials">
+                <span role="img" aria-label="Hand Writing Emoji">✍</span>
                 <h3>Testimonials</h3>
-                <p>What users say about us.</p>
                 <div className="testimonials__container">
                     <ul>
                         <li className="testimonials__card">

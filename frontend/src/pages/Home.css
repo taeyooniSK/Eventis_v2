@@ -55,7 +55,25 @@
     padding-top: 8rem;
     padding: 8rem 2.5rem 0 2.5rem;
 }
+.content > h3, .testimonials > h3 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 4rem;
+}
+.content > span, .testimonials > span {
+    font-size: 25px;
+    text-align: center;
+    display: block;
+    margin-bottom: 0.6rem;
+}
 
+/* .testimonials > h3 {
+    font-size: 1.8rem;
+}
+.testimonials > p {
+    margin-top: 0.6rem;
+    font-size: 1.3rem;
+} */
 
 .content__item {
     margin: auto;
@@ -174,6 +192,13 @@ footer {
 .testimonials > h3, .testimonials > p {
     text-align: center;
 }
+.testimonials > h3 {
+    font-size: 1.8rem;
+}
+.testimonials > p {
+    margin-top: 0.6rem;
+    font-size: 1.3rem;
+}
 .testimonials__container ul > li > span{
     font-size: 32px;
     display: block;
@@ -270,7 +295,7 @@ footer {
     /* testimonials */
     .testimonials__card {
         width: 48%;
-        margin-top: 2rem;
+        margin-bottom: 2rem;
     }
     
     

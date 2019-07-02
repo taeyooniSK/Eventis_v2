@@ -446,10 +446,17 @@ class EventsPage extends Component {
                     <p>{this.state.selectedEvent.description}</p>
                     </Modal>}
                 { this.context.token && (
+                <div className="events-control__container">
                     <div className="events-control">
-                        <Link to="/event/new" className="btn">Create Event</Link>
+                        <div className="events-control__background">
+                        </div>
+                        <div className="events-control__title">
+                            <h1>&nbsp;&nbsp;&nbsp;&nbsp;It's time to host events<br />With your own style</h1>
+                        </div>
+                        <Link to="/event/new" className="btn create-btn">Create Event</Link>
                         {/* <button className="btn" onClick={this.handleCreateEvent}>Create Event</button> */}
                     </div>
+                </div>
                 )}
                 {this.state.isLoading ? <Spinner /> : 
                 <EventList 

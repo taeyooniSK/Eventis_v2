@@ -59,7 +59,7 @@ const MainNavigation = props => {
             <nav className="main-navigation__items">
                 <ul>
                     {!context.token && <li>
-                        <NavLink to="/auth">Authenticate</NavLink>
+                        <NavLink to="/auth">Login / Sign Up</NavLink>
                     </li>}
                     <li>
                         <NavLink to="/events">Events</NavLink>
@@ -105,7 +105,7 @@ const MainNavigation = props => {
             <nav className="main-navigation__items__mobile">
                 <ul style={ulStyle}>
                     {!context.token && <li>
-                        <NavLink to="/auth" onClick={closeModal}>Authenticate</NavLink>
+                        <NavLink to="/auth" onClick={closeModal}>Login / Sign Up</NavLink>
                     </li>}
                     <li>
                         <NavLink to="/events" onClick={closeModal}>Events</NavLink>

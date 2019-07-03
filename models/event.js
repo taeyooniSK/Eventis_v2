@@ -56,6 +56,22 @@ const eventSchema = new Schema({
                 default: Date.now()
             }
         }
+    ],
+    likes : [
+        {   
+            eventId: {
+                type: String,
+                required: true
+            },
+            userId: {
+                type: String,
+                required: true
+            },
+            likedAt: {
+                type: Date,
+                default: Date.now()
+            }
+        }
     ]
 });
 

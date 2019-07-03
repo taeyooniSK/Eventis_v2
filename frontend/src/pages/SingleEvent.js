@@ -51,6 +51,10 @@ class SingleEventPage extends Component {
                         bookers {
                             userId
                         }
+                        likes {
+                            eventId
+                            userId
+                        }
                     }
                 }
             `

@@ -155,5 +155,40 @@ module.exports = { // javascript object where all the resolver functions are in
         } catch(err) {
             throw err;
         }
+    },
+    likeEvent : async (args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try {
+            const event = await Event.findById({_id: args.eventID});
+            const like = {
+                eventId: args.eventID,
+                userId: args.userID
+            };
+            event.likes.push(like);
+            await event.save();
+            const result = event.likes.filter(liked => (liked.eventId === like.eventId && liked.userId === like.userId));
+            console.log(result[0]);
+            return result[0];
+            // return event.likes[event.likes.length-1]; // return what has just been added in likes array in db
+        } catch(err){
+            throw err;
+        }
+    },
+    unlikeEvent : async (args, req) => {
+        if (!req.isAuthenticated){
+            throw new Error("It's not authenticated!");
+        }
+        try {
+            const deletedLikesArr = await Event.findOneAndUpdate({_id: args.eventID }, {$pull: { likes: {eventId: args.eventID} }}, (err, data) => {
+                if(err) console.log(err);
+                return data;
+             });
+            console.log(deletedLikesArr.likes[0]);
+            return deletedLikesArr.likes[0];
+        } catch(err){
+            throw err;
+        }
     }
 }

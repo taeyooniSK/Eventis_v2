@@ -283,6 +283,9 @@ class EventsPage extends Component {
                         bookers{
                             userId
                         }
+                        likes {
+                            userId
+                        }
                     }
                 }
             `

@@ -6,32 +6,33 @@ import Spinner from "../Spinner/Spinner";
 import "./DetailedEvent.css";
 
 class DetailedEvent extends Component{
+    constructor(props){
+        super(props);   
+    
+        this.textInputRef = React.createRef();
+    }
+
     state = {
+        event: this.props.event,
         isLoading: false,
         isClicked: false,
         comments: this.props.comments,
         isBooked: false,
-        numberOfBookers: this.props.event.bookers.length
-    }
-    static contextType = AuthContext;
+        numberOfBookers: this.props.event.bookers.length,
+        liked: false,
+        likes: this.props.event.likes,
+        likesNumber: this.props.event.likes.length
+    };
+
     
+    static contextType = AuthContext;
+
     componentDidMount(){
-        // if(this.getCookie(this.context.email) && this.getCookie(this.context.email) === this.props.eventId){
-        //     this.setState(() => ({isBooked: true}));
-        // }
-       
+       this.active = true;
        this.isBooked();
-    //    this.getCountRegistrations();
-        
+       this.liked();
     }
 
-    constructor(props){
-        super(props);
-        this.textInputRef = React.createRef();
-        
-        
-    }
-    
     isBooked = () => {
         const email = this.context.email;
         if(localStorage.getItem(email)){
@@ -62,6 +63,11 @@ class DetailedEvent extends Component{
         }
     }
 
+    liked = () => {
+        if(this.state.likes.filter(liker => (liker.eventId === this.props.event._id && liker.userId === this.context.email)).length > 0){
+            this.setState({liked : true} );
+        }
+    }
 
     postComment = (e) => {
         e.preventDefault();
@@ -186,11 +192,115 @@ class DetailedEvent extends Component{
         })
     }
 
+    handleLike = () => {
+        this.setState({liked: true});
+
+        let reqBody = {
+            query: `
+            mutation {
+              likeEvent(eventID: "${this.props.eventId}", userID: "${this.context.email}") {
+                _id
+                eventId
+                userId
+              }
+            }
+          `
+        };
+        // save token from context into token variable
+        const token = this.context.token; 
+        
+  
+  
+        fetch("http://localhost:8000/graphql", {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        }).then(res => {
+            if(res.status !== 200 && res.status !== 201){
+                throw new Error("Failed to get the result of liking the event");
+            }
+            return res.json();
+        }).then(result => {
+           console.log("Your like is accepted :)");
+           console.log(result);
+           this.setState((prevState) => {
+            return { 
+                likes: prevState.likes.push(result.data.likeEvent),
+                likesNumber : prevState.likesNumber + 1
+            }
+           });
+
+        }).catch(err => {
+            console.log(err);
+            this.setState({liked: false});
+            
+        })
+    }
+
+    handleUnlike = () => {
+
+        let reqBody = {
+            query: `
+            mutation {
+              unlikeEvent(eventID: "${this.props.eventId}", userID: "${this.context.email}") {
+                _id
+                eventId
+                userId
+              }
+            }
+          `
+        };
+        // save token from context into token variable
+        const token = this.context.token; 
+        
+  
+  
+        fetch("http://localhost:8000/graphql", {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        }).then(res => {
+            if(res.status !== 200 && res.status !== 201){
+                throw new Error("Failed to get the result of liking the event");
+            }
+            return res.json();
+        }).then(result => {
+           console.log("Your unlike is accepted :)");
+            this.setState(() => {
+                const clonedLikes = this.state.event.likes.filter(like => (like.eventId !== this.props.event._id && like.userId !== this.context.email));
+                return { 
+                    liked: false,
+                    likes: clonedLikes,
+                    likesNumber:  this.state.event.likes.length - 1
+                 };
+            });
+           
+        }).catch(err => {
+            console.log(err);
+            this.setState(prevState => ({ liked: true, likes: prevState.likes, likesNumber: prevState.likes.length }));
+            
+        })
+    }
+    
+    componentWillUnmount(){
+        this.active = false;
+        console.log("Unmount");
+    }
+
     render(){
         // console.log(this.textInputRef.current);
         const email = this.props.event.creator.email;
         const id = email.slice(0, this.props.event.creator.email.indexOf("@"));
-        console.log(this.context.email);
+        
+        // const likes= this.state.likes;
+        // const liker = this.state.likes.filter(like => (like.userId === this.context.email && this.props.event._id === like.eventId));
+        // console.log(this.context.email);
         return(
             <div className="detailed-event__container">
                 <div className="detailed-event__info">
@@ -198,7 +308,22 @@ class DetailedEvent extends Component{
                     <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/>
                     <h2>{(this.props.price && "$" + this.props.price ) || "Free"} - {this.props.event.startDateTime} ~ {this.props.event.endDateTime }</h2>
                     <p>{this.props.event.description}</p>
-                    <p>{this.state.numberOfBookers}</p>
+                    <span role="img" aria-label="Like" onClick={this.handleLike}>
+                    💓{ this.state.likesNumber } 
+                    </span>
+                    {/* <button disabled={ this.state.liked || liker.length > 0 } onClick={this.handleLike}>{liker.length > 0 || this.state.liked ? "Liked ♡" : "Like ♡"}</button> */}
+                    <button 
+                        onClick={
+                          this.state.liked
+                        ? this.handleUnlike 
+                        : this.handleLike}>
+                        {
+                            this.state.liked 
+                            ? "Liked ♡" 
+                            : "Like ♡"
+                        }
+                    </button>
+                    <p>{this.state.numberOfBookers} will attend the event</p>
                     {
                         this.context.userId === this.props.event.creator._id
                     ?  "" 

@@ -1,9 +1,10 @@
 
 .spinner{
-    position: fixed;
+    /* position: fixed;
     top: 40vh;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); */
+    margin-top: 10rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,7 +15,7 @@
     display: inline-block;
     width: 64px;
     height: 64px;
-  }
+}
 .lds-dual-ring:after {
   content: " ";
   display: block;

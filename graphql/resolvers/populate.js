@@ -83,7 +83,7 @@ const transformEvent = event => {
         startDateTime: dateToString2(event._doc.startDateTime),
         endDateTime: dateToString2(event._doc.endDateTime),
         creator: user.bind(this, event._doc.creator),
-        comments:  comments.bind(this, event._doc.comments) // when event is loaded from db, get comments data according to the event
+        comments:  comments.bind(this, event._doc.comments), // when event is loaded from db, get comments data according to the event
     }
 };
 

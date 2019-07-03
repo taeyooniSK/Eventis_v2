@@ -31,6 +31,7 @@ type Event {
     comments: [Comment!]
     creator: User!
     bookers: [Bookers!]
+    likes: [Like!]
 }
 
 type User {
@@ -52,6 +53,12 @@ type Bookers{
     _id: ID!
     userId: String!
     bookedAt: String!
+}
+type Like{
+    _id: ID
+    eventId: String
+    userId: String
+    likedAt: String
 }
 
 type AuthData {
@@ -118,6 +125,8 @@ type RootMutation {
     cancelBooking(bookingID: ID!, eventID: ID!, userID: String!): Event!
     deleteBooking(bookingID: ID!): DeleteResponse
     createComment(commentInput: CommentInput) : Comment
+    likeEvent(eventID: ID!, userID: String!): Like
+    unlikeEvent(eventID: ID!, userID: String!): Like
     
 }
 

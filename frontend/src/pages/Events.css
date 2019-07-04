@@ -44,11 +44,13 @@
 }
 
 .events-control__title,
-.events-control > a.create-btn {
+.events-control > a.create-btn,
+.events-control > a.auth-btn {
     position: absolute;
     z-index: 2;
 }
-.events-control > a.create-btn {
+.events-control > a.create-btn,
+.events-control > a.auth-btn {
     top: 70%;
     left: 60px;
     display: inline-block;

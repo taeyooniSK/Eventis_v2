@@ -1,18 +1,19 @@
 .comment__list--item {
     margin: 0 0 0.6rem 0;
-    border-bottom: 1px solid #6e6e6e3d;
+    /* border-bottom: 1px solid #6e6e6e3d; */
 }
 .comment__item span {
     display: inline-block;
 }
 .comment__item--username span {
     font-size: 18px;
-    font-weight: 600;
+    /* font-weight: 600; */
     margin: 0 0 0.6rem 0;
 }
 .comment__item--text p {
     margin-bottom: 0.6rem;
 }
-.comment__item--date span {
-    margin-bottom: 0.6rem;
+span.comment__item--date {
+    font-size: 1rem;
+    color: #73849D;
 }

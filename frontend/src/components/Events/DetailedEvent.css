@@ -1,27 +1,92 @@
 /* .detailed-event__container {
     margin: 4rem 2.5rem;
 } */
+.small-spinner {
+    width: 20px;
+    height: 20px;
+}
 
-.detailed-event__container {
+.detailed-event__container{
+    margin: 6rem auto 0 auto;
     margin-top: 6rem;
+    padding: 0 20px 0 20px;
+    max-width: 1096px;
 }
 .detailed-event__info {
-    width: 50%;
-    margin: 0 auto;
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.detailed-event__primary-info {
+    display: flex;
+    width: 40%;
+    flex-direction: column;
+}
+.detailed-event__primary-info--time > h3,
+.detailed-event__primary-info--host > h3,
+.detailed-event__primary-info--price > h3,
+.detailed-event__description > h3 {
+    margin: 0.7rem 0;
+}
+
+.detailed-event__primary-info--place > p{
+    color: #c6c8cc;
+    font-size: 1.3rem;
+}
+.detailed-event__primary-info--time > p,
+.detailed-event__primary-info--host > p {
+    font-size: 1.1rem;
+}
+.detailed-event__primary-info--price {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+.detailed-event__primary-info--like > button {
+    margin-left: 1.5rem;
+}
+
+.detailed-event__img {
+    width: 60%;
+    height: 330px;
+}
+.detailed-event__info--booking {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #c6c8cc;
+    border-bottom: 1px solid #c6c8cc;
+    padding: 0.7rem 0;
+    margin-bottom: 2rem;
+}
+.detailed-event__info--booking > button {
+    margin-right: 0;
+    width: 200px;
+}
+
+.detailed-event__description {
+    border-bottom: 1px solid #c6c8cc;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
 }
 
 .comment__container--actions {
     display: flex;
-    width: 50%;
+    width: 100%;
     margin: 0 auto;
-    flex-direction: column;
+    /* flex-direction: column; */
 }
 
 .comment__container--actions textarea {
     height: 6rem;
     margin-bottom: 1rem;
+    font-size: 1.2rem;
+    padding: 0.4rem 0.4rem;
+    width: 88%;
+    margin-right: 2%;
+    
 }
 
 .comment__container--actions button.btn {
     margin-right: 0;
+    height: 6rem;
 }

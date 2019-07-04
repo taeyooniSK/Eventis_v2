@@ -1,25 +1,18 @@
 
-.spinner{
-    /* position: fixed;
-    top: 40vh;
-    left: 50%;
-    transform: translateX(-50%); */
-    margin-top: 10rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+.small-spinner{
+    display:inline-block;
+    width: 20px;
+    height: 20px;
 }
-.lds-dual-ring {
+.small-lds-dual-ring {
     display: inline-block;
-    width: 64px;
-    height: 64px;
+    
 }
-.lds-dual-ring:after {
+.small-lds-dual-ring:after {
   content: " ";
   display: block;
-  width: 46px;
-  height: 46px;
+  width: 20px;
+  height: 20px;
   margin: 1px;
   border-radius: 50%;
   border: 5px solid #2ABFCB;

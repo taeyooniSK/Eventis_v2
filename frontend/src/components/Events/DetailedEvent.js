@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import AuthContext from "../../context/auth-context";
 import CommentList from "../Comments/CommentList";
 import Spinner from "../Spinner/Spinner";
+import SmallSpinner from "../Spinner/SmallSpinner";
 import "./DetailedEvent.css";
 
 class DetailedEvent extends Component{
@@ -15,6 +16,7 @@ class DetailedEvent extends Component{
     state = {
         event: this.props.event,
         isLoading: false,
+        spinnerIsOn: false,
         isClicked: false,
         comments: this.props.comments,
         isBooked: false,
@@ -193,7 +195,7 @@ class DetailedEvent extends Component{
     }
 
     handleLike = () => {
-        this.setState({liked: true});
+        this.setState({liked: true, spinnerIsOn: true});
 
         let reqBody = {
             query: `
@@ -229,13 +231,14 @@ class DetailedEvent extends Component{
            this.setState((prevState) => {
             return { 
                 likes: prevState.likes.push(result.data.likeEvent),
-                likesNumber : prevState.likesNumber + 1
+                likesNumber: prevState.likesNumber + 1,
+                spinnerIsOn: false
             }
            });
 
         }).catch(err => {
             console.log(err);
-            this.setState({liked: false});
+            this.setState({liked: false, spinnerIsOn: true});
             
         })
     }
@@ -301,46 +304,97 @@ class DetailedEvent extends Component{
         // const likes= this.state.likes;
         // const liker = this.state.likes.filter(like => (like.userId === this.context.email && this.props.event._id === like.eventId));
         // console.log(this.context.email);
+
+        const likeBtnStyle={
+            color: this.state.liked ? "#fff" : "#E74654",
+            border: this.state.liked ? "1px solid #fff" : "1px solid #E74654",
+            background: this.state.liked ? "#E74654" : "#fff",
+            font: "inherit",
+            fontWeight: 600,
+            borderRadius: "5px",
+            padding: "0.3rem 0.5rem",
+            outline: "none",
+            boxShadow: "none", 
+        }
+
         return(
-            <div className="detailed-event__container">
+            <div className="detailed-event__container"> 
                 <div className="detailed-event__info">
-                    <h1>{this.props.event.title} hosted by <span>{id}</span></h1>
-                    <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/>
-                    <h2>{(this.props.price && "$" + this.props.price ) || "Free"} - {this.props.event.startDateTime} ~ {this.props.event.endDateTime }</h2>
+                    <div className="detailed-event__primary-info">
+                        <div className="detailed-event__primary-info--title">
+                            <h1>{this.props.event.title}</h1>
+                        </div>
+                        <div className="detailed-event__primary-info--place">
+                            <p>@ Bergen, Norway</p>
+                        </div>
+                        <div className="detailed-event__primary-info--time">
+                            <h3>Date & Time</h3>
+                            <p>From {this.props.event.startDateTime}</p>
+                            <p>Until {this.props.event.endDateTime }</p>
+                        </div>
+                        <div className="detailed-event__primary-info--host">
+                            <h3>Host</h3>
+                            <p>{id}</p>
+                        </div>
+                        <div className="detailed-event__primary-info--price">
+                            <h3>Price</h3>
+                            {(this.props.price && "$" + this.props.price ) || "Free"}
+                        </div>
+                        <div className="detailed-event__primary-info--like">
+                            <span role="img" aria-label="Like" onClick={this.handleLike}>
+                            💓{ this.state.likesNumber } 
+                            </span>
+                            {/* <button disabled={ this.state.liked || liker.length > 0 } onClick={this.handleLike}>{liker.length > 0 || this.state.liked ? "Liked ♡" : "Like ♡"}</button> */}
+                            {
+                                this.context.token  && <button 
+                                className="btn"
+                                disabled={this.state.spinnerIsOn}
+                                onClick={
+                                this.state.liked
+                                ? this.handleUnlike 
+                                : this.handleLike}
+                                    style={likeBtnStyle}
+                            >
+                                
+                                {
+                                    this.state.liked 
+                                    ? <React.Fragment>Liked ♡ {this.state.spinnerIsOn && <SmallSpinner />}</React.Fragment>
+                                    : "Like ♡"
+                                }
+                            </button> 
+                            }
+                        </div>
+                    </div>
+                    <div className="detailed-event__img" style={{background: `url(${this.props.event.img && this.props.event.img}) center center / cover`}}>
+                        {/* <img style={{"width": "100%", "height": "300px"}} src={this.props.event.img && this.props.event.img} alt={this.props.event.img && this.props.event.img }/> */}
+                    </div>
+                </div>       {/* </div> detailed-event__info */}
+               
+                <div className="detailed-event__info--booking">
+                    <div className="detailed-event__info--bookers">
+                        <p><span role="img" aria-label="Man & Woman" >👨👧</span>&nbsp;{this.state.numberOfBookers < 1 ? "No one has booked yet" : `${this.state.numberOfBookers} will attend this event`}</p>
+                    </div>
+                            {
+                                this.context.userId === this.props.event.creator._id
+                            ?  "" 
+                            :
+                            <React.Fragment>
+                                { 
+                                    this.props.event.cancelled 
+                                    ? "This event is cancelled" 
+                                    : <button disabled={this.state.isBooked } 
+                                            onClick={this.handleBookEvent} 
+                                            className={this.state.isBooked ? "btn disabled" :  "btn"}
+                                    >
+                                        {this.state.isBooked ? "Booked" : "Book" }
+                                    </button>
+                                } 
+                            </React.Fragment>
+                            }
+                </div>
+                <div className="detailed-event__description">
+                    <h3>Description</h3>
                     <p>{this.props.event.description}</p>
-                    <span role="img" aria-label="Like" onClick={this.handleLike}>
-                    💓{ this.state.likesNumber } 
-                    </span>
-                    {/* <button disabled={ this.state.liked || liker.length > 0 } onClick={this.handleLike}>{liker.length > 0 || this.state.liked ? "Liked ♡" : "Like ♡"}</button> */}
-                    <button 
-                        onClick={
-                          this.state.liked
-                        ? this.handleUnlike 
-                        : this.handleLike}>
-                        {
-                            this.state.liked 
-                            ? "Liked ♡" 
-                            : "Like ♡"
-                        }
-                    </button>
-                    <p>{this.state.numberOfBookers} will attend the event</p>
-                    {
-                        this.context.userId === this.props.event.creator._id
-                    ?  "" 
-                    :
-                    <React.Fragment>
-                        { 
-                            this.props.event.cancelled 
-                            ? "This event is cancelled" 
-                            : <button disabled={this.state.isBooked } 
-                                      onClick={this.handleBookEvent} 
-                                      className={this.state.isBooked ? "btn disabled" :  "btn"}
-                              >
-                                {this.state.isBooked ? "Booked" : "Book" }
-                            </button>
-                        } 
-                    </React.Fragment>
-                    }
                 </div>
                 {
                     this.context.token 
@@ -349,7 +403,7 @@ class DetailedEvent extends Component{
                         <form className="form-control">
                             <div className="comment__container--actions">
                                 <textarea ref={this.textInputRef}></textarea>
-                                <button disabled={this.state.isClicked} className="btn" onClick={this.context.token && this.postComment}>Confirm</button>
+                                <button disabled={this.state.isClicked} className="btn" onClick={this.context.token && this.postComment}>Comment</button>
                             </div>
                         </form>
                     </div>

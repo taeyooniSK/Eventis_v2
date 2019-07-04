@@ -10,14 +10,11 @@ const Comment = props => {
         <li className="comment__list--item" key={props.author._id}>
             <div className="comment__item">
                 <div className="comment__item--username">
-                    <span>{emailUsedAsUserName}</span>
+                    <span>{emailUsedAsUserName}</span>&nbsp;&nbsp;&nbsp;<span className="comment__item--date">{props.date}</span>
                 </div>
                 <div className="comment__item--text">
                     <p>{props.text}</p>
                 </div> 
-                <div className="comment__item--date">
-                    <span>{props.date}</span>
-                </div>  
             </div>
         </li>
     );

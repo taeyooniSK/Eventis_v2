@@ -7,8 +7,7 @@
 }
 
 .detailed-event__container{
-    margin: 6rem auto 0 auto;
-    margin-top: 6rem;
+    margin: 5rem auto 0 auto;
     padding: 0 20px 0 20px;
     max-width: 1096px;
 }
@@ -89,4 +88,21 @@
 .comment__container--actions button.btn {
     margin-right: 0;
     height: 6rem;
+}
+
+
+@media all and (max-width: 768px) {
+    .detailed-event__info {
+        flex-direction: column-reverse;
+    }
+    .detailed-event__primary-info {
+        width: 100%;
+    }
+    .detailed-event__img {
+        width: 100%;
+        margin-bottom: 1.2rem;
+    }
+}
+@media all and (max-width: 480px) { 
+   
 }

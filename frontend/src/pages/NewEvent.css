@@ -93,6 +93,16 @@
 #img-label:hover {
     background: rgb(183, 220, 253);
 }
+.image-delete-btn {
+    display: none;
+}
+
+.form-action > div > #image-upload:hover .image-delete-btn {
+    display:block;
+    transition: display 0.5s ease;
+}
+
+
 
 
 @media all and (max-width: 991px) { 

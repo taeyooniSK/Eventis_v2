@@ -120,7 +120,7 @@ AWS.config.update({
             // if(this.isActive){
               // if events list is updated when user creates a new event, override events of state
           //   this.setState({event: event, isLoading: false});
-              this.setState(() => ({event, isLoading: false}))
+              this.setState(() => ({event, isLoading: false, url: result.data.event.img}))
               
             // }
           }).catch(err => {
@@ -137,29 +137,12 @@ AWS.config.update({
           const dateTime = `${date[2]}-${date[0]}-${date[1]}T${time}`;
           return dateTime;
   }
-  // when a user change a picture not deleting the previous image, delete the picture before the user uploads it
-  handleChangeImg = () => {
-        const imgURL = this.state.event.img;
-        const index = imgURL.indexOf(this.context.email.slice(0, this.context.email.indexOf("@")));
-        const albumAndFile = imgURL.slice(index).split("/");
-    
-        const params = {
-          Bucket: config.bucketName,
-          Key: encodeURIComponent(albumAndFile[0]) + "/" + albumAndFile[1]
-        };
-        s3.deleteObject(params, (err, data) => {
-          if (err) {
-            return alert("There was an error deleting your photo: ", err.message);
-          }
-          console.log(data);
-          this.setState({ url: null, isUploaded: false });
-          // localStorage.removeItem("imgUrlForEditPage");
-          alert("Successfully deleted photo.");
-        });
-    
-  }
-  addPhoto = (e) => {
-        e.preventDefault();
+  
+  addPhoto = () => {
+    // when a user change a picture not deleting the previous image, delete the picture before the user uploads it
+        if(this.state.url){
+          this.deletePhoto();
+        }
         const files = this.imgInputRef.files;
         if(this.imgInputRef.files)
         console.log(files);
@@ -168,8 +151,9 @@ AWS.config.update({
         // }
         const file = files[0];
         const fileName = file.name;
-        console.log(this.context.email.slice(0, this.context.email.indexOf("@")));
+        // console.log(this.context.email.slice(0, this.context.email.indexOf("@")));
         const albumName = this.context.email.slice(0, this.context.email.indexOf("@"));
+        // const albumName = this.context.email;
         const albumPhotosKey = encodeURIComponent(albumName) + "/";
     
         const photoName = albumPhotosKey + fileName;
@@ -188,7 +172,7 @@ AWS.config.update({
             }
             console.log(data);
             this.setState(() => ({ isUploaded : true, url: data.Location }));
-            this.refs.image.src = this.state.url;
+            // this.refs.image.src = this.state.url;
 
             // localStorage.setItem("imgUrlForEditPage", this.state.url);
          
@@ -198,21 +182,29 @@ AWS.config.update({
       // 사진 지우기
       deletePhoto = () => {
         const index = this.state.url.indexOf(this.context.email.slice(0, this.context.email.indexOf("@")));
+        // const index = this.state.url.indexOf(encodeURIComponent(this.context.email));
         const albumAndFile = this.state.url.slice(index).split("/");
-    
+        console.log(albumAndFile);
         const params = {
           Bucket: config.bucketName,
-          Key: encodeURIComponent(albumAndFile[0]) + "/" + albumAndFile[1]
+          // Key: encodeURIComponent(albumAndFile[0])
+          Key: albumAndFile[0] + "/" + albumAndFile[1]
         };
-        s3.deleteObject(params, (err, data) => {
-          if (err) {
-            return alert("There was an error deleting your photo: ", err.message);
-          }
-          console.log(data);
-          this.setState({ url: null, isUploaded: false });
-          // localStorage.removeItem("imgUrlForEditPage");
-          alert("Successfully deleted photo.");
+        s3.getObject(params, (err, data) => {
+          if (err) console.log(err, err.stack); // an error occurred
+          console.log("the result of getObject", data); 
+          
+          s3.deleteObject(params, (err, data) => {
+            if (err) {
+              return alert("There was an error deleting your photo: ", err.message);
+            }
+            console.log("result of deleting", data);
+            this.setState({ url: null, isUploaded: false });
+            // localStorage.removeItem("imgUrlForEditPage");
+            alert("Successfully deleted photo.");
+          });
         });
+        
     };
    // Edit: modal confirm button for editing an event
     saveEditInfo = (e) => {
@@ -228,12 +220,12 @@ AWS.config.update({
         const endTime = this.endTimeInputRef.current.value; // end time
 
         const endDateTime = endDate + "T" + endTime;
-        const img = this.refs.image.src;
+        const img = this.state.url;
         const description = this.descriptionInputRef.current.value;
         const location = this.locationInputRef.current.value;
         
         // simple validation
-        if( title.trim().length === 0 || price < 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || description.trim().length === 0 || location.trim().length === 0) {
+        if( title.trim().length === 0 || price < 0 || startDateTime.trim().length === 0 || endDateTime.trim().length === 0 || img.length === 0 || description.trim().length === 0 || location.trim().length === 0) {
             return;
         }
 
@@ -304,6 +296,12 @@ AWS.config.update({
     textAlign: "center",
     borderRadius: 13
     };
+
+    const imageBackgroundStyle={
+      background: this.state.url ? `url(${this.state.url}) center center / cover` : "#eaecef",
+      width: "100%",
+      height: "300px",
+    }
     return (
       <React.Fragment>
       { this.state.isLoading ? <Spinner /> : 
@@ -394,9 +392,19 @@ AWS.config.update({
                                   type="file" 
                                   accept="image/jpeg, image/jpg, image/png" 
                                   ref={file => this.imgInputRef = file}
-                                  onChange={this.handleChangeImg}
+                                  onChange={this.addPhoto}
                             />
-                            <div style={{position: "relative"}}>
+                             <div style={{position: "relative"}}>
+                                {/* <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"> */}
+                                  <div id="image-upload__container"
+                                      style={imageBackgroundStyle} 
+                                  >
+                                    {/* <img id="image-upload" src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : {width: "100%", height: "200px", objectFit: "cover", backgroundColor: "#eaecef", marginBottom: "10px"}} ref="image"/> */}
+                                  </div>
+                                {/* </a> */}
+                                {this.state.url && <span className="image-delete-btn" style={xBtn} onClick={this.deletePhoto}>X</span>}
+                              </div>
+                            {/* <div style={{position: "relative"}}>
                               <a rel="noopener noreferrer" href={this.state.event.img && this.state.event.img} target="_blank">
                                 <div id="image-upload__container">
                                   <img id="image-upload" 
@@ -411,7 +419,7 @@ AWS.config.update({
                               </a>
                               <span style={xBtn} onClick={this.deletePhoto}>X</span>
                             </div>
-                            <button className="btn" onClick={this.addPhoto}>Confirm</button>
+                            <button className="btn" onClick={this.addPhoto}>Confirm</button> */}
                     </div>
                 </div>
                 <div className="form-control event">

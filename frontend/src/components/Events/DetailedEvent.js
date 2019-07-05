@@ -33,6 +33,7 @@ class DetailedEvent extends Component{
        this.active = true;
        this.isBooked();
        this.liked();
+       
     }
 
     isBooked = () => {
@@ -329,16 +330,16 @@ class DetailedEvent extends Component{
                         </div>
                         <div className="detailed-event__primary-info--time">
                             <h3>Date & Time</h3>
-                            <p>From {this.props.event.startDateTime}</p>
-                            <p>Until {this.props.event.endDateTime }</p>
+                            <p>&nbsp;&nbsp;From {this.props.event.startDateTime}</p>
+                            <p>&nbsp;&nbsp;Until {this.props.event.endDateTime }</p>
                         </div>
                         <div className="detailed-event__primary-info--host">
                             <h3>Host</h3>
-                            <p>{id}</p>
+                            <p>&nbsp;&nbsp;{id}</p>
                         </div>
                         <div className="detailed-event__primary-info--price">
                             <h3>Price</h3>
-                            {(this.props.price && "$" + this.props.price ) || "Free"}
+                            &nbsp;&nbsp;{(this.props.price && "$" + this.props.price ) || "Free"}
                         </div>
                         <div className="detailed-event__primary-info--like">
                             <span role="img" aria-label="Like" onClick={this.handleLike}>

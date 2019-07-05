@@ -141,7 +141,7 @@ module.exports = { // javascript object where all the resolver functions are in
                return data;
             });
 
-            console.log(result)
+            // console.log(result)
             // when deleting a post, delete all comments attached to this post
             const commentsToDelete  = await Comment.deleteMany({ post : args.deleteEventInput.eventID });
             console.log(commentsToDelete);
@@ -151,7 +151,7 @@ module.exports = { // javascript object where all the resolver functions are in
             // delete booking data
             const deletedBooking = await Booking.findOneAndDelete({event: args.deleteEventInput.eventID});
             console.log("Booking deleted : ", deletedBooking);
-            return deletedBooking;
+            return eventToDelete;
         } catch(err) {
             throw err;
         }

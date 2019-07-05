@@ -127,7 +127,6 @@ class MyEventsPage extends Component {
                 mutation { 
                     deleteEvent(deleteEventInput: { userID: "${this.context.userId}", eventID:"${eventId}" }) {
                         _id
-                        
                     }
                 }
             `

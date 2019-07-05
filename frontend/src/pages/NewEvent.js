@@ -50,11 +50,18 @@ class NewEvent extends Component {
         this.locationInputRef = React.createRef();
         this.descriptionInputRef = React.createRef();
     }
+    upload = () => {
+      
+    }
+
 
     // 사진 추가하기
-    addPhoto = (e) => {
+    addPhoto = () => {
         
-        e.preventDefault();
+        // e.preventDefault();
+        if(this.state.url){
+          this.deletePhoto();
+        }
         const files = this.imgInputRef.files;
         console.log(files);
         if (!files.length) {
@@ -62,8 +69,9 @@ class NewEvent extends Component {
         }
         const file = files[0];
         const fileName = file.name;
-        console.log(this.context.email.slice(0, this.context.email.indexOf("@")) );
-        const albumName = this.context.email.slice(0, this.context.email.indexOf("@")) ;
+        // console.log(this.context.email.slice(0, this.context.email.indexOf("@")) );
+        const albumName = this.context.email.slice(0, this.context.email.indexOf("@"));
+        // const albumName = this.context.email;
         const albumPhotosKey = encodeURIComponent(albumName) + "/";
     
         const photoName = albumPhotosKey + fileName;
@@ -82,7 +90,7 @@ class NewEvent extends Component {
             }
             console.log(data);
             this.setState(() => ({ isUploaded : true, url: data.Location }));
-            this.refs.image.src = this.state.url;
+            // this.refs.image.src = this.state.url;
 
             localStorage.setItem("imgUrl", this.state.url);
          
@@ -92,6 +100,7 @@ class NewEvent extends Component {
       // 사진 지우기
       deletePhoto = () => {
         const index = this.state.url.indexOf(this.context.email.slice(0, this.context.email.indexOf("@")));
+        // const index = this.state.url.indexOf(this.context.email);
         const albumAndFile = this.state.url.slice(index).split("/");
     
         const params = {
@@ -182,21 +191,6 @@ class NewEvent extends Component {
           console.log(result);
             // if(this.isActive){
             this.setState(prevState => {
-                // const updatedEvents = [...prevState.events];
-                // updatedEvents.push({
-                //     _id : result.data.createEvent._id,
-                //     title : result.data.createEvent.title,
-                //     price : result.data.createEvent.price,
-                //     startDateTime : result.data.createEvent.startDate,
-                //     endDateTime : result.data.createEvent.endDate,
-                //     img: result.data.createEvent.img, // 이거 이미지 주소 제대로 받는지 봐야됨
-                //     location: result.data.createEvent.location,
-                //     description : result.data.createEvent.description,
-                //     creator :{
-                //         _id : this.context.userId
-                //     }
-                // });
-                
                 return { isUploaded: false };
             })
             const path = "/events";
@@ -234,6 +228,11 @@ class NewEvent extends Component {
     borderRadius: 13
     };
 
+    const imageBackgroundStyle={
+      background: this.state.url ? `url(${this.state.url}) center center / cover` : "#eaecef",
+      width: "100%",
+      height: "300px",
+    }
     return (
       <div className="new-event">
         <header className="new-event__header">
@@ -303,16 +302,20 @@ class NewEvent extends Component {
                     </div>
                     <div className="form-action">
                         <label id="img-label" htmlFor="img">Choose a file</label>
-                            <input id="img" type="file"  accept="image/jpeg, image/jpg, image/png" ref={file => this.imgInputRef = file}/>
+                            <input 
+                              id="img" 
+                              type="file" 
+                              accept="image/jpeg, image/jpg, image/png"
+                              ref={file => this.imgInputRef = file}
+                              onChange={this.addPhoto}
+                            />
                             <div style={{position: "relative"}}>
-                              <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank">
-                                <div id="image-upload__container">
-                                  <img id="image-upload" src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : {width: "100%", height: "200px", objectFit: "cover", backgroundColor: "#eaecef", marginBottom: "10px"}} ref="image"/>
+                                <div id="image-upload__container"
+                                     style={imageBackgroundStyle} 
+                                >
                                 </div>
-                              </a>
-                              <span style={xBtn} onClick={this.deletePhoto}>X</span>
+                              {this.state.url && <span className="image-delete-btn" style={xBtn} onClick={this.deletePhoto}>X</span>}
                             </div>
-                            <button className="btn" onClick={this.addPhoto}>Confirm</button>
                     </div>
                 </div>
                 <div className="form-control event">

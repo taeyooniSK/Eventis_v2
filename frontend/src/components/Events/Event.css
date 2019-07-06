@@ -35,6 +35,10 @@
     padding: 13px;
 }
 
+.events__item--action {
+    padding: 13px;
+}
+
 
 @media all and (max-width: 991px) { 
     .events__list--item {

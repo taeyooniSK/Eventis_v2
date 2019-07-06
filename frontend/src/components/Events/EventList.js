@@ -18,8 +18,6 @@ const EventList = (props) => {
         creatorEmail={event.creator.email}
         creatorId={event.creator._id} 
         onMore={props.onViewMore}
-        onEdit={props.onEdit}  
-        openEditModal={props.openEditModal}  
         />
     );
         

@@ -11,10 +11,7 @@ const Modal = (props) => (
             {props.children}
         </section>
         <footer className="modal__actions">
-            {props.canCancel && <button className="btn" onClick={props.handleModalCancel}>Cancel</button>}
-            {props.canEditCancel && <button className="btn" onClick={props.handleEditModalCancel}>Cancel</button>}
-            {props.canConfirm && <button className="btn" onClick={props.handleModalConfirm}>{props.buttonText}</button>}
-            {props.canEditConfirm && <button className="btn" onClick={props.handleEditModalConfirm}>{props.buttonText}</button>}
+            <button className="btn" onClick={props.handleModalClose}>Close</button>
         </footer>
     </div>
 );

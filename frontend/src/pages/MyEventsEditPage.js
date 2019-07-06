@@ -395,31 +395,12 @@ AWS.config.update({
                                   onChange={this.addPhoto}
                             />
                              <div style={{position: "relative"}}>
-                                {/* <a rel="noopener noreferrer" href={this.state.url && this.state.url} target="_blank"> */}
                                   <div id="image-upload__container"
                                       style={imageBackgroundStyle} 
                                   >
-                                    {/* <img id="image-upload" src={this.state.url} alt={this.state.url && this.state.url} style={this.state.url ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : {width: "100%", height: "200px", objectFit: "cover", backgroundColor: "#eaecef", marginBottom: "10px"}} ref="image"/> */}
                                   </div>
-                                {/* </a> */}
                                 {this.state.url && <span className="image-delete-btn" style={xBtn} onClick={this.deletePhoto}>X</span>}
                               </div>
-                            {/* <div style={{position: "relative"}}>
-                              <a rel="noopener noreferrer" href={this.state.event.img && this.state.event.img} target="_blank">
-                                <div id="image-upload__container">
-                                  <img id="image-upload" 
-                                       src={this.state.event.img && this.state.event.img} 
-                                       alt={this.state.event.img && this.state.event.img} 
-                                       style={
-                                         this.state.event.img ? {width: "100%", height: "200px", objectFit: "cover", marginBottom: "10px"} : 
-                                         {width: "100%", height: "200px", objectFit: "cover", backgroundColor: "#eaecef", marginBottom: "10px"}
-                                       } 
-                                       ref="image"/>
-                                </div>
-                              </a>
-                              <span style={xBtn} onClick={this.deletePhoto}>X</span>
-                            </div>
-                            <button className="btn" onClick={this.addPhoto}>Confirm</button> */}
                     </div>
                 </div>
                 <div className="form-control event">

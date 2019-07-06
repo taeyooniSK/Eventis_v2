@@ -24,8 +24,17 @@
 .my-events__list--host {
     display: flex;
     flex-wrap: wrap;
+    position: relative;
+    min-height: 200px;
 }
 
+.my-events__list--cancelled > h3,
+.my-events__list--host > h3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .cancelled:hover {
     box-shadow:rgb(255, 188, 188) 3px 5px 5px 2px;
 }

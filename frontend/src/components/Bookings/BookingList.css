@@ -1,11 +1,22 @@
 .booking__list--container {
     padding: 0 24px;
 }
+
+.booking__list--cancelled-item__container > h3,
+.booking__list--item__container > h3{ 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .booking__list--cancelled-item__container,
 .booking__list--item__container {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
+    min-height: 300px;
 }
+
 .booking__list--cancelled,
 .booking__list {
     /* margin: 4rem auto 0 auto;
@@ -50,6 +61,9 @@
 .bookings__list-item--content{
     height: 90px;
     padding: 13px;
+}
+.bookings__list-item--content > h3 {
+    text-align: center;
 }
 .bookings__list-item--booking-date{
     text-align: center;

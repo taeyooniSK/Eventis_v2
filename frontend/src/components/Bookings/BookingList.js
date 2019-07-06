@@ -38,14 +38,14 @@ const BookingList = props => {
                 {/* {props.deleteResponse ? props.deleteResponse.ok.length > 0  props.deleteResponse.ok : props.deleteResponse.err} */}
                 <h2>Cancelled Bookings by hosts</h2>
                 <p>You can't attend this(these) event(s). Please delete this(these) event(s)</p>
-                <div className="booking__list--cancelled-item__container" style={{justifyContent: "center"}}>
-                {cancelledBookingsByHost.length > 0 ? cancelledBookingsByHost : <h3 style={{marginTop: "30px"}}>None</h3>}
+                <div className="booking__list--cancelled-item__container">
+                {cancelledBookingsByHost.length > 0 ? cancelledBookingsByHost : <h3>None</h3>}
                 </div>
             </ul>
             <ul className="booking__list">
                 <h2>My Booking List</h2>
                 <div className="booking__list--item__container">
-                    {bookings}
+                    {bookings.length > 0 ? bookings : <h3>None</h3>}
                 </div>
             </ul>
         </div>

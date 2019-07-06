@@ -44,15 +44,15 @@ const MyEventsList = (props) => {
         <div className="my-events__list--container">
             <ul className="my-events__list">
             <h2>Events lists that I cancelled</h2>
-            <div className="my-events__list--cancelled" style={{justifyContent : "center"}}>
-                {cancelledEvents.length > 0 ? cancelledEvents : <h3 style={{marginTop: "30px"}}>None</h3>}
+            <div className="my-events__list--cancelled">
+                {cancelledEvents.length > 0 ? cancelledEvents : <h3>None</h3>}
             </div>
                 
             </ul>
             <ul className="my-events__list">
             <h2>Events lists I host</h2>
             <div className="my-events__list--host">
-                {events}
+                {events ? events : <h3>None</h3>}
             </div>
             </ul>
         </div>

@@ -326,7 +326,7 @@ class DetailedEvent extends Component{
                             <h1>{this.props.event.title}</h1>
                         </div>
                         <div className="detailed-event__primary-info--place">
-                            <p>@ Bergen, Norway</p>
+                            <p>@{this.props.event.location}</p>
                         </div>
                         <div className="detailed-event__primary-info--time">
                             <h3>Date & Time</h3>

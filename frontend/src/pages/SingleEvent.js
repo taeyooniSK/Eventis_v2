@@ -30,6 +30,7 @@ class SingleEventPage extends Component {
                         startDateTime
                         endDateTime
                         img
+                        location
                         description
                         cancelled
                         comments {

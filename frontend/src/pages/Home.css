@@ -237,9 +237,12 @@ footer {
     height: 30px;
 }
 
-/* @media all and (min-width: 991px) { 
-
-}  */
+@media all and (max-width: 991px) { 
+    .testimonials__card {
+        width: 48%;
+        margin-bottom: 2rem;
+    }
+} 
 /* css style which is going to be applied less than 768px */
 @media all and (max-width: 768px ) {
     .header__content h1 {

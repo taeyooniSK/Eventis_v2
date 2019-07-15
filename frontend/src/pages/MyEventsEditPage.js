@@ -44,11 +44,7 @@ AWS.config.update(config);
   componentWillMount(){
     this.getEvent();
   }
-
-  componentDidMount(){
-       
-  }
-
+  
   componentDidUpdate(){
     console.log(this.titleInputRef.current.value);
     console.log(this.priceInputRef.current.value);

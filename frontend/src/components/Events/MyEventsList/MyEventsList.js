@@ -52,7 +52,7 @@ const MyEventsList = (props) => {
             <ul className="my-events__list">
             <h2>Events lists I host</h2>
             <div className="my-events__list--host">
-                {events ? events : <h3>None</h3>}
+                {events.length > 0 ? events : <h3>None</h3>}
             </div>
             </ul>
         </div>

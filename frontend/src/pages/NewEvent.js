@@ -330,7 +330,6 @@ class NewEvent extends Component {
                         <textarea id="description" style={{padding: "15px"}} rows="4" ref={this.descriptionInputRef}></textarea>
                     </div>
                 </div>
-                <Link to="/events" onClick={this.saveEventInfo} className="btn">Create Event</Link>
                 <button  className="btn" onClick={this.saveEventInfo}>Create Event</button>
             </form>
         </div>

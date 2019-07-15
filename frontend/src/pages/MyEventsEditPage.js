@@ -2,18 +2,12 @@ import React, { Component } from 'react'
 
 import AuthContext from "../context/auth-context";
 import AWS from "aws-sdk";
-import config from "../config/config";
+import config from "../config";
 import Spinner from "../components/Spinner/Spinner";
 import "./MyEventsEditPage.css";
 
 // AWS config
-AWS.config.update({
-    bucketName: config.bucketName,
-    dirName: config.dirName,
-    region: config.region,
-    accessKeyId: config.accessKeyId,
-    secretAccessKey: config.secretAccessKey
-  });
+AWS.config.update(config);
   
   const s3 = new AWS.S3({
     apiVersion: "2006-03-01",
@@ -99,30 +93,16 @@ AWS.config.update({
           }).then(result => {
               const startDateTimeToConvert = new Date(result.data.event.startDateTime).toLocaleString("en-US", { year:"numeric", month: "2-digit", day:"2-digit", hour:"2-digit", minute: "2-digit", second: "2-digit", hour12: false });
               const endDateTimeToConvert = new Date(result.data.event.endDateTime).toLocaleString("en-US", {year:"numeric", month: "2-digit", day:"2-digit", hour:"2-digit", minute: "2-digit", second: "2-digit", hour12: false  });
-              
-              // const splittedDateTime = startDateTimeToConvert.split(", ");
-              // const startDate = splittedDateTime[0].split("/");
-              // const startTime = splittedDateTime[1];
-              // const startDateTime = `${startDate[2]}-${startDate[0]}-${startDate[1]}T${startTime}`;
-  
-              
-
-              // const event = result.data.event;
+          
               const event = {
                 ...result.data.event,
                 startDateTime : this.convertDateTime(startDateTimeToConvert),
                 endDateTime : this.convertDateTime(endDateTimeToConvert)
               };
              
-              console.log(event);
-              
-              //only when this component is active, update the state
-            // if(this.isActive){
-              // if events list is updated when user creates a new event, override events of state
-          //   this.setState({event: event, isLoading: false});
+              // console.log(event);
               this.setState(() => ({event, isLoading: false, url: result.data.event.img}))
               
-            // }
           }).catch(err => {
               console.log(err);
               this.setState({isLoading: true});
@@ -146,9 +126,7 @@ AWS.config.update({
         const files = this.imgInputRef.files;
         if(this.imgInputRef.files)
         console.log(files);
-        // if (!files.length) {
-        //   return alert("Please choose a file to upload first.");
-        // }
+     
         const file = files[0];
         const fileName = file.name;
         // console.log(this.context.email.slice(0, this.context.email.indexOf("@")));
@@ -172,9 +150,6 @@ AWS.config.update({
             }
             console.log(data);
             this.setState(() => ({ isUploaded : true, url: data.Location }));
-            // this.refs.image.src = this.state.url;
-
-            // localStorage.setItem("imgUrlForEditPage", this.state.url);
          
           }
         );
@@ -187,7 +162,6 @@ AWS.config.update({
         console.log(albumAndFile);
         const params = {
           Bucket: config.bucketName,
-          // Key: encodeURIComponent(albumAndFile[0])
           Key: albumAndFile[0] + "/" + albumAndFile[1]
         };
         s3.getObject(params, (err, data) => {
@@ -200,7 +174,6 @@ AWS.config.update({
             }
             console.log("result of deleting", data);
             this.setState({ url: null, isUploaded: false });
-            // localStorage.removeItem("imgUrlForEditPage");
             alert("Successfully deleted photo.");
           });
         });

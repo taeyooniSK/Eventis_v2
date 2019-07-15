@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 
-import BackgroundShadow from "../components/BackgroundShadow/BackgroundShadow";
 import AuthContext from "../context/auth-context";
 import Spinner from "../components/Spinner/Spinner";
 import "./MyEvents.css";
@@ -17,8 +16,6 @@ class MyEventsPage extends Component {
     isActive = true;
     componentWillMount(){
         this.getMyEvents();
-        // return this.getPromise();
-        // this.getCancelledEvents();
     }
 
     getMyEvents() {
@@ -56,7 +53,7 @@ class MyEventsPage extends Component {
             }
             return res.json();
         }).then(result => {
-            console.log(result);
+            // console.log(result);
             const myEvents = result.data.myEvents;
             const cancelledEvents = myEvents.filter(event => (event.cancelled === true));
 

@@ -33,10 +33,7 @@ class App extends Component {
   }
 
   login = (token, email, userId, tokenExpiration) => {
-    // const userInfo = JSON.parse(localStorage.getItem("info"));
-    // this.setState(prevState => (
-    //   {token: userInfo.token, userId: userInfo.userId }
-    // ));
+
     this.setState(prevState => (
       {token: token, userId: userId, email: email }
     ));
@@ -49,11 +46,6 @@ class App extends Component {
     localStorage.removeItem("info");
   }
 
-  // loadUser = ()  => {
-  //   const userInfo = localStorage.getItem("token");
-  //   return userInfo;
-  // }
- 
 
   render(){
     

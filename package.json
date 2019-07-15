@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "cd frontend && npm install && npm install && npm run build"
   },
   "author": "Tae-yoon <yeotaeyoon@gmail.com>",
   "license": "MIT",
@@ -17,6 +20,7 @@
     "mongoose": "^5.6.3"
   },
   "devDependencies": {
+    "concurrently": "^4.1.1",
     "nodemon": "^1.19.1"
   }
 }

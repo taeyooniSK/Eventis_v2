@@ -9,9 +9,6 @@ const isAuthenticated = require("./middleware/isAuth");
 const graphqlSchema = require("./graphql/schema/index");
 const graphqlResolvers = require("./graphql/resolvers/index");
 
-
-
-
 // DB model
 
 const Event = require("./models/event");
@@ -45,6 +42,14 @@ app.use("/graphql", graphqlHttp({
     graphiql: true
 }));
 
+// Server's static assets in production
+if(process.env.NODE_ENV === "production"){
+    // Set static folder
+    app.use(express.static("frontend/build"));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname+'/frontend/build/index.html'));
+    });
+}
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-tdceq.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex : true})
 .then(() => {
@@ -53,7 +58,8 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PA
 .catch(err => {
     console.log(err);
 })
+const PORT = process.env.PORT || 8000;
 
-app.listen(8000, ()=>{
-    console.log("Server is running on 8000");
+app.listen(PORT, ()=>{
+    console.log(`Server is running on ${PORT}`);
 })

@@ -57,7 +57,7 @@ class BookingsPage extends Component {
             }
             return res.json();
         }).then(result => {
-            console.log(result);
+            // console.log(result);
             const bookings = result.data.bookings;
             const cancelledBookingsByHost = bookings.filter(booking => {
                 return booking.event.cancelled === true;

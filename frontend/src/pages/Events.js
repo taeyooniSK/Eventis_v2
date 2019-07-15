@@ -8,25 +8,6 @@ import AuthContext from "../context/auth-context";
 import "./Events.css";
 import Spinner from "../components/Spinner/Spinner";
 
-import AWS from "aws-sdk";
-// import S3FileUpload from "react-s3";
-import config from "../config/config";
-
-
-
-AWS.config.update({
-    bucketName: config.bucketName,
-    dirName: config.dirName,
-    region: config.region,
-    accessKeyId: config.accessKeyId,
-    secretAccessKey: config.secretAccessKey
-  });
-  
-  const s3 = new AWS.S3({
-    apiVersion: "2006-03-01",
-    params: { Bucket: config.bucketName }
-  });
-
 
 class EventsPage extends Component {
     state = {
@@ -46,7 +27,6 @@ class EventsPage extends Component {
     }
 
     handleModalClose = () => {
-        // when making an event if you cancel, creating : false 
         // & when closing the modal for view details, selectedEvent: null
         this.setState(() => ({ selectedEvent: null }));
     } 

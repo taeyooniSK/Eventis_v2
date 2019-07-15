@@ -23,7 +23,7 @@ module.exports = { // javascript object where all the resolver functions are in
     events: async () => {
         try {
            const events = await Event.find({});
-           console.log(events);
+        //    console.log(events);
            return events.map(event => {
                 return transformEvent(event);
            });
@@ -37,7 +37,7 @@ module.exports = { // javascript object where all the resolver functions are in
         }
         try {
             const cancelledEvents = await CancelledEvent.findById({user: args.userID}).populate("event");
-            console.log(cancelledEvents);
+            // console.log(cancelledEvents);
             return cancelledEvents.map(event => {
                 return transformEvent(event);
             })
@@ -85,7 +85,7 @@ module.exports = { // javascript object where all the resolver functions are in
             // when user found, save event and save event in User's createdEvents field in database
             creator.createdEvents.push(event);
             await creator.save();
-            console.log(createdEvent);
+            // console.log(createdEvent);
             return createdEvent; // when querying, I can get this newly created event
         } catch(err){
             console.log(err);
@@ -123,7 +123,7 @@ module.exports = { // javascript object where all the resolver functions are in
             const eventToCancel = await Event.findByIdAndUpdate({_id: args.eventID}, { $set : {
                 cancelled: true
             }});
-            console.log(eventToCancel);
+            // console.log(eventToCancel);
             return transformEvent(eventToCancel)
            
         } catch(err) {
@@ -144,13 +144,13 @@ module.exports = { // javascript object where all the resolver functions are in
             // console.log(result)
             // when deleting a post, delete all comments attached to this post
             const commentsToDelete  = await Comment.deleteMany({ post : args.deleteEventInput.eventID });
-            console.log(commentsToDelete);
+            // console.log(commentsToDelete);
             // delete the event from db that I'm about to delete
             const eventToDelete = await Event.findByIdAndDelete({_id: args.deleteEventInput.eventID});
-            console.log(eventToDelete);
+            // console.log(eventToDelete);
             // delete booking data
             const deletedBooking = await Booking.findOneAndDelete({event: args.deleteEventInput.eventID});
-            console.log("Booking deleted : ", deletedBooking);
+            // console.log("Booking deleted : ", deletedBooking);
             return eventToDelete;
         } catch(err) {
             throw err;
@@ -169,7 +169,7 @@ module.exports = { // javascript object where all the resolver functions are in
             event.likes.push(like);
             await event.save();
             const result = event.likes.filter(liked => (liked.eventId === like.eventId && liked.userId === like.userId));
-            console.log(result[0]);
+            // console.log(result[0]);
             return result[0];
             // return event.likes[event.likes.length-1]; // return what has just been added in likes array in db
         } catch(err){
@@ -185,7 +185,7 @@ module.exports = { // javascript object where all the resolver functions are in
                 if(err) console.log(err);
                 return data;
              });
-            console.log(deletedLikesArr.likes[0]);
+            // console.log(deletedLikesArr.likes[0]);
             return deletedLikesArr.likes[0];
         } catch(err){
             throw err;

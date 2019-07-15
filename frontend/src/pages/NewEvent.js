@@ -4,17 +4,11 @@ import { Link } from "react-router-dom";
 import AuthContext from "../context/auth-context";
 import AWS from "aws-sdk";
 
-import config from "../config/config";
+import config from "../config";
 import "./NewEvent.css";
 
 // AWS config
-AWS.config.update({
-    bucketName: config.bucketName,
-    dirName: config.dirName,
-    region: config.region,
-    accessKeyId: config.accessKeyId,
-    secretAccessKey: config.secretAccessKey
-  });
+AWS.config.update(config);
   
   const s3 = new AWS.S3({
     apiVersion: "2006-03-01",

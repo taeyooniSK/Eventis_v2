@@ -66,18 +66,13 @@ class AuthPage extends Component {
                 "Content-Type": "application/json"
             }
         }).then(res => {
-            if (res.status === 500){
-                this.setState(() => ({message: "Your email doesn't exist. Please register your email."}));
-                this.hideMessage();
-                throw new Error("Failed to get user data");
-            } else if(res.status !== 200 && res.status !== 201){
+           if(res.status !== 200 && res.status !== 201){
                 this.setState(() => ({message: "Email or password is incorrect."}));
                 this.hideMessage();
                 throw new Error("Failed to get data");
             } 
             return res.json();
         }).then(result => {
-            console.log(result);
             if(this.state.isLogin){
                 const info = {
                     token: result.data.login.token,
@@ -93,16 +88,16 @@ class AuthPage extends Component {
             }
             
             if(!this.state.isLogin){
-                if(result.errors[0]){
+                if(result.data.createUser && result.data.createUser.email){
+                    this.setState(() => ({isRegistered: true, message: "You are registered succesfully, Please login. :)"}));
+                    this.hideMessage();
+                } else if (result.errors && result.errors[0]){
                     // if a user regsitered his email, print out a message
                     this.setState(() => ({isRegistered: false, message: result.errors[0].message}));
                     // make the message disappear in 3 seconds
                     this.hideMessage();
                 }
-                if(result.data.createuser.email){
-                    this.setState(() => ({isRegistered: true, message: "You are registered succesfully, Please login. :)"}));
-                    this.hideMessage();
-                } 
+                
             } 
         }).catch(err => {
             localStorage.removeItem("token");
@@ -111,7 +106,6 @@ class AuthPage extends Component {
         
     }
 
-    
     hideMessage = () => {
         setTimeout(() => {
             this.setState(() => ({message: null}));
@@ -128,7 +122,13 @@ class AuthPage extends Component {
         };
         return (
             <React.Fragment>
-                {this.state.message && <div className="message" style={messageStyle}>{this.state.message && this.state.message}</div>}
+                {
+                    this.state.message && 
+                    <div className="message" 
+                        style={messageStyle}>
+                        {this.state.message && this.state.message}
+                    </div>
+                }
                 <form className="auth-form" onSubmit={this.submitHandler} >
                     <div className="form-control auth">
                             <label htmlFor="email">E-mail</label>
@@ -140,7 +140,7 @@ class AuthPage extends Component {
                     </div>
                     <div className="form-actions">
                             <button type="submit">Submit</button>
-                            <button type="button" onClick={this.switchHandler}>Switch to {this.state.isLogin ? "Signup" : "Login"}</button>
+                            <button type="button" onClick={this.switchHandler}>Switch to {this.state.isLogin ? "Sign Up" : "Login"}</button>
                     </div>
                 </form>
            </React.Fragment>

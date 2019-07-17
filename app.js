@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const graphqlHttp = require("express-graphql"); // this enables me to use graphql like a middleware  in express
 const mongoose = require("mongoose");
+const path = require("path");
 
 const isAuthenticated = require("./middleware/isAuth");
 

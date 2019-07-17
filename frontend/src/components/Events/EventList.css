@@ -2,6 +2,6 @@
     display:flex;
     flex-wrap: wrap;
     max-width: 1160px;
-    margin: 4rem auto;
+    margin: auto;
     padding: 0;
 }

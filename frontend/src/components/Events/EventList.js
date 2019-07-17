@@ -20,9 +20,27 @@ const EventList = (props) => {
         onMore={props.onViewMore}
         />
     );
-        
+    const h2Style={
+        fontSize: "1.5rem",
+        maxWidth: "1160px",
+        fontWeight: "bold",
+        marginLeft: "1%",
+        marginRight: "1%"
+    }
+    const divStyle={
+        maxWidth: "1160px",
+        margin: "2rem auto 0 auto"
+    }
+
     return (
-        <ul className="event__list">{events}</ul>
+        <React.Fragment>
+            <div style={divStyle}>
+                <h2 style={h2Style}>Events</h2>
+            </div>
+            <ul className="event__list">
+                {events}
+            </ul>
+        </React.Fragment>
     )
 }
 

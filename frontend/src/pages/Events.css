@@ -62,3 +62,18 @@
         font-size: 1.8rem;
     }
 }
+
+@media (max-width: 480px) { 
+    .events-control__title h1 {
+        font-size: 1.4rem;
+    }
+    .events-control__title h1 {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+    .events-control > a.create-btn {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+

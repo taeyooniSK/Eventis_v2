@@ -9,5 +9,5 @@ Eventis is an app for users to host events with their own style and join a varie
 ## ⌨ Main Features ☝
    * CRUD for events and bookings
    * Like/Unlike
-   * Book / unbook (web storage)
+   * Book / Unbook (web storage)
    * Comment

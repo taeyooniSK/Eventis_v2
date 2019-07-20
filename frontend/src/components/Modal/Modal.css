@@ -46,4 +46,17 @@
         width: 50rem;
         margin: auto;
     }
+    .modal__content {
+        height: 300px;
+        overflow-y: scroll; 
+    }
 }
+
+@media (max-width: 768px) {
+    .modal__content {
+        height: 150px;
+        overflow-y: scroll; 
+    }
+}
+
+

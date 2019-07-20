@@ -98,7 +98,7 @@ class BookingsPage extends Component {
             }
             return res.json();
         }).then(result => {
-            console.log("handleCancelBooking func: ", result);
+            // console.log("handleCancelBooking func: ", result);
             // booking._id and bookingId(the booking I click) is differnet (which means the booking I'm about to delete is equal)
             this.setState(prevState => {
                 const updatedBookings = prevState.bookings.filter(booking => {
@@ -141,7 +141,7 @@ class BookingsPage extends Component {
             }
             return res.json();
         }).then(result => {
-            console.log(result);
+            // console.log(result);
             const deleteResponse = result.data.deleteBooking;
             this.setState(prevState => {
                 const deletedBookings = prevState.cancelledBookingsByHost.filter(booking => {

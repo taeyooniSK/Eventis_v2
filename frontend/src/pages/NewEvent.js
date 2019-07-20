@@ -254,7 +254,7 @@ class NewEvent extends Component {
                 <div className="form-control event">
                 <div className="form-specification">
                     <h3 className="form-title">Price for The Event</h3>
-                    <p className="form-description">Set a proper price for attending.</p>
+                    <p className="form-description">Set a proper price for attending.<br />(if you enter 0, it's going to be print out as "Free")</p>
                 </div>
                 <div className="form-action">
                     <input type="number" id="price" ref={this.priceInputRef}></input>

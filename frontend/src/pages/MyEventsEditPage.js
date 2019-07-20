@@ -45,10 +45,6 @@ AWS.config.update(config);
     this.getEvent();
   }
   
-  componentDidUpdate(){
-    console.log(this.titleInputRef.current.value);
-    console.log(this.priceInputRef.current.value);
-  }
   // Get an event that I'm about to edit
   getEvent() {
           this.setState({ isLoading: true });
@@ -279,7 +275,6 @@ AWS.config.update(config);
             <h1>Edit your event</h1>
             <p>Please fill the forms to update the information about the event.</p>
         </header>
-        <button onClick={this.getMyRefs}>Test</button>
         <div className="edit-event__content">
             <div id="edit-event__hostInfo">
                 <h3>Host of The Event</h3>
@@ -306,7 +301,7 @@ AWS.config.update(config);
                 <div className="form-control event">
                 <div className="form-specification">
                     <h3 className="form-title">Price for The Event</h3>
-                    <p className="form-description">Set a proper price for attending.</p>
+                    <p className="form-description">Set a proper price for attending.<br />(if you enter 0, it's going to be print out as "Free")</p>
                 </div>
                 <div className="form-action">
                     <input type="number" 
